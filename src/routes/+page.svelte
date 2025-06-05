@@ -94,37 +94,49 @@
   const skills = [
     {
       name: "javascript",
-      icon: "JS",
+      logo: `
+            <i class="devicon-javascript-plain"></i>
+          `,
       status: "can_make_things_work",
       truth: "mostly vibe coding error messages",
     },
     {
       name: "react",
-      icon: "⚛",
+      logo: `
+            <i class="devicon-react-original"></i>
+          `,
       status: "hooks_make_sense_now",
       truth: "useEffect dependency array still scary",
     },
     {
       name: "svelte",
-      icon: "SV",
+      logo: `
+            <i class="devicon-svelte-plain"></i>
+          `,
       status: "the_chosen_one",
       truth: "feels like magic after react",
     },
     {
       name: "neovim",
-      icon: "NV",
+      logo: `
+            <i class="devicon-neovim-plain"></i>
+          `,
       status: "daily_driver",
       truth: "everything else is slow",
     },
     {
       name: "rust",
-      icon: "RS",
+      logo: `
+            <i class="devicon-rust-original"></i>
+          `,
       status: "aspirational",
       truth: "the book is on my shelf",
     },
     {
       name: "kotlin",
-      icon: "KT",
+      logo: `
+            <i class="devicon-kotlin-plain"></i>
+          `,
       status: "someday_maybe",
       truth: "java but less painful (allegedly)",
     },
@@ -241,6 +253,12 @@
     Math.round((todos.filter((t) => !t.done).length / todos.length) * 100),
   );
 </script>
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+/>
 
 <svelte:head>
   <title>wilmer.exe - runtime: focus dependency</title>
@@ -467,7 +485,7 @@
             >
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2">
-                  <span class="text-lg">{skill.icon}</span>
+                  {@html skill.logo}
                   <span
                     class="text-slate-200 group-hover:text-blue-400 transition-colors"
                     >"{skill.name}"</span

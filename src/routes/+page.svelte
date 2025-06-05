@@ -292,7 +292,6 @@
         <span class="text-blue-400">git:(main)</span>
       </div>
       <div class="flex items-center gap-4 text-slate-500">
-        <span>🔋 energy_level: moderate</span>
         <span>🌏 {currentTime} PHT</span>
       </div>
     </div>
@@ -320,7 +319,7 @@
           </div>
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
             <span class="text-slate-500">[language]</span>
-            <p class="text-slate-300">jlpt n5 certified</p>
+            <p class="text-slate-300">jlpt n5</p>
             <p class="text-slate-500 text-xs">can order ramen (maybe)</p>
           </div>
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
@@ -332,7 +331,7 @@
 
         <!-- Social Links Section -->
         <div class="mt-12">
-          <p class="text-slate-500 text-sm mb-4">// connect with me</p>
+          <p class="text-slate-500 text-sm mb-4">connect</p>
           <div class="flex justify-center gap-6">
             <a
               href={socialLinks.github}

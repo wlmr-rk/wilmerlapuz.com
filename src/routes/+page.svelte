@@ -1,5 +1,4 @@
 <script lang="ts">
-  // Modern Svelte 5 runes syntax - no onMount needed!
   let currentTime = $state("");
   let showTodoModal = $state(false);
   let todos = $state([
@@ -12,28 +11,13 @@
   let newTodo = $state("");
   let terminalOutput = $state([]);
   let currentCommand = $state("");
-  let konamiCode = $state([]);
   let secretUnlocked = $state(false);
   let terminalTimeout = $state(null);
 
-  // Social links - update these with your actual URLs
   const socialLinks = {
     github: "https://github.com/wlmr-rk",
     linkedin: "https://www.linkedin.com/in/wilmerlapuz/",
   };
-
-  const konamiSequence = [
-    "ArrowUp",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowLeft",
-    "ArrowRight",
-    "KeyB",
-    "KeyA",
-  ];
 
   const terminalCommands = {
     "ls -la":
@@ -66,7 +50,7 @@
       id: "todo",
       name: "recursive todo",
       description: "a todo app to track building todo apps",
-      stack: ["js", "react", "svelte", "existential_crisis"],
+      stack: ["js", "react", "svelte"],
       status: "perpetually_unfinished",
       clickable: true,
       reality: "the 4th iteration of the same app",
@@ -84,7 +68,7 @@
       id: "portfolio",
       name: "wilmerlapuz.com",
       description: "this website (finally deployed after buying domain)",
-      stack: ["sveltekit", "tailwind", "procrastination_driven_development"],
+      stack: ["sveltekit", "tailwind"],
       status: "shipped",
       clickable: false,
       reality: "you are here",
@@ -163,15 +147,6 @@
   });
 
   $effect(() => {
-    // Konami code listener effect
-    const handleKeyDown = (e) => {
-      konamiCode = [...konamiCode, e.code].slice(-10);
-      if (konamiCode.join(",") === konamiSequence.join(",")) {
-        secretUnlocked = true;
-        setTimeout(() => (secretUnlocked = false), 5000);
-      }
-    };
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   });
@@ -249,9 +224,6 @@
   // Derived values (computed properties) using $derived
   const completedTodos = $derived(todos.filter((t) => t.done).length);
   const totalTodos = $derived(todos.length);
-  const procrastinationLevel = $derived(
-    Math.round((todos.filter((t) => !t.done).length / todos.length) * 100),
-  );
 </script>
 
 <link
@@ -292,13 +264,12 @@
         <span class="text-blue-400">git:(main)</span>
       </div>
       <div class="flex items-center gap-4 text-slate-500">
-        <span>🌏 {currentTime} PHT</span>
+        <span>{currentTime} PHT</span>
       </div>
     </div>
   </div>
 
   <div class="pt-8 px-4">
-    <!-- ASCII art header -->
     <section class="py-16">
       <div class="max-w-5xl mx-auto text-center">
         <pre
@@ -315,17 +286,14 @@
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
             <span class="text-slate-500">[location]</span>
             <p class="text-slate-300">pasig city, ph</p>
-            <p class="text-slate-500 text-xs">working from home</p>
           </div>
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
             <span class="text-slate-500">[language]</span>
             <p class="text-slate-300">jlpt n5</p>
-            <p class="text-slate-500 text-xs">can order ramen (maybe)</p>
           </div>
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
             <span class="text-slate-500">[os]</span>
             <p class="text-slate-300">nixos btw</p>
-            <p class="text-slate-500 text-xs">hyprland enjoyer</p>
           </div>
         </div>
 
@@ -512,9 +480,6 @@
           </h2>
           <div class="ml-4 space-y-2 text-sm">
             <p class="text-slate-400">
-              • perfecting the art of productive procrastination
-            </p>
-            <p class="text-slate-400">
               • maintaining nixos config that definitely won't break
             </p>
             <p class="text-slate-400">• trying to remember anki exists</p>
@@ -527,7 +492,7 @@
     <!-- Footer -->
     <footer class="py-8 text-center border-t border-slate-800 mt-16">
       <p class="text-slate-600 text-xs">
-        <span class="text-slate-500">// EOF</span> - compiled with 🧠 and determination
+        <span class="text-slate-500">// EOF</span> - compiled with determination
       </p>
     </footer>
   </div>
@@ -609,7 +574,6 @@
 
         <div class="mt-4 text-xs text-slate-500 font-mono">
           <p>completed: {completedTodos}/{totalTodos}</p>
-          <p>procrastination level: {procrastinationLevel}%</p>
         </div>
       </div>
     </div>

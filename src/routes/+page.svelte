@@ -274,12 +274,7 @@
       <div class="max-w-5xl mx-auto text-center">
         <pre
           class="text-green-400 mb-6 text-xs md:text-sm leading-none select-none">
-{`██╗    ██╗██╗     ███╗   ███╗██████╗ 
-██║    ██║██║     ████╗ ████║██╔══██╗
-██║ █╗ ██║██║     ██╔████╔██║██████╔╝
-██║███╗██║██║     ██║╚██╔╝██║██╔══██╗
-╚███╔███╔╝███████╗██║ ╚═╝ ██║██║  ██║
- ╚══╝╚══╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝`}
+{`rebuilding everything with next.js, post-breakup`}
         </pre>
 
         <div class="grid md:grid-cols-3 gap-8 text-left max-w-3xl mx-auto">

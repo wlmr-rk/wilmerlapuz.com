@@ -147,11 +147,6 @@
   });
 
   $effect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  });
-
-  $effect(() => {
     // Terminal timeout cleanup effect
     return () => {
       if (terminalTimeout) {
@@ -284,7 +279,7 @@
           </div>
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
             <span class="text-slate-500">[language]</span>
-            <p class="text-slate-300">jlpt n5</p>
+            <p class="text-slate-300">native ph, jlpt n5</p>
           </div>
           <div class="bg-slate-900/30 border border-slate-800 rounded p-4">
             <span class="text-slate-500">[os]</span>

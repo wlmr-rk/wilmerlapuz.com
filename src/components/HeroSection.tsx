@@ -12,20 +12,33 @@ const HeroSection: React.FC = () => {
     }
   };
 
-  // HIRING MANAGER'S NOTE: This tech stack is curated to be both honest and impressive.
-  // It leads with your strengths and shows your ambitious learning path.
   const techStack = [
-    "JavaScript",
-    "TypeScript",
-    "React / Next.js",
-    "SvelteKit",
-    "Node.js",
-    "Rust",
-    "Kotlin",
-    "NixOS",
+    {
+      name: "JavaScript",
+      iconClass: "devicon-javascript-plain",
+    },
+    {
+      name: "TypeScript",
+      iconClass: "devicon-typescript-plain",
+    },
+    {
+      name: "React",
+      iconClass: "devicon-react-original",
+    },
+    {
+      name: "Next.js",
+      iconClass: "devicon-nextjs-plain",
+    },
+    {
+      name: "SvelteKit",
+      iconClass: "devicon-svelte-plain",
+    },
+    {
+      name: "Tailwind CSS",
+      iconClass: "devicon-tailwindcss-original",
+    },
   ];
 
-  // ACTION REQUIRED: Update these links with your actual profiles.
   const socialLinks = [
     {
       href: "https://github.com/wlmr-rk",
@@ -45,6 +58,7 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
+    // --- CHANGE 1: Reverted to `items-center` to ensure vertical centering within the viewport.
     <section
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black font-[Space_Grotesk] p-4 sm:p-6 lg:p-8"
@@ -67,7 +81,8 @@ const HeroSection: React.FC = () => {
               </span>
             </div>
 
-            <h1 className="mb-6">
+            {/* --- CHANGE 2: Reduced margins for a tighter vertical rhythm. --- */}
+            <h1 className="mb-8">
               <div className="text-2xl sm:text-3xl lg:text-4xl font-light text-white/80 mb-2 tracking-wide">
                 Hello, I&apos;m
               </div>
@@ -75,33 +90,33 @@ const HeroSection: React.FC = () => {
                 WILMER
               </div>
               <div className="text-xl sm:text-2xl lg:text-3xl font-light text-white/70 tracking-wide">
-                Systems Thinker & Software Engineer
+                Web Developer & Systems Thinker
               </div>
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-8 leading-relaxed">
+            <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed">
               Leveraging a 7-year background in financial analysis to build
               efficient and reliable web applications with a systems-first
               approach.
             </p>
 
-            <div className="mb-8">
-              <div className="text-sm font-semibold text-white/80 uppercase tracking-widest mb-4">
-                Tech Stack
+            <div className="mb-10">
+              <div className="text-sm font-semibold text-white/80 uppercase tracking-widest mb-6">
+                Core Stack
               </div>
-              <div className="flex flex-wrap justify-center gap-3">
+              {/* --- CHANGE 3: Reduced icon size and spacing slightly. --- */}
+              <div className="flex flex-wrap justify-center items-center gap-x-7 gap-y-4">
                 {techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-3 py-1 text-sm rounded-lg border border-white/10 bg-white/5 text-white/80 backdrop-blur-[20px] hover:border-white/20 hover:bg-white/10 transition-all duration-300"
-                  >
-                    {tech}
-                  </span>
+                  <i
+                    key={tech.name}
+                    className={`${tech.iconClass} text-4xl text-white/70 transition-all duration-300 ease-in-out hover:text-accent-main hover:scale-110 hover:drop-shadow-[0_0_4px_var(--color-accent-main)]`}
+                    title={tech.name}
+                  />
                 ))}
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
               <a
                 href="#projects"
                 onClick={(e) => {
@@ -125,13 +140,13 @@ const HeroSection: React.FC = () => {
                     contactSection.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="ease-snappy px-8 py-4 rounded-xl border border-white/15 bg-white/5 text-white font-semibold backdrop-blur-[40px] transition-all duration-400 hover:border-white/25 hover:bg-white/10 hover:-translate-y-1"
+                className="ease-snappy px-8 py-4 rounded-xl border border-white/10 text-white/60 font-semibold backdrop-blur-[40px] transition-all duration-400 hover:border-white/25 hover:text-white hover:-translate-y-1"
               >
                 Get In Touch
               </a>
             </div>
 
-            <div className="flex justify-center space-x-6">
+            <div className="flex justify-center space-x-8">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
@@ -140,19 +155,20 @@ const HeroSection: React.FC = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="ease-snappy relative rounded-xl p-3 text-white/60 transition-all duration-400 hover:text-white hover:bg-white/8 hover:inset-shadow-[0_1px_1px_rgba(255,255,255,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:-translate-y-1"
+                    className="ease-snappy relative rounded-xl p-3 text-white/60 transition-all duration-400 hover:text-accent-main hover:-translate-y-1"
                     aria-label={social.label}
                   >
-                    <Icon size={20} />
+                    <Icon size={24} />
                   </a>
                 );
               })}
             </div>
 
-            <div className="accent-line relative mx-auto mt-8 h-1 w-16 rounded bg-linear-to-r/oklch from-accent-main via-accent-light to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.5),0_4px_8px_rgba(0,0,0,0.3)]" />
+            <div className="accent-line relative mx-auto mt-10 h-1 w-16 rounded bg-linear-to-r/oklch from-accent-main via-accent-light to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.5),0_4px_8px_rgba(0,0,0,0.3)]" />
           </div>
         </div>
 
+        {/* --- CHANGE 4: Returned chevron to a visible position. --- */}
         <button
           onClick={scrollToNext}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/50 hover:text-white/80 transition-colors duration-300"

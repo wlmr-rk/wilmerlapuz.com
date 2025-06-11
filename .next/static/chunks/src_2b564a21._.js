@@ -487,19 +487,32 @@ const HeroSection = ()=>{
             });
         }
     };
-    // HIRING MANAGER'S NOTE: This tech stack is curated to be both honest and impressive.
-    // It leads with your strengths and shows your ambitious learning path.
     const techStack = [
-        "JavaScript",
-        "TypeScript",
-        "React / Next.js",
-        "SvelteKit",
-        "Node.js",
-        "Rust",
-        "Kotlin",
-        "NixOS"
+        {
+            name: "JavaScript",
+            iconClass: "devicon-javascript-plain"
+        },
+        {
+            name: "TypeScript",
+            iconClass: "devicon-typescript-plain"
+        },
+        {
+            name: "React",
+            iconClass: "devicon-react-original"
+        },
+        {
+            name: "Next.js",
+            iconClass: "devicon-nextjs-plain"
+        },
+        {
+            name: "SvelteKit",
+            iconClass: "devicon-svelte-plain"
+        },
+        {
+            name: "Tailwind CSS",
+            iconClass: "devicon-tailwindcss-original"
+        }
     ];
-    // ACTION REQUIRED: Update these links with your actual profiles.
     const socialLinks = [
         {
             href: "https://github.com/wlmr-rk",
@@ -517,7 +530,8 @@ const HeroSection = ()=>{
             label: "Email"
         }
     ];
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+    return(// --- CHANGE 1: Reverted to `items-center` to ensure vertical centering within the viewport.
+    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         id: "hero",
         className: "relative min-h-screen flex items-center justify-center overflow-hidden bg-black font-[Space_Grotesk] p-4 sm:p-6 lg:p-8",
         children: [
@@ -525,7 +539,7 @@ const HeroSection = ()=>{
                 className: "bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]"
             }, void 0, false, {
                 fileName: "[project]/src/components/HeroSection.tsx",
-                lineNumber: 52,
+                lineNumber: 66,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -540,7 +554,7 @@ const HeroSection = ()=>{
                                     className: "floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.9),0_0_32px_rgba(0,255,136,0.5)]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 57,
+                                    lineNumber: 71,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -550,7 +564,7 @@ const HeroSection = ()=>{
                                             className: "status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-2 mr-3 shadow-[0_0_12px_rgba(0,255,136,0.8)]"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 60,
+                                            lineNumber: 74,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -558,7 +572,7 @@ const HeroSection = ()=>{
                                             children: "Open to Work"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 61,
+                                            lineNumber: 75,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -566,7 +580,7 @@ const HeroSection = ()=>{
                                             children: "•"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 64,
+                                            lineNumber: 78,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -574,24 +588,24 @@ const HeroSection = ()=>{
                                             children: "Available for full-time opportunities"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 65,
+                                            lineNumber: 79,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 59,
+                                    lineNumber: 73,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                    className: "mb-6",
+                                    className: "mb-8",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-2xl sm:text-3xl lg:text-4xl font-light text-white/80 mb-2 tracking-wide",
                                             children: "Hello, I'm"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 71,
+                                            lineNumber: 86,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -599,52 +613,12 @@ const HeroSection = ()=>{
                                             children: "WILMER"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 74,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-xl sm:text-2xl lg:text-3xl font-light text-white/70 tracking-wide",
-                                            children: "Systems Thinker & Software Engineer"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 77,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 70,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-8 leading-relaxed",
-                                    children: "Leveraging a 7-year background in financial analysis to build efficient and reliable web applications with a systems-first approach."
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 82,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "mb-8",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-sm font-semibold text-white/80 uppercase tracking-widest mb-4",
-                                            children: "Tech Stack"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/HeroSection.tsx",
                                             lineNumber: 89,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-wrap justify-center gap-3",
-                                            children: techStack.map((tech)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "px-3 py-1 text-sm rounded-lg border border-white/10 bg-white/5 text-white/80 backdrop-blur-[20px] hover:border-white/20 hover:bg-white/10 transition-all duration-300",
-                                                    children: tech
-                                                }, tech, false, {
-                                                    fileName: "[project]/src/components/HeroSection.tsx",
-                                                    lineNumber: 94,
-                                                    columnNumber: 19
-                                                }, this))
+                                            className: "text-xl sm:text-2xl lg:text-3xl font-light text-white/70 tracking-wide",
+                                            children: "Web Developer & Systems Thinker"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
                                             lineNumber: 92,
@@ -653,11 +627,51 @@ const HeroSection = ()=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 88,
+                                    lineNumber: 85,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed",
+                                    children: "Leveraging a 7-year background in financial analysis to build efficient and reliable web applications with a systems-first approach."
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/HeroSection.tsx",
+                                    lineNumber: 97,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex flex-col sm:flex-row gap-4 justify-center items-center mb-8",
+                                    className: "mb-10",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-sm font-semibold text-white/80 uppercase tracking-widest mb-6",
+                                            children: "Core Stack"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/HeroSection.tsx",
+                                            lineNumber: 104,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex flex-wrap justify-center items-center gap-x-7 gap-y-4",
+                                            children: techStack.map((tech)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
+                                                    className: `${tech.iconClass} text-4xl text-white/70 transition-all duration-300 ease-in-out hover:text-accent-main hover:scale-110 hover:drop-shadow-[0_0_4px_var(--color-accent-main)]`,
+                                                    title: tech.name
+                                                }, tech.name, false, {
+                                                    fileName: "[project]/src/components/HeroSection.tsx",
+                                                    lineNumber: 110,
+                                                    columnNumber: 19
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/HeroSection.tsx",
+                                            lineNumber: 108,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/HeroSection.tsx",
+                                    lineNumber: 103,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex flex-col sm:flex-row gap-4 justify-center items-center mb-10",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                             href: "#projects",
@@ -674,7 +688,7 @@ const HeroSection = ()=>{
                                             children: "View My Work"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 105,
+                                            lineNumber: 120,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -688,63 +702,63 @@ const HeroSection = ()=>{
                                                     });
                                                 }
                                             },
-                                            className: "ease-snappy px-8 py-4 rounded-xl border border-white/15 bg-white/5 text-white font-semibold backdrop-blur-[40px] transition-all duration-400 hover:border-white/25 hover:bg-white/10 hover:-translate-y-1",
+                                            className: "ease-snappy px-8 py-4 rounded-xl border border-white/10 text-white/60 font-semibold backdrop-blur-[40px] transition-all duration-400 hover:border-white/25 hover:text-white hover:-translate-y-1",
                                             children: "Get In Touch"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 119,
+                                            lineNumber: 134,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 104,
+                                    lineNumber: 119,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-center space-x-6",
+                                    className: "flex justify-center space-x-8",
                                     children: socialLinks.map((social)=>{
                                         const Icon = social.icon;
                                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                             href: social.href,
                                             target: "_blank",
                                             rel: "noopener noreferrer",
-                                            className: "ease-snappy relative rounded-xl p-3 text-white/60 transition-all duration-400 hover:text-white hover:bg-white/8 hover:inset-shadow-[0_1px_1px_rgba(255,255,255,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:-translate-y-1",
+                                            className: "ease-snappy relative rounded-xl p-3 text-white/60 transition-all duration-400 hover:text-accent-main hover:-translate-y-1",
                                             "aria-label": social.label,
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
-                                                size: 20
+                                                size: 24
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HeroSection.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 161,
                                                 columnNumber: 21
                                             }, this)
                                         }, social.href, false, {
                                             fileName: "[project]/src/components/HeroSection.tsx",
-                                            lineNumber: 138,
+                                            lineNumber: 153,
                                             columnNumber: 19
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 134,
+                                    lineNumber: 149,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "accent-line relative mx-auto mt-8 h-1 w-16 rounded bg-linear-to-r/oklch from-accent-main via-accent-light to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.5),0_4px_8px_rgba(0,0,0,0.3)]"
+                                    className: "accent-line relative mx-auto mt-10 h-1 w-16 rounded bg-linear-to-r/oklch from-accent-main via-accent-light to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.5),0_4px_8px_rgba(0,0,0,0.3)]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HeroSection.tsx",
-                                    lineNumber: 152,
+                                    lineNumber: 167,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HeroSection.tsx",
-                            lineNumber: 56,
+                            lineNumber: 70,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/HeroSection.tsx",
-                        lineNumber: 55,
+                        lineNumber: 69,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -755,26 +769,26 @@ const HeroSection = ()=>{
                             size: 32
                         }, void 0, false, {
                             fileName: "[project]/src/components/HeroSection.tsx",
-                            lineNumber: 161,
+                            lineNumber: 177,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/HeroSection.tsx",
-                        lineNumber: 156,
+                        lineNumber: 172,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/HeroSection.tsx",
-                lineNumber: 54,
+                lineNumber: 68,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/HeroSection.tsx",
-        lineNumber: 48,
+        lineNumber: 62,
         columnNumber: 5
-    }, this);
+    }, this));
 };
 _c = HeroSection;
 const __TURBOPACK__default__export__ = HeroSection;
@@ -2363,13 +2377,7 @@ const StatsSection = ()=>{
                                 children: [
                                     "Last updated:",
                                     " ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: stats?.wakatime?.lastUpdated ? new Date(stats.wakatime.lastUpdated).toLocaleString() : "Never"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 86,
-                                        columnNumber: 13
-                                    }, this)
+                                    stats?.wakatime?.lastUpdated ? new Date(stats.wakatime.lastUpdated).toLocaleString() : "Never"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
@@ -2383,7 +2391,7 @@ const StatsSection = ()=>{
                                         className: "status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-1.5 mr-2 shadow-[0_0_8px_rgba(0,255,136,0.8)]"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 95,
+                                        lineNumber: 93,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2391,13 +2399,13 @@ const StatsSection = ()=>{
                                         children: "Auto-updates hourly"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 96,
+                                        lineNumber: 94,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 94,
+                                lineNumber: 92,
                                 columnNumber: 11
                             }, this)
                         ]
@@ -2416,7 +2424,7 @@ const StatsSection = ()=>{
                                         className: "absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 108,
+                                        lineNumber: 106,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2432,12 +2440,12 @@ const StatsSection = ()=>{
                                                             className: "text-blue-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 113,
+                                                            lineNumber: 111,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 112,
+                                                        lineNumber: 110,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2447,7 +2455,7 @@ const StatsSection = ()=>{
                                                                 children: "Coding Activity"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 116,
+                                                                lineNumber: 114,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2455,19 +2463,19 @@ const StatsSection = ()=>{
                                                                 children: stats.wakatime.status
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 119,
+                                                                lineNumber: 117,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 115,
+                                                        lineNumber: 113,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 111,
+                                                lineNumber: 109,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2481,7 +2489,7 @@ const StatsSection = ()=>{
                                                                 children: "Today"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 128,
+                                                                lineNumber: 126,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2492,7 +2500,7 @@ const StatsSection = ()=>{
                                                                         children: formatHours(stats.wakatime.today.codingMinutes)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 130,
+                                                                        lineNumber: 128,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2500,19 +2508,19 @@ const StatsSection = ()=>{
                                                                         children: "active coding"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 133,
+                                                                        lineNumber: 131,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 129,
+                                                                lineNumber: 127,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 127,
+                                                        lineNumber: 125,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2526,7 +2534,7 @@ const StatsSection = ()=>{
                                                                         children: "Language"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 139,
+                                                                        lineNumber: 137,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2534,13 +2542,13 @@ const StatsSection = ()=>{
                                                                         children: stats.wakatime.today.primaryLanguage
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 140,
+                                                                        lineNumber: 138,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 138,
+                                                                lineNumber: 136,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2551,7 +2559,7 @@ const StatsSection = ()=>{
                                                                         children: "Editor"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 145,
+                                                                        lineNumber: 143,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2559,25 +2567,25 @@ const StatsSection = ()=>{
                                                                         children: stats.wakatime.today.environment.editor
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 146,
+                                                                        lineNumber: 144,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 144,
+                                                                lineNumber: 142,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 137,
+                                                        lineNumber: 135,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 126,
+                                                lineNumber: 124,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2591,7 +2599,7 @@ const StatsSection = ()=>{
                                                                 children: "This Week"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 156,
+                                                                lineNumber: 154,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2605,7 +2613,7 @@ const StatsSection = ()=>{
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 158,
+                                                                        lineNumber: 156,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2613,19 +2621,19 @@ const StatsSection = ()=>{
                                                                         children: "total hours"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 161,
+                                                                        lineNumber: 159,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 157,
+                                                                lineNumber: 155,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 155,
+                                                        lineNumber: 153,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2639,7 +2647,7 @@ const StatsSection = ()=>{
                                                                         children: "Active Days"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 167,
+                                                                        lineNumber: 165,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2650,13 +2658,13 @@ const StatsSection = ()=>{
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 170,
+                                                                        lineNumber: 168,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 166,
+                                                                lineNumber: 164,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2667,7 +2675,7 @@ const StatsSection = ()=>{
                                                                         children: "Consistency"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 175,
+                                                                        lineNumber: 173,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2675,19 +2683,19 @@ const StatsSection = ()=>{
                                                                         children: stats.wakatime.weeklyStats.consistency
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 178,
+                                                                        lineNumber: 176,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 174,
+                                                                lineNumber: 172,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 165,
+                                                        lineNumber: 163,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2698,7 +2706,7 @@ const StatsSection = ()=>{
                                                                 children: "Top Languages"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 185,
+                                                                lineNumber: 183,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2709,7 +2717,7 @@ const StatsSection = ()=>{
                                                                         children: stats.wakatime.weeklyStats.languages.primary
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 189,
+                                                                        lineNumber: 187,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2720,13 +2728,13 @@ const StatsSection = ()=>{
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 192,
+                                                                        lineNumber: 190,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 188,
+                                                                lineNumber: 186,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2737,7 +2745,7 @@ const StatsSection = ()=>{
                                                                         children: stats.wakatime.weeklyStats.languages.secondary
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 198,
+                                                                        lineNumber: 196,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2748,37 +2756,37 @@ const StatsSection = ()=>{
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 201,
+                                                                        lineNumber: 199,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 197,
+                                                                lineNumber: 195,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 184,
+                                                        lineNumber: 182,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 154,
+                                                lineNumber: 152,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 110,
+                                        lineNumber: 108,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 106,
+                                lineNumber: 104,
                                 columnNumber: 13
                             }, this),
                             stats?.anki && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2788,7 +2796,7 @@ const StatsSection = ()=>{
                                         className: "absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 219,
+                                        lineNumber: 217,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2804,12 +2812,12 @@ const StatsSection = ()=>{
                                                             className: "text-purple-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 224,
+                                                            lineNumber: 222,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 223,
+                                                        lineNumber: 221,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2819,7 +2827,7 @@ const StatsSection = ()=>{
                                                                 children: "Japanese Study"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 227,
+                                                                lineNumber: 225,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2827,19 +2835,19 @@ const StatsSection = ()=>{
                                                                 children: "Anki Flashcards"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 230,
+                                                                lineNumber: 228,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 226,
+                                                        lineNumber: 224,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 222,
+                                                lineNumber: 220,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2853,7 +2861,7 @@ const StatsSection = ()=>{
                                                                 children: stats.anki.overall.reviewsToday
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 237,
+                                                                lineNumber: 235,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2861,13 +2869,13 @@ const StatsSection = ()=>{
                                                                 children: "Reviews Today"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 240,
+                                                                lineNumber: 238,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 236,
+                                                        lineNumber: 234,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2881,7 +2889,7 @@ const StatsSection = ()=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 243,
+                                                                lineNumber: 241,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2889,19 +2897,19 @@ const StatsSection = ()=>{
                                                                 children: "Retention Rate"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 247,
+                                                                lineNumber: 245,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 242,
+                                                        lineNumber: 240,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 235,
+                                                lineNumber: 233,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2912,7 +2920,7 @@ const StatsSection = ()=>{
                                                         children: "Active Decks"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 253,
+                                                        lineNumber: 251,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2928,7 +2936,7 @@ const StatsSection = ()=>{
                                                                                 children: getDeckIcon(deck.deckName)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                                lineNumber: 263,
+                                                                                lineNumber: 261,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2939,7 +2947,7 @@ const StatsSection = ()=>{
                                                                                         children: getDeckDisplayName(deck.deckName)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                                        lineNumber: 267,
+                                                                                        lineNumber: 265,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2952,19 +2960,19 @@ const StatsSection = ()=>{
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                                        lineNumber: 270,
+                                                                                        lineNumber: 268,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                                lineNumber: 266,
+                                                                                lineNumber: 264,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 262,
+                                                                        lineNumber: 260,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2975,7 +2983,7 @@ const StatsSection = ()=>{
                                                                                 children: deck.reviewsToday
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                                lineNumber: 276,
+                                                                                lineNumber: 274,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2983,30 +2991,30 @@ const StatsSection = ()=>{
                                                                                 children: "today"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                                lineNumber: 279,
+                                                                                lineNumber: 277,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 275,
+                                                                        lineNumber: 273,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, deck.deckName, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 258,
+                                                                lineNumber: 256,
                                                                 columnNumber: 23
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 256,
+                                                        lineNumber: 254,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 252,
+                                                lineNumber: 250,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3019,7 +3027,7 @@ const StatsSection = ()=>{
                                                                 children: "Overall Progress"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 289,
+                                                                lineNumber: 287,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3031,13 +3039,13 @@ const StatsSection = ()=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 290,
+                                                                lineNumber: 288,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 288,
+                                                        lineNumber: 286,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3049,30 +3057,30 @@ const StatsSection = ()=>{
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 296,
+                                                            lineNumber: 294,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 295,
+                                                        lineNumber: 293,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 287,
+                                                lineNumber: 285,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 221,
+                                        lineNumber: 219,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 217,
+                                lineNumber: 215,
                                 columnNumber: 13
                             }, this),
                             stats?.spotify && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3082,7 +3090,7 @@ const StatsSection = ()=>{
                                         className: "absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 312,
+                                        lineNumber: 310,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3098,19 +3106,19 @@ const StatsSection = ()=>{
                                                             className: "text-green-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 318,
+                                                            lineNumber: 316,
                                                             columnNumber: 23
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$music$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Music$3e$__["Music"], {
                                                             size: 18,
                                                             className: "text-white"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 320,
+                                                            lineNumber: 318,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 316,
+                                                        lineNumber: 314,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3120,7 +3128,7 @@ const StatsSection = ()=>{
                                                                 children: stats.spotify.isPlaying ? "Now Playing" : "Last Played"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 324,
+                                                                lineNumber: 322,
                                                                 columnNumber: 21
                                                             }, this),
                                                             stats.spotify.isPlaying && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3130,26 +3138,26 @@ const StatsSection = ()=>{
                                                                         className: "w-1.5 h-1.5 bg-green-400 rounded-full mr-1 animate-pulse"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 329,
+                                                                        lineNumber: 327,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     "Live"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 328,
+                                                                lineNumber: 326,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 323,
+                                                        lineNumber: 321,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 315,
+                                                lineNumber: 313,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3166,7 +3174,7 @@ const StatsSection = ()=>{
                                                                 className: "w-16 h-16 rounded-lg shadow-lg"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 339,
+                                                                lineNumber: 337,
                                                                 columnNumber: 21
                                                             }, this),
                                                             stats.spotify.isPlaying && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3176,18 +3184,18 @@ const StatsSection = ()=>{
                                                                     className: "text-white fill-white"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/StatsSection.tsx",
-                                                                    lineNumber: 348,
+                                                                    lineNumber: 346,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 347,
+                                                                lineNumber: 345,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 338,
+                                                        lineNumber: 336,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3198,7 +3206,7 @@ const StatsSection = ()=>{
                                                                 children: stats.spotify.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 355,
+                                                                lineNumber: 353,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3206,7 +3214,7 @@ const StatsSection = ()=>{
                                                                 children: stats.spotify.artist
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 358,
+                                                                lineNumber: 356,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -3220,38 +3228,38 @@ const StatsSection = ()=>{
                                                                         className: "mr-1"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                                        lineNumber: 367,
+                                                                        lineNumber: 365,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     "Spotify"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 361,
+                                                                lineNumber: 359,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 354,
+                                                        lineNumber: 352,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 336,
+                                                lineNumber: 334,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 314,
+                                        lineNumber: 312,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 310,
+                                lineNumber: 308,
                                 columnNumber: 13
                             }, this),
                             stats?.leetcode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3261,7 +3269,7 @@ const StatsSection = ()=>{
                                         className: "absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-yellow-500/20 to-amber-500/20 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 380,
+                                        lineNumber: 378,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3277,12 +3285,12 @@ const StatsSection = ()=>{
                                                             className: "text-yellow-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 385,
+                                                            lineNumber: 383,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 384,
+                                                        lineNumber: 382,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3292,7 +3300,7 @@ const StatsSection = ()=>{
                                                                 children: "LeetCode"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 388,
+                                                                lineNumber: 386,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3300,19 +3308,19 @@ const StatsSection = ()=>{
                                                                 children: "Problem Solving"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 389,
+                                                                lineNumber: 387,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 387,
+                                                        lineNumber: 385,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 383,
+                                                lineNumber: 381,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3323,7 +3331,7 @@ const StatsSection = ()=>{
                                                         children: stats.leetcode.totalSolved
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 394,
+                                                        lineNumber: 392,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3335,7 +3343,7 @@ const StatsSection = ()=>{
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 397,
+                                                        lineNumber: 395,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3346,13 +3354,13 @@ const StatsSection = ()=>{
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 400,
+                                                        lineNumber: 398,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 393,
+                                                lineNumber: 391,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3366,7 +3374,7 @@ const StatsSection = ()=>{
                                                                 children: stats.leetcode.easySolved
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 413,
+                                                                lineNumber: 411,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3374,13 +3382,13 @@ const StatsSection = ()=>{
                                                                 children: "Easy"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 416,
+                                                                lineNumber: 414,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 412,
+                                                        lineNumber: 410,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3391,7 +3399,7 @@ const StatsSection = ()=>{
                                                                 children: stats.leetcode.mediumSolved
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 419,
+                                                                lineNumber: 417,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3399,13 +3407,13 @@ const StatsSection = ()=>{
                                                                 children: "Medium"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 422,
+                                                                lineNumber: 420,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 418,
+                                                        lineNumber: 416,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3416,7 +3424,7 @@ const StatsSection = ()=>{
                                                                 children: stats.leetcode.hardSolved
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 425,
+                                                                lineNumber: 423,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3424,31 +3432,31 @@ const StatsSection = ()=>{
                                                                 children: "Hard"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 428,
+                                                                lineNumber: 426,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 424,
+                                                        lineNumber: 422,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 411,
+                                                lineNumber: 409,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 382,
+                                        lineNumber: 380,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 378,
+                                lineNumber: 376,
                                 columnNumber: 13
                             }, this),
                             stats?.strava && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3458,7 +3466,7 @@ const StatsSection = ()=>{
                                         className: "absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-red-500/20 to-orange-500/20 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 439,
+                                        lineNumber: 437,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3474,12 +3482,12 @@ const StatsSection = ()=>{
                                                             className: "text-red-400"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                                            lineNumber: 444,
+                                                            lineNumber: 442,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 443,
+                                                        lineNumber: 441,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3489,7 +3497,7 @@ const StatsSection = ()=>{
                                                                 children: "Running"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 447,
+                                                                lineNumber: 445,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3497,19 +3505,19 @@ const StatsSection = ()=>{
                                                                 children: "Strava Activity"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 448,
+                                                                lineNumber: 446,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 446,
+                                                        lineNumber: 444,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 442,
+                                                lineNumber: 440,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3523,7 +3531,7 @@ const StatsSection = ()=>{
                                                                 children: "Total Runs"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 454,
+                                                                lineNumber: 452,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3531,13 +3539,13 @@ const StatsSection = ()=>{
                                                                 children: stats.strava.totalRuns
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 455,
+                                                                lineNumber: 453,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 453,
+                                                        lineNumber: 451,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3548,7 +3556,7 @@ const StatsSection = ()=>{
                                                                 children: "Distance"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 460,
+                                                                lineNumber: 458,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3559,13 +3567,13 @@ const StatsSection = ()=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 461,
+                                                                lineNumber: 459,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 459,
+                                                        lineNumber: 457,
                                                         columnNumber: 19
                                                     }, this),
                                                     stats.strava.recentRuns[0] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3576,7 +3584,7 @@ const StatsSection = ()=>{
                                                                 children: "Latest Run"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 467,
+                                                                lineNumber: 465,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3587,7 +3595,7 @@ const StatsSection = ()=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 470,
+                                                                lineNumber: 468,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3595,37 +3603,37 @@ const StatsSection = ()=>{
                                                                 children: formatDate(stats.strava.recentRuns[0].date)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                                lineNumber: 473,
+                                                                lineNumber: 471,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                                        lineNumber: 466,
+                                                        lineNumber: 464,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                                lineNumber: 452,
+                                                lineNumber: 450,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/StatsSection.tsx",
-                                        lineNumber: 441,
+                                        lineNumber: 439,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 437,
+                                lineNumber: 435,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/StatsSection.tsx",
-                        lineNumber: 103,
+                        lineNumber: 101,
                         columnNumber: 9
                     }, this),
                     error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3640,17 +3648,17 @@ const StatsSection = ()=>{
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/StatsSection.tsx",
-                                lineNumber: 488,
+                                lineNumber: 486,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/StatsSection.tsx",
-                            lineNumber: 487,
+                            lineNumber: 485,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/StatsSection.tsx",
-                        lineNumber: 486,
+                        lineNumber: 484,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3663,7 +3671,7 @@ const StatsSection = ()=>{
                                     className: "mr-2 text-accent-main"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/StatsSection.tsx",
-                                    lineNumber: 498,
+                                    lineNumber: 496,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3678,24 +3686,24 @@ const StatsSection = ()=>{
                                             children: "View Source"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/StatsSection.tsx",
-                                            lineNumber: 501,
+                                            lineNumber: 499,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/StatsSection.tsx",
-                                    lineNumber: 499,
+                                    lineNumber: 497,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/StatsSection.tsx",
-                            lineNumber: 497,
+                            lineNumber: 495,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/StatsSection.tsx",
-                        lineNumber: 496,
+                        lineNumber: 494,
                         columnNumber: 9
                     }, this)
                 ]

@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2025-06-11T07:33:11.466Z",
+  "lastUpdated": "2025-06-11T08:52:52.261Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 142,
+    "codingMinutes": 143,
     "primaryLanguage": "JavaScript",
     "environment": {
       "editor": "Neovim",
@@ -16,8 +16,8 @@
     "languages": {
       "primary": "JavaScript",
       "secondary": "YAML",
-      "primaryPercentage": "44.1",
-      "secondaryPercentage": "22.0"
+      "primaryPercentage": "43.8",
+      "secondaryPercentage": "21.9"
     },
     "consistency": "Building"
   }

@@ -1,24 +1,4 @@
 {
-  "lastUpdated": "2025-06-11T04:33:58.846Z",
-  "status": "Active Developer",
-  "today": {
-    "codingMinutes": 47,
-    "primaryLanguage": "JavaScript",
-    "environment": {
-      "editor": "Neovim",
-      "os": "Linux"
-    }
-  },
-  "weeklyStats": {
-    "totalHoursLast7Days": "0.8",
-    "activeDaysCount": 1,
-    "dailyAverageMinutes": 7,
-    "languages": {
-      "primary": "JavaScript",
-      "secondary": "Svelte",
-      "primaryPercentage": "91.5",
-      "secondaryPercentage": "4.3"
-    },
-    "consistency": "Building"
-  }
+  "lastUpdated": "2025-06-11T05:50:16.897Z",
+  "status": "Active Developer"
 }

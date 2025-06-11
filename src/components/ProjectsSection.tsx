@@ -6,12 +6,9 @@ import {
   ExternalLink,
   Github,
   Code2,
-  Zap,
-  Database,
   Globe,
   Smartphone,
   Server,
-  Brain,
   Terminal,
   Target,
 } from "lucide-react";
@@ -156,6 +153,9 @@ const categories = ["All", "Web App", "Tool", "System", "Mobile"] as const;
 
 const ProjectsSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  // We disable the lint rule here because the modal to display the project isn't built yet.
+  // This is a placeholder for future functionality.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects =

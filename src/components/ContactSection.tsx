@@ -14,7 +14,6 @@ import {
   CheckCircle,
   AlertCircle,
   ExternalLink,
-  Phone,
   Download,
 } from "lucide-react";
 
@@ -84,11 +83,11 @@ const ContactSection: React.FC = () => {
       } else {
         throw new Error("Failed to send message");
       }
-    } catch (error) {
+    } catch {
       setStatus({
         type: "error",
         message:
-          "Failed to send message. Please try emailing me directly at your.email@example.com",
+          "Failed to send message. Please try emailing me directly at wilmer.lapuz@gmail.com",
       });
     }
   };
@@ -157,7 +156,7 @@ const ContactSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
-            Let's Connect
+            Let&apos;s Connect
           </h2>
           <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
             Ready to contribute to your team or collaborate on exciting projects
@@ -189,7 +188,7 @@ const ContactSection: React.FC = () => {
                       Send a Message
                     </h3>
                     <p className="text-white/60">
-                      I'll respond within 24 hours
+                      I&apos;ll respond within 24 hours
                     </p>
                   </div>
                 </div>

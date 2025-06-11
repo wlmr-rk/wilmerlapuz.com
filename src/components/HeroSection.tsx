@@ -69,7 +69,7 @@ const HeroSection: React.FC = () => {
 
             <h1 className="mb-6">
               <div className="text-2xl sm:text-3xl lg:text-4xl font-light text-white/80 mb-2 tracking-wide">
-                Hello, I'm
+                Hello, I&apos;m
               </div>
               <div className="text-5xl sm:text-6xl lg:text-8xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
                 WILMER

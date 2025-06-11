@@ -2,6 +2,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useStats } from "../hooks/useStats";
 import {
   Activity,
@@ -9,23 +10,11 @@ import {
   Brain,
   Code2,
   Trophy,
-  Clock,
-  Zap,
-  Target,
-  TrendingUp,
-  Calendar,
-  Play,
-  Pause,
-  Terminal,
-  Award,
-  BookOpen,
-  BarChart3,
-  Coffee,
-  Flame,
+  CheckCircle,
+  AlertCircle,
   ExternalLink,
+  Play,
   GitBranch,
-  Timer,
-  Languages,
 } from "lucide-react";
 
 const StatsSection: React.FC = () => {
@@ -347,9 +336,11 @@ const StatsSection: React.FC = () => {
                 <div className="flex items-center">
                   {/* Album Art */}
                   <div className="relative mr-3 flex-shrink-0">
-                    <img
+                    <Image
                       src={stats.spotify.albumImageUrl}
                       alt={stats.spotify.album}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 rounded-lg shadow-lg"
                     />
                     {stats.spotify.isPlaying && (

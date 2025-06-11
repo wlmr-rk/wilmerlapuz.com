@@ -7,7 +7,6 @@ import {
   Github,
   Linkedin,
   Mail,
-  Code2,
   User,
   Briefcase,
   BarChart3,

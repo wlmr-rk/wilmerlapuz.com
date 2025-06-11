@@ -1,0 +1,21 @@
+{
+  "totalRuns": 20,
+  "totalDistanceKm": "39.8",
+  "recentRuns": [
+    {
+      "name": "Day 3 of Running/Walk",
+      "distanceKm": "10.2",
+      "date": "2025-03-23"
+    },
+    {
+      "name": "Lunch Walk",
+      "distanceKm": "4.7",
+      "date": "2019-07-20"
+    },
+    {
+      "name": "Night Run",
+      "distanceKm": "1.5",
+      "date": "2019-07-20"
+    }
+  ]
+}

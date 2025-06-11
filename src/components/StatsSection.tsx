@@ -10,8 +10,6 @@ import {
   Brain,
   Code2,
   Trophy,
-  CheckCircle,
-  AlertCircle,
   ExternalLink,
   Play,
   GitBranch,

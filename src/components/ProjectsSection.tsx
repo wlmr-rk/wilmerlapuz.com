@@ -46,8 +46,8 @@ const projects: Project[] = [
     ],
     category: "Web App",
     status: "Live",
-    githubUrl: "https://github.com/yourusername/portfolio",
-    liveUrl: "https://yoursite.com",
+    githubUrl: "https://github.com/wlmr-rk/wilmerlapuz.com",
+    liveUrl: "wilmerlapuz.com",
     features: [
       "Automated data fetching every hour",
       "Real-time stats from 5+ platforms",

@@ -30,12 +30,12 @@ const AboutSection: React.FC = () => {
     },
     {
       category: "Backend & Data",
-      items: ["Node.js", "API Design", "MongoDB", "Supabase"],
+      items: ["Node.js", "API Design", "Supabase"],
       icon: Terminal,
     },
     {
       category: "Tools & Environment",
-      items: ["NixOS", "Neovim", "Git", "Docker", "Figma"],
+      items: ["NixOS", "Neovim", "Git", "Hyprland"],
       icon: Coffee,
     },
   ];

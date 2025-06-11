@@ -83,9 +83,11 @@ const StatsSection: React.FC = () => {
           </p>
           <div className="text-sm text-white/40">
             Last updated:{" "}
-            {stats?.wakatime?.lastUpdated
-              ? new Date(stats.wakatime.lastUpdated).toLocaleString()
-              : "Never"}
+            <strong>
+              {stats?.wakatime?.lastUpdated
+                ? new Date(stats.wakatime.lastUpdated).toLocaleString()
+                : "Never"}
+            </strong>
           </div>
 
           {/* Update indicator */}

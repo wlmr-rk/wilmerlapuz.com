@@ -17,13 +17,13 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { href: "https://github.com/yourusername", icon: Github, label: "GitHub" },
+    { href: "https://github.com/wlmr-rk", icon: Github, label: "GitHub" },
     {
-      href: "https://linkedin.com/in/yourusername",
+      href: "https://www.linkedin.com/in/wilmerlapuz/",
       icon: Linkedin,
       label: "LinkedIn",
     },
-    { href: "mailto:your.email@example.com", icon: Mail, label: "Email" },
+    { href: "mailto:wilmerlapuz@gmail.com", icon: Mail, label: "Email" },
   ];
 
   const quickLinks = [

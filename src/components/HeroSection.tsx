@@ -28,17 +28,17 @@ const HeroSection: React.FC = () => {
   // ACTION REQUIRED: Update these links with your actual profiles.
   const socialLinks = [
     {
-      href: "https://github.com/your-github-username", // <-- UPDATE THIS
+      href: "https://github.com/wlmr-rk",
       icon: Github,
       label: "GitHub",
     },
     {
-      href: "https://linkedin.com/in/your-linkedin-profile", // <-- UPDATE THIS
+      href: "https://www.linkedin.com/in/wilmerlapuz/",
       icon: Linkedin,
       label: "LinkedIn",
     },
     {
-      href: "mailto:wilmerlapuz@gmail.com", // <-- This is from your resume
+      href: "mailto:wilmerlapuz@gmail.com",
       icon: Mail,
       label: "Email",
     },
@@ -74,13 +74,11 @@ const HeroSection: React.FC = () => {
               <div className="text-5xl sm:text-6xl lg:text-8xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
                 WILMER
               </div>
-              {/* HIRING MANAGER'S NOTE: This title is a powerful hook. */}
               <div className="text-xl sm:text-2xl lg:text-3xl font-light text-white/70 tracking-wide">
                 Systems Thinker & Software Engineer
               </div>
             </h1>
 
-            {/* HIRING MANAGER'S NOTE: This subtitle connects your past to your present. */}
             <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-8 leading-relaxed">
               Leveraging a 7-year background in financial analysis to build
               efficient and reliable web applications with a systems-first

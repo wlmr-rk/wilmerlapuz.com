@@ -61,7 +61,7 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <div className="fixed right-6 top-1/2 z-50 -translate-y-1/2 transform perspective-normal hidden lg:block">
+    <div className="fixed right-8 top-1/2 z-50 -translate-y-1/2 transform perspective-normal hidden lg:block">
       {/* Main Navigation Pill */}
       <nav className="ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 bg-linear-to-b/oklch from-white/8 via-white/4 to-white/6 p-4 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_2px_4px_rgba(255,255,255,0.2),0_-2px_4px_rgba(0,0,0,0.9)] shadow-[0_4px_16px_rgba(0,255,136,0.05),0_8px_32px_rgba(0,0,0,0.4),0_16px_64px_rgba(0,0,0,0.3)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-400">
         {/* Navigation Items */}

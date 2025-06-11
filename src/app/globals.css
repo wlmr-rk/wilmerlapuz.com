@@ -1,0 +1,263 @@
+/* src/app/globals.css */
+
+@import "tailwindcss";
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+@theme {
+  /* REVERTED: Original color values with the new variable names */
+  --color-accent-main: oklch(0.75 0.15 145); /* Original Green */
+  --color-accent-mid: oklch(0.75 0.12 210); /* Original Blue */
+  --color-accent-light: oklch(0.75 0.13 195); /* Original Cyan */
+
+  /* REVERTED: Original glass color hue */
+  --color-glass-dark: oklch(0.12 0.02 240 / 0.96);
+  --color-glass-mid: oklch(0.16 0.02 240 / 0.92);
+  --color-glass-light: oklch(0.14 0.02 240 / 0.94);
+  --color-glass-deep: oklch(0.09 0.02 240 / 0.97);
+
+  /* Modern easing functions */
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+
+  /* 3D perspective utilities */
+  --perspective-near: 500px;
+  --perspective-normal: 1000px;
+  --perspective-distant: 1500px;
+
+  /* Dynamic spacing scale */
+  --spacing: 0.25rem;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.3;
+  }
+}
+
+@keyframes progress-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1) rotate(0.5deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-accent {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.8;
+  }
+  33% {
+    transform: translateY(-8px) scale(1.1);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(-4px) scale(0.9);
+    opacity: 0.9;
+  }
+}
+
+@keyframes float-ring {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.1;
+  }
+}
+
+.bg-noise {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><filter id="n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="10" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.07"/></svg>');
+}
+
+.card-glass {
+  background: linear-gradient(
+    135deg in oklch,
+    var(--color-glass-dark) 0%,
+    var(--color-glass-mid) 20%,
+    var(--color-glass-light) 40%,
+    var(--color-glass-deep) 70%,
+    oklch(0.02 0 0 / 0.99) 100%
+  );
+}
+
+/* --- The following classes are where the color changes will appear --- */
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  background: linear-gradient(
+    90deg in oklch,
+    transparent 0%,
+    var(--color-accent-main) 10%,
+    oklch(0.95 0.02 0) 30%,
+    var(--color-accent-mid) 50%,
+    oklch(0.95 0.02 0) 70%,
+    var(--color-accent-main) 90%,
+    transparent 100%
+  );
+  border-radius: 32px;
+  animation: shimmer 5s ease-in-out infinite;
+  filter: blur(1px);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  background:
+    radial-gradient(
+      circle at 25% 25%,
+      color-mix(in oklch, var(--color-accent-main) 3%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      color-mix(in oklch, var(--color-accent-mid) 2.5%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      45deg in oklch,
+      transparent 0%,
+      color-mix(in oklch, white 1%, transparent) 50%,
+      transparent 100%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card:hover::before {
+  background: linear-gradient(
+    90deg in oklch,
+    transparent 0%,
+    color-mix(in oklch, var(--color-accent-main) 60%, transparent) 10%,
+    color-mix(in oklch, white 80%, transparent) 30%,
+    color-mix(in oklch, var(--color-accent-mid) 70%, transparent) 50%,
+    color-mix(in oklch, white 80%, transparent) 70%,
+    color-mix(in oklch, var(--color-accent-main) 60%, transparent) 90%,
+    transparent 100%
+  );
+  height: 6px;
+  top: -3px;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.bento-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(
+    circle at 20% 20%,
+    color-mix(in oklch, white 2%, transparent) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.status-dot::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg in oklch,
+    color-mix(in oklch, var(--color-accent-main) 30%, transparent),
+    color-mix(in oklch, var(--color-accent-mid) 30%, transparent)
+  );
+  z-index: -1;
+  animation: pulse-ring 2.5s ease-in-out infinite;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg in oklch,
+    transparent 0%,
+    color-mix(in oklch, white 30%, transparent) 50%,
+    transparent 100%
+  );
+  border-radius: 2px;
+  animation: progress-shine 2s ease-in-out infinite 1s;
+}
+
+.floating-accent::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid
+    color-mix(in oklch, var(--color-accent-main) 20%, transparent);
+  border-radius: 50%;
+  animation: float-ring 5s ease-in-out infinite reverse;
+}
+
+.accent-line::after {
+  content: "";
+  position: absolute;
+  inset: -1px 0;
+  background: linear-gradient(
+    90deg in oklch,
+    color-mix(in oklch, var(--color-accent-main) 30%, transparent) 0%,
+    color-mix(in oklch, var(--color-accent-light) 30%, transparent) 50%,
+    color-mix(in oklch, var(--color-accent-mid) 30%, transparent) 100%
+  );
+  border-radius: 4px;
+  z-index: -1;
+  filter: blur(2px);
+}

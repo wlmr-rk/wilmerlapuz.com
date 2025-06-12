@@ -1,36 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+```markdown
+# wilmerlapuz.com – Portfolio & Live Dashboard
+
+A glass-morphic, **Next.js + TypeScript** portfolio that doubles as a real-time
+dashboard for my coding, fitness, language-learning and music activity.
+Everything you see is generated automatically by GitHub Actions every hour and
+deployed to Vercel in seconds.
+
+| Live Site | Tech Stack | License |
+|-----------|------------|---------|
+| <https://wilmerlapuz.com> | Next 14 • React 18 • Tailwind CSS v4 • Framer Motion • Vercel | MIT |
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Screenshots](#screenshots)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Folder Structure](#folder-structure)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Features
+
+- **Live Metrics**  
+  - WakaTime coding stats  
+  - Strava running distance & latest run  
+  - Spotify now-playing / recent track  
+  - LeetCode problem-solving progress  
+  - Anki Japanese deck breakdown  
+
+- **Automated Data Pipeline**  
+  - **GitHub Actions** workflow runs hourly  
+  - Fetches data from 5 APIs, normalises to JSON and commits to `public/*.json`  
+  - Zero-downtime Vercel deploy on push  
+
+- **Fully Responsive UI**  
+  - Desktop sidebar + mobile bottom-nav with smooth-scroll  
+  - Bento-grid for stats (drag-n-drop ready)  
+  - Glassmorphism powered by `oklch()` colour space and Tailwind CSS plugins  
+
+- **Accessibility & Performance**  
+  - Lighthouse ≥ 95 on all categories  
+  - Semantic HTML + aria labels  
+  - Optimised images via `next/image`  
+
+- **DX First**  
+  - Strict TypeScript (`noUncheckedIndexedAccess`, etc.)  
+  - ESLint, Prettier & Husky pre-commit hooks  
+  - Hot reload with `next dev`  
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    A[GitHub Actions<br>hourly cron]
+    A -->|REST / GraphQL calls| B(Data Aggregator)
+    B -->|Normalise JSON| C(public/*.json)
+    C -->|SWR (10 min)| D(Next.js App Router)
+    D --> E(StatsSection Hook)
+    E --> F(React UI Components)
+```
+
+- **Data layer** – simple JSON files; no server/database required
+- **UI layer** – statically generated at build time, hydrated client-side for
+  animations and live re-fetch
+- **Deployment** – Vercel preview per PR + production on `main`
+
+---
+
+## Screenshots
+
+| Hero Section | Live Dashboard |
+|--------------|----------------|
+| ![](./docs/screenshot-hero.png) | ![](./docs/screenshot-dashboard.png) |
+
+_(screenshots live in `/docs`)_
+
+---
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone**
+
+   ```bash
+   git clone https://github.com/wlmr-rk/wilmerlapuz.com.git
+   cd wilmerlapuz.com
+   ```
+
+2. **Install deps**
+
+   ```bash
+   pnpm install   # or yarn / npm
+   ```
+
+3. **Run locally**
+
+   ```bash
+   pnpm dev
+   # visit http://localhost:3000
+   ```
+
+There are no secret API keys required for local development; the demo JSON
+files under `/public` are enough.  
+To fetch fresh data locally, run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm fetch:stats   # executes the same script used in CI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Run in dev mode with fast refresh |
+| `pnpm build` | Production build |
+| `pnpm fetch:stats` | Pull latest data from external APIs |
+| `pnpm lint` | ESLint + TypeScript check |
+| `pnpm format` | Prettier auto-format |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Folder Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+.
+├─ app/                # Next.js App Router
+│  ├─ page.tsx
+│  ├─ layout.tsx
+│  └─ ...
+├─ components/         # Re-usable UI/section components
+├─ hooks/              # React hooks (e.g. useStats)
+├─ public/             # Auto-generated JSON + static assets
+├─ scripts/            # GitHub Action data fetchers
+├─ types/              # Shared TypeScript types
+└─ docs/               # Screenshots & diagrams for README
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Roadmap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] Dark-/light-mode toggle  
+- [ ] i18n (🇵🇭 & 🇯🇵 translations)  
+- [ ] Drag-to-reorder bento widgets (persisted to `localStorage`)  
+- [ ] Add **Rust** & **Kotlin** project showcases  
+- [ ] Lighthouse CI & unit tests (Vitest + React Testing Library)  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Contributing
+
+Pull requests are welcome!  
+If you spot a bug or want a new stat source:
+
+- Fork → create branch → commit → open PR
+- Describe *why* the change helps (hiring managers love clear reasoning)
+
+---
+
+## License
+
+MIT © Wilmer Lapuz  
+See [`LICENSE`](./LICENSE) for details.
+```

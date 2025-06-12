@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 12, "column": 0}, "map": {"version":3,"sources":["file:///home/wlmr/Code/myWebsite/src/app/icon.svg.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 275, height: 304 }\n"],"names":[],"mappings":";;;AAAA;;uCACe;IAAE,KAAA,2GAAA,CAAA,UAAG;IAAE,OAAO;IAAK,QAAQ;AAAI","debugId":null}}]
+}

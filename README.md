@@ -3,12 +3,12 @@
 
 A glass-morphic, **Next.js + TypeScript** portfolio that doubles as a real-time
 dashboard for my coding, fitness, language-learning and music activity.
-Everything you see is generated automatically by GitHub Actions every hour and
+Everything you see in **Stats** are generated automatically by GitHub Actions every hour and
 deployed to Vercel in seconds.
 
 | Live Site | Tech Stack | License |
 |-----------|------------|---------|
-| <https://wilmerlapuz.com> | Next 14 • React 18 • Tailwind CSS v4 • Framer Motion • Vercel | MIT |
+| <https://wilmerlapuz.com> | Next 15 • React 19 • Tailwind CSS v4 • Framer Motion • Vercel | MIT |
 
 ---
 
@@ -16,7 +16,6 @@ deployed to Vercel in seconds.
 
 - [Features](#features)
 - [Architecture](#architecture)
-- [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
 - [Available Scripts](#available-scripts)
 - [Folder Structure](#folder-structure)
@@ -73,16 +72,6 @@ graph TD
 - **UI layer** – statically generated at build time, hydrated client-side for
   animations and live re-fetch
 - **Deployment** – Vercel preview per PR + production on `main`
-
----
-
-## Screenshots
-
-| Hero Section | Live Dashboard |
-|--------------|----------------|
-| ![](./docs/screenshot-hero.png) | ![](./docs/screenshot-dashboard.png) |
-
-_(screenshots live in `/docs`)_
 
 ---
 
@@ -143,7 +132,6 @@ pnpm fetch:stats   # executes the same script used in CI
 ├─ public/             # Auto-generated JSON + static assets
 ├─ scripts/            # GitHub Action data fetchers
 ├─ types/              # Shared TypeScript types
-└─ docs/               # Screenshots & diagrams for README
 ```
 
 ---
@@ -151,7 +139,7 @@ pnpm fetch:stats   # executes the same script used in CI
 ## Roadmap
 
 - [ ] Dark-/light-mode toggle  
-- [ ] i18n (🇵🇭 & 🇯🇵 translations)  
+- [ ] i18n (🇯🇵 translations)  
 - [ ] Drag-to-reorder bento widgets (persisted to `localStorage`)  
 - [ ] Add **Rust** & **Kotlin** project showcases  
 - [ ] Lighthouse CI & unit tests (Vitest + React Testing Library)  
@@ -164,7 +152,6 @@ Pull requests are welcome!
 If you spot a bug or want a new stat source:
 
 - Fork → create branch → commit → open PR
-- Describe *why* the change helps (hiring managers love clear reasoning)
 
 ---
 

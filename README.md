@@ -59,14 +59,19 @@ deployed to Vercel in seconds.
 ## Architecture
 
 ```mermaid
-graph TD
-    A[GitHub Actions<br>hourly cron]
-    A -->|REST / GraphQL calls| B(Data Aggregator)
-    B -->|Normalise JSON| C(public/*.json)
-    C -->|SWR (10 min)| D(Next.js App Router)
-    D --> E(StatsSection Hook)
-    E --> F(React UI Components)
+graph LR
+    A[⏰ GitHub Actions] --> B[📊 Aggregator]
+    B --> C[📁 JSON Files] 
+    C --> D[⚡ Next.js]
+    D --> E[🎨 React UI]
+    
+    style A fill:#2563eb,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style B fill:#059669,stroke:#10b981,stroke-width:2px,color:#fff
+    style C fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#fff
+    style D fill:#7c3aed,stroke:#a855f7,stroke-width:2px,color:#fff
+    style E fill:#7c3aed,stroke:#a855f7,stroke-width:2px,color:#fff
 ```
+
 
 - **Data layer** – simple JSON files; no server/database required
 - **UI layer** – statically generated at build time, hydrated client-side for

@@ -1,4 +1,4 @@
-```markdown
+
 # wilmerlapuz.com – Portfolio & Live Dashboard
 
 A glass-morphic, **Next.js + TypeScript** portfolio that doubles as a real-time
@@ -172,4 +172,3 @@ If you spot a bug or want a new stat source:
 
 MIT © Wilmer Lapuz  
 See [`LICENSE`](./LICENSE) for details.
-```

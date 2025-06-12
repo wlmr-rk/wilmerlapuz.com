@@ -6,7 +6,7 @@ import { sql } from "@vercel/postgres"; // Use the Vercel Postgres SDK
 // Instantiate Resend with your API key
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TO_EMAIL = "wilmer.lapuz@gmail.com";
-const FROM_EMAIL = "onboarding@resend.dev"; // Resend's default for testing
+const FROM_EMAIL = "onboarding@wilmerlapuz.com";
 
 export async function POST(req: NextRequest) {
   try {
@@ -37,10 +37,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // --- 2. SEND EMAIL NOTIFICATION ---
-    // This part only runs if the database write was successful.
     const { error: emailError } = await resend.emails.send({
-      from: `Portfolio Contact <${FROM_EMAIL}>`,
+      from: `Wilmer Lapuz <${FROM_EMAIL}>`,
       to: [TO_EMAIL],
       replyTo: email,
       subject: `New Portfolio Contact: ${subject}`,

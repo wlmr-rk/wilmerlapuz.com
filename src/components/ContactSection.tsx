@@ -58,8 +58,6 @@ const ContactSection: React.FC = () => {
     setStatus({ type: "loading", message: "Sending message..." });
 
     try {
-      // Replace this with your actual form submission logic
-      // You can use services like Formspree, Netlify Forms, or your own API
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -68,7 +66,9 @@ const ContactSection: React.FC = () => {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
+      // NEW, SMARTER LOGIC
+      if (response.status === 200) {
+        // This is a complete success (200 OK)
         setStatus({
           type: "success",
           message: "Message sent successfully! I'll get back to you soon.",
@@ -80,14 +80,31 @@ const ContactSection: React.FC = () => {
           subject: "",
           message: "",
         });
+      } else if (response.status === 207) {
+        // This is a partial success (207 Multi-Status)
+        const result = await response.json();
+        setStatus({
+          type: "success", // Still a success, but with a different message
+          message:
+            result.message ||
+            "Your message was saved, but the email notification failed.",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          subject: "",
+          message: "",
+        });
       } else {
+        // Any other status is a failure
         throw new Error("Failed to send message");
       }
     } catch {
       setStatus({
         type: "error",
         message:
-          "Failed to send message. Please try emailing me directly at wilmer.lapuz@gmail.com",
+          "An error occurred. Please try emailing me directly at wilmer.lapuz@gmail.com",
       });
     }
   };

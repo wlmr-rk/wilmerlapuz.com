@@ -1600,7 +1600,6 @@ const projects = [
         category: "Web App",
         status: "Live",
         githubUrl: "https://github.com/wlmr-rk/wilmerlapuz.com",
-        liveUrl: "wilmerlapuz.com",
         features: [
             "Automated data fetching every hour",
             "Real-time stats from 5+ platforms",
@@ -1612,36 +1611,40 @@ const projects = [
             "Cross-platform data normalization",
             "Responsive design with complex animations"
         ],
-        gradient: "from-blue-500/20 to-cyan-500/20",
+        gradient: "from-blue-500/20 to-blue-300/20",
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$globe$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Globe$3e$__["Globe"]
     },
     {
-        id: "rust-cli-tool",
-        title: "System Configuration Manager",
-        description: "Rust CLI tool for managing NixOS configurations and dotfiles",
-        longDescription: "A command-line utility built in Rust that automates the management of NixOS system configurations, dotfiles synchronization, and development environment setup.",
+        id: "nixos-dotfiles",
+        title: "Personal NixOS Configuration",
+        description: "Comprehensive NixOS system configuration with Hyprland and development tools",
+        longDescription: "A complete NixOS system configuration featuring Hyprland window manager, custom development environments, and productivity-focused dotfiles. Built for efficient development workflow with Rust/Kotlin focus.",
         technologies: [
-            "Rust",
-            "Clap",
-            "Tokio",
-            "Serde",
-            "Git"
+            "Nix",
+            "Hyprland",
+            "Waybar",
+            "Fish Shell",
+            "Alacritty",
+            "Home Manager"
         ],
         category: "Tool",
-        status: "In Progress",
-        githubUrl: "https://github.com/yourusername/nix-manager",
+        status: "Completed",
+        githubUrl: "https://github.com/wlmr-rk/wlmr-nix",
         features: [
-            "Automated dotfiles sync",
-            "NixOS configuration validation",
-            "Development environment setup",
-            "Cross-machine configuration"
+            "Modular Nix configuration structure",
+            "Custom Hyprland + Waybar setup",
+            "Enhanced Fuzzel launcher with Japanese UI",
+            "Development environment templates",
+            "Automated clipboard monitoring",
+            "Tokyo Night themed everything"
         ],
         challenges: [
-            "Complex Nix expression parsing",
-            "Async file operations optimization",
-            "Error handling for system calls"
+            "Modular configuration architecture",
+            "Wayland-specific app compatibility",
+            "Custom Fish shell function development",
+            "AMD GPU optimization for gaming"
         ],
-        gradient: "from-orange-500/20 to-red-500/20",
+        gradient: "from-blue-500/20 to-purple-500/20",
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$terminal$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Terminal$3e$__["Terminal"]
     },
     {
@@ -1658,7 +1661,7 @@ const projects = [
         ],
         category: "Mobile",
         status: "In Progress",
-        githubUrl: "https://github.com/yourusername/productivity-tracker",
+        // githubUrl: "https://github.com/yourusername/productivity-tracker",
         features: [
             "Habit tracking with streaks",
             "Data visualization charts",
@@ -1674,32 +1677,36 @@ const projects = [
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$smartphone$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Smartphone$3e$__["Smartphone"]
     },
     {
-        id: "automation-pipeline",
-        title: "Data Pipeline Automation",
-        description: "Automated data collection and processing system for personal metrics",
-        longDescription: "A robust system that automatically collects data from various APIs, processes it, and generates insights. Built with error handling, retry mechanisms, and monitoring.",
+        id: "project-nexus",
+        title: "Project Nexus - Data Aggregation Pipeline",
+        description: "Serverless data aggregation pipeline streaming real-time telemetry from multiple APIs into a Next.js portfolio",
+        longDescription: "A comprehensive automated system that collects and synchronizes data from Spotify, Strava, LeetCode, WakaTime, and Anki to power a dynamic portfolio website. Runs hourly via GitHub Actions, transforming personal metrics into compelling 'building in public' content with >99% uptime.",
         technologies: [
             "Node.js",
-            "TypeScript",
             "GitHub Actions",
-            "JSON",
-            "REST APIs"
+            "REST APIs",
+            "GraphQL",
+            "Vercel",
+            "JSON"
         ],
         category: "System",
         status: "Live",
-        githubUrl: "https://github.com/yourusername/data-pipeline",
+        githubUrl: "https://github.com/wlmr-rk/proj-nexus",
         features: [
-            "Multi-API data collection",
-            "Error handling & retries",
-            "Automated scheduling",
-            "Data validation & cleaning"
+            "5 API integrations (Spotify, Strava, LeetCode, WakaTime, Anki)",
+            "Hourly automated sync via GitHub Actions",
+            "Resilient error handling & graceful failures",
+            "Zero-downtime deployment with Vercel",
+            "Real-time portfolio data updates",
+            "Concurrent API processing for speed"
         ],
         challenges: [
-            "API reliability management",
-            "Data consistency across sources",
-            "Scalable architecture design"
+            "OAuth2 refresh token management across services",
+            "Git conflict resolution for concurrent updates",
+            "Rate limit compliance across multiple APIs",
+            "Transforming disparate data formats into unified JSON"
         ],
-        gradient: "from-purple-500/20 to-pink-500/20",
+        gradient: "from-pink-600/20 to-red-200/20",
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$server$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Server$3e$__["Server"]
     }
 ];
@@ -1749,7 +1756,7 @@ const ProjectsSection = ()=>{
                 className: "bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]"
             }, void 0, false, {
                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                lineNumber: 198,
+                lineNumber: 212,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1763,7 +1770,7 @@ const ProjectsSection = ()=>{
                                 children: "Projects"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 203,
+                                lineNumber: 217,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1771,7 +1778,7 @@ const ProjectsSection = ()=>{
                                 children: "Building solutions that solve real problems with modern technologies"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 206,
+                                lineNumber: 220,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1782,18 +1789,18 @@ const ProjectsSection = ()=>{
                                         children: category
                                     }, category, false, {
                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                        lineNumber: 213,
+                                        lineNumber: 227,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 211,
+                                lineNumber: 225,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                        lineNumber: 202,
+                        lineNumber: 216,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1808,7 +1815,7 @@ const ProjectsSection = ()=>{
                                         className: `absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br ${project.gradient} opacity-30 group-hover:opacity-50 transition-opacity duration-400`
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                        lineNumber: 239,
+                                        lineNumber: 253,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1827,12 +1834,12 @@ const ProjectsSection = ()=>{
                                                                     className: "text-white"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                    lineNumber: 249,
+                                                                    lineNumber: 263,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                lineNumber: 248,
+                                                                lineNumber: 262,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1842,7 +1849,7 @@ const ProjectsSection = ()=>{
                                                                         children: project.category
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                        lineNumber: 252,
+                                                                        lineNumber: 266,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1850,19 +1857,19 @@ const ProjectsSection = ()=>{
                                                                         children: project.title
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                        lineNumber: 255,
+                                                                        lineNumber: 269,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                lineNumber: 251,
+                                                                lineNumber: 265,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                        lineNumber: 247,
+                                                        lineNumber: 261,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1872,7 +1879,7 @@ const ProjectsSection = ()=>{
                                                                 className: `inline-block size-2 rounded-full mr-2 ${getStatusDot(project.status)}`
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                lineNumber: 263,
+                                                                lineNumber: 277,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1880,19 +1887,19 @@ const ProjectsSection = ()=>{
                                                                 children: project.status
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                lineNumber: 266,
+                                                                lineNumber: 280,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                        lineNumber: 262,
+                                                        lineNumber: 276,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                lineNumber: 246,
+                                                lineNumber: 260,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1900,7 +1907,7 @@ const ProjectsSection = ()=>{
                                                 children: project.description
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                lineNumber: 275,
+                                                lineNumber: 289,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1911,7 +1918,7 @@ const ProjectsSection = ()=>{
                                                             children: tech
                                                         }, tech, false, {
                                                             fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                            lineNumber: 282,
+                                                            lineNumber: 296,
                                                             columnNumber: 23
                                                         }, this)),
                                                     project.technologies.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1923,13 +1930,13 @@ const ProjectsSection = ()=>{
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                        lineNumber: 290,
+                                                        lineNumber: 304,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                lineNumber: 280,
+                                                lineNumber: 294,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1947,14 +1954,14 @@ const ProjectsSection = ()=>{
                                                                 className: "mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                lineNumber: 306,
+                                                                lineNumber: 320,
                                                                 columnNumber: 25
                                                             }, this),
                                                             "Code"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                        lineNumber: 299,
+                                                        lineNumber: 313,
                                                         columnNumber: 23
                                                     }, this),
                                                     project.liveUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1969,45 +1976,45 @@ const ProjectsSection = ()=>{
                                                                 className: "mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                                lineNumber: 318,
+                                                                lineNumber: 332,
                                                                 columnNumber: 25
                                                             }, this),
                                                             "Live"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                        lineNumber: 311,
+                                                        lineNumber: 325,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                                lineNumber: 297,
+                                                lineNumber: 311,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                        lineNumber: 244,
+                                        lineNumber: 258,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                                        lineNumber: 326,
+                                        lineNumber: 340,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, project.id, true, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 233,
+                                lineNumber: 247,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                        lineNumber: 229,
+                        lineNumber: 243,
                         columnNumber: 9
                     }, this),
                     filteredProjects.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2018,7 +2025,7 @@ const ProjectsSection = ()=>{
                                 className: "text-white/30 mx-auto mb-4"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 335,
+                                lineNumber: 349,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2026,7 +2033,7 @@ const ProjectsSection = ()=>{
                                 children: "No projects found"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 336,
+                                lineNumber: 350,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2034,13 +2041,13 @@ const ProjectsSection = ()=>{
                                 children: "Try selecting a different category"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                                lineNumber: 339,
+                                lineNumber: 353,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                        lineNumber: 334,
+                        lineNumber: 348,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2053,7 +2060,7 @@ const ProjectsSection = ()=>{
                                     className: "mr-2 text-accent-main"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ProjectsSection.tsx",
-                                    lineNumber: 346,
+                                    lineNumber: 360,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2069,7 +2076,7 @@ const ProjectsSection = ()=>{
                                             children: "GitHub"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectsSection.tsx",
-                                            lineNumber: 349,
+                                            lineNumber: 363,
                                             columnNumber: 15
                                         }, this),
                                         " ",
@@ -2077,30 +2084,30 @@ const ProjectsSection = ()=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProjectsSection.tsx",
-                                    lineNumber: 347,
+                                    lineNumber: 361,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProjectsSection.tsx",
-                            lineNumber: 345,
+                            lineNumber: 359,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProjectsSection.tsx",
-                        lineNumber: 344,
+                        lineNumber: 358,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ProjectsSection.tsx",
-                lineNumber: 200,
+                lineNumber: 214,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/ProjectsSection.tsx",
-        lineNumber: 193,
+        lineNumber: 207,
         columnNumber: 5
     }, this);
 };

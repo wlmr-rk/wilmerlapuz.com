@@ -42,7 +42,6 @@ A glass-morphic, **Next.js + TypeScript** portfolio that doubles as a real-time 
 
 -   **Fully Responsive UI**
     -   Desktop sidebar + mobile bottom-nav with smooth-scroll
-    -   Bento-grid for stats (drag-n-drop ready)
     -   Glassmorphism powered by `oklch()` colour space and Tailwind CSS plugins
 
 -   **Accessibility & Performance**

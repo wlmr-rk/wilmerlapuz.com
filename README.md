@@ -58,19 +58,7 @@ deployed to Vercel in seconds.
 
 ## Architecture
 
-```mermaid
-graph LR
-    A[⏰ GitHub Actions] --> B[📊 Aggregator]
-    B --> C[📁 JSON Files] 
-    C --> D[⚡ Next.js]
-    D --> E[🎨 React UI]
-    
-    style A fill:#2563eb,stroke:#3b82f6,stroke-width:2px,color:#fff
-    style B fill:#059669,stroke:#10b981,stroke-width:2px,color:#fff
-    style C fill:#dc2626,stroke:#ef4444,stroke-width:2px,color:#fff
-    style D fill:#7c3aed,stroke:#a855f7,stroke-width:2px,color:#fff
-    style E fill:#7c3aed,stroke:#a855f7,stroke-width:2px,color:#fff
-```
+⏰ GitHub Actions → 📊 Aggregator → 📁 JSON Files → ⚡ Next.js → 🎨 React UI
 
 
 - **Data layer** – simple JSON files; no server/database required

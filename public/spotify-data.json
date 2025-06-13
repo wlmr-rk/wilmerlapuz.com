@@ -7,6 +7,10 @@
     "url": "https://open.spotify.com/track/05kVyNUR9uibHta4jcGTTv",
     "isPlaying": false
   },
+  "todaysPlays": {
+    "totalPlays": 0,
+    "tracks": []
+  },
   "recentlyPlayed": [
     {
       "id": "05kVyNUR9uibHta4jcGTTv",
@@ -50,5 +54,5 @@
     "topGenres": [],
     "note": "Top tracks are based on Spotify's ranking, not play counts. Listening time is not available via the API."
   },
-  "lastUpdated": "2025-06-13T17:28:53.092Z"
+  "lastUpdated": "2025-06-13T17:34:50.880Z"
 }

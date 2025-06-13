@@ -1,8 +1,15 @@
 {
-  "easy": 0,
+  "easy": 1,
   "medium": 0,
   "hard": 0,
-  "recentProblems": [],
-  "lastUpdated": "2025-06-13T17:04:04.566Z",
-  "error": "LeetCode API request failed with status 400: {\"errors\":[{\"message\":\"Cannot query field \\\"recentAcSubmissionList\\\" on type \\\"UserNode\\\".\",\"locations\":[{\"line\":11,\"column\":7}]}]}"
+  "recentProblems": [
+    {
+      "title": "Two Sum",
+      "titleSlug": "two-sum",
+      "date": "2025-06-10",
+      "language": "rust",
+      "url": "https://leetcode.com/problems/two-sum/"
+    }
+  ],
+  "lastUpdated": "2025-06-13T17:05:11.135Z"
 }

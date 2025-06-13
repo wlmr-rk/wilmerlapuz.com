@@ -1,21 +1,33 @@
 {
-  "totalRuns": 20,
-  "totalDistanceKm": "39.8",
-  "recentRuns": [
+  "weeklyGoalKm": 40,
+  "runs": [
     {
-      "name": "Day 3 of Running/Walk",
-      "distanceKm": "10.2",
-      "date": "2025-03-23"
+      "day": "Sun",
+      "km": 0
     },
     {
-      "name": "Lunch Walk",
-      "distanceKm": "4.7",
-      "date": "2019-07-20"
+      "day": "Mon",
+      "km": 0
     },
     {
-      "name": "Night Run",
-      "distanceKm": "1.5",
-      "date": "2019-07-20"
+      "day": "Tue",
+      "km": 0
+    },
+    {
+      "day": "Wed",
+      "km": 0
+    },
+    {
+      "day": "Thu",
+      "km": 0
+    },
+    {
+      "day": "Fri",
+      "km": 0
+    },
+    {
+      "day": "Sat",
+      "km": 0
     }
   ]
 }

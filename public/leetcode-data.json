@@ -3,6 +3,6 @@
   "medium": 0,
   "hard": 0,
   "recentProblems": [],
-  "lastUpdated": "2025-06-13T17:03:08.957Z",
-  "error": "LeetCode API request failed with status 400"
+  "lastUpdated": "2025-06-13T17:04:04.566Z",
+  "error": "LeetCode API request failed with status 400: {\"errors\":[{\"message\":\"Cannot query field \\\"recentAcSubmissionList\\\" on type \\\"UserNode\\\".\",\"locations\":[{\"line\":11,\"column\":7}]}]}"
 }

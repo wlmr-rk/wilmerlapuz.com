@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-13T17:22:09.342Z",
+  "lastUpdated": "2025-06-13T17:24:43.910Z",
   "status": "Active Developer",
   "today": {
     "timeTodayMinutes": 103,
@@ -14,7 +14,7 @@
         "name": "Nix",
         "timeMinutes": 34,
         "percentage": "33.4",
-        "color": "#64748b"
+        "color": "#5277c3"
       },
       {
         "name": "JSON",
@@ -70,7 +70,7 @@
         "timeHours": 1.5,
         "totalSeconds": 5361,
         "percentage": "10.4",
-        "color": "#64748b"
+        "color": "#5277c3"
       },
       {
         "name": "JavaScript",
@@ -237,6 +237,17 @@
     ],
     "consistency": "Good"
   },
+  "monthly": {
+    "totalTimeMinutes": 0,
+    "totalTimeHours": 0,
+    "activeDays": 0,
+    "dailyAverageMinutes": 0,
+    "languages": [],
+    "totalLanguages": 0,
+    "topEditors": [],
+    "topProjects": [],
+    "note": "Monthly data unavailable - check WakaTime plan or API permissions"
+  },
   "languages": [
     {
       "name": "TypeScript",
@@ -252,7 +263,7 @@
       "timeHours": 1.5,
       "totalSeconds": 5361,
       "percentage": "10.4",
-      "color": "#64748b"
+      "color": "#5277c3"
     },
     {
       "name": "JavaScript",

@@ -1,8 +1,54 @@
 {
-  "isPlaying": false,
-  "title": "Innerbloom",
-  "artist": "RÜFÜS DU SOL",
-  "album": "Bloom",
-  "albumImageUrl": "https://i.scdn.co/image/ab67616d0000b273de342b284f5dc7e0257fe38c",
-  "songUrl": "https://open.spotify.com/track/05kVyNUR9uibHta4jcGTTv"
+  "nowPlaying": {
+    "id": "05kVyNUR9uibHta4jcGTTv",
+    "song": "Innerbloom",
+    "artist": "RÜFÜS DU SOL",
+    "albumArt": "https://i.scdn.co/image/ab67616d0000b273de342b284f5dc7e0257fe38c",
+    "url": "https://open.spotify.com/track/05kVyNUR9uibHta4jcGTTv",
+    "isPlaying": false
+  },
+  "recentlyPlayed": [
+    {
+      "id": "05kVyNUR9uibHta4jcGTTv",
+      "song": "Innerbloom",
+      "artist": "RÜFÜS DU SOL",
+      "albumArt": "https://i.scdn.co/image/ab67616d0000b273de342b284f5dc7e0257fe38c",
+      "url": "https://open.spotify.com/track/05kVyNUR9uibHta4jcGTTv"
+    },
+    {
+      "id": "5jxb6T8Gns1H3l88nXczUv",
+      "song": "OHAYO!",
+      "artist": "MIYACHI",
+      "albumArt": "https://i.scdn.co/image/ab67616d0000b273338194701d31befd12ca519e",
+      "url": "https://open.spotify.com/track/5jxb6T8Gns1H3l88nXczUv"
+    },
+    {
+      "id": "2fktrJuECcaRCgJuqwChL8",
+      "song": "It Could Happen To You",
+      "artist": "Ryo Fukui",
+      "albumArt": "https://i.scdn.co/image/ab67616d0000b273b752bbaa0dd7578b736f7cc1",
+      "url": "https://open.spotify.com/track/2fktrJuECcaRCgJuqwChL8"
+    },
+    {
+      "id": "2HvyNivWMMe2eywZL49cuu",
+      "song": "Sleep Tight",
+      "artist": "Nursery Rhymes 123",
+      "albumArt": "https://i.scdn.co/image/ab67616d0000b273e8f3db90796ba40b5e73d3fc",
+      "url": "https://open.spotify.com/track/2HvyNivWMMe2eywZL49cuu"
+    },
+    {
+      "id": "5ic62hKqeDhZsa9l6YQxzJ",
+      "song": "メズマライザー (feat. 初音ミク&重音テト)",
+      "artist": "32ki, Hatsune Miku, 重音テト",
+      "albumArt": "https://i.scdn.co/image/ab67616d0000b27321333eb66e3cf9f3818e789f",
+      "url": "https://open.spotify.com/track/5ic62hKqeDhZsa9l6YQxzJ"
+    }
+  ],
+  "analytics": {
+    "topTrackMonth": null,
+    "topTrackYear": null,
+    "topGenres": [],
+    "note": "Top tracks are based on Spotify's ranking, not play counts. Listening time is not available via the API."
+  },
+  "lastUpdated": "2025-06-13T17:28:53.092Z"
 }

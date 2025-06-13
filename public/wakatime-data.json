@@ -1,24 +1,275 @@
 {
-  "lastUpdated": "2025-06-13T17:18:55.493Z",
+  "lastUpdated": "2025-06-13T17:22:09.342Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 103,
-    "primaryLanguage": "TypeScript",
-    "environment": {
-      "editor": "Neovim",
-      "os": "Linux"
-    }
+    "timeTodayMinutes": 103,
+    "languages": [
+      {
+        "name": "TypeScript",
+        "timeMinutes": 39,
+        "percentage": "38.4",
+        "color": "#3178c6"
+      },
+      {
+        "name": "Nix",
+        "timeMinutes": 34,
+        "percentage": "33.4",
+        "color": "#64748b"
+      },
+      {
+        "name": "JSON",
+        "timeMinutes": 22,
+        "percentage": "21.4",
+        "color": "#292929"
+      },
+      {
+        "name": "Svelte",
+        "timeMinutes": 4,
+        "percentage": "3.6",
+        "color": "#ff3e00"
+      },
+      {
+        "name": "Rust",
+        "timeMinutes": 3,
+        "percentage": "2.8",
+        "color": "#dea584"
+      },
+      {
+        "name": "Markdown",
+        "timeMinutes": 0,
+        "percentage": "0.4",
+        "color": "#083fa1"
+      },
+      {
+        "name": "TOML",
+        "timeMinutes": 0,
+        "percentage": "0.0",
+        "color": "#9c4221"
+      }
+    ],
+    "topEditor": "Neovim",
+    "topProject": "myWebsite"
   },
-  "weeklyStats": {
-    "totalHoursLast7Days": "14.3",
-    "activeDaysCount": 3,
+  "weekly": {
+    "totalTimeMinutes": 861,
+    "totalTimeHours": 14.3,
+    "activeDays": 3,
     "dailyAverageMinutes": 123,
-    "languages": {
-      "primary": "TypeScript",
-      "secondary": "Nix",
-      "primaryPercentage": "49.3",
-      "secondaryPercentage": "10.4"
-    },
+    "languages": [
+      {
+        "name": "TypeScript",
+        "timeMinutes": 425,
+        "timeHours": 7.1,
+        "totalSeconds": 25475,
+        "percentage": "49.3",
+        "color": "#3178c6"
+      },
+      {
+        "name": "Nix",
+        "timeMinutes": 89,
+        "timeHours": 1.5,
+        "totalSeconds": 5361,
+        "percentage": "10.4",
+        "color": "#64748b"
+      },
+      {
+        "name": "JavaScript",
+        "timeMinutes": 85,
+        "timeHours": 1.4,
+        "totalSeconds": 5086,
+        "percentage": "9.9",
+        "color": "#f7df1e"
+      },
+      {
+        "name": "CSS",
+        "timeMinutes": 74,
+        "timeHours": 1.2,
+        "totalSeconds": 4420,
+        "percentage": "8.6",
+        "color": "#1572b6"
+      },
+      {
+        "name": "Svelte",
+        "timeMinutes": 52,
+        "timeHours": 0.9,
+        "totalSeconds": 3138,
+        "percentage": "6.1",
+        "color": "#ff3e00"
+      },
+      {
+        "name": "YAML",
+        "timeMinutes": 31,
+        "timeHours": 0.5,
+        "totalSeconds": 1874,
+        "percentage": "3.6",
+        "color": "#cb171e"
+      },
+      {
+        "name": "JSON",
+        "timeMinutes": 28,
+        "timeHours": 0.5,
+        "totalSeconds": 1686,
+        "percentage": "3.3",
+        "color": "#292929"
+      },
+      {
+        "name": "Bash",
+        "timeMinutes": 26,
+        "timeHours": 0.4,
+        "totalSeconds": 1566,
+        "percentage": "3.0",
+        "color": "#89e051"
+      },
+      {
+        "name": "gitignore",
+        "timeMinutes": 20,
+        "timeHours": 0.3,
+        "totalSeconds": 1179,
+        "percentage": "2.3",
+        "color": "#64748b"
+      },
+      {
+        "name": "conf",
+        "timeMinutes": 9,
+        "timeHours": 0.2,
+        "totalSeconds": 566,
+        "percentage": "1.1",
+        "color": "#64748b"
+      },
+      {
+        "name": "Rust",
+        "timeMinutes": 7,
+        "timeHours": 0.1,
+        "totalSeconds": 414,
+        "percentage": "0.8",
+        "color": "#dea584"
+      },
+      {
+        "name": "Markdown",
+        "timeMinutes": 6,
+        "timeHours": 0.1,
+        "totalSeconds": 338,
+        "percentage": "0.7",
+        "color": "#083fa1"
+      },
+      {
+        "name": "TOML",
+        "timeMinutes": 4,
+        "timeHours": 0.1,
+        "totalSeconds": 259,
+        "percentage": "0.5",
+        "color": "#9c4221"
+      },
+      {
+        "name": "TSConfig",
+        "timeMinutes": 4,
+        "timeHours": 0.1,
+        "totalSeconds": 229,
+        "percentage": "0.4",
+        "color": "#64748b"
+      },
+      {
+        "name": "HTML",
+        "timeMinutes": 1,
+        "timeHours": 0,
+        "totalSeconds": 40,
+        "percentage": "0.1",
+        "color": "#e34f26"
+      }
+    ],
+    "totalLanguages": 15,
+    "topEditors": [
+      {
+        "name": "Neovim",
+        "timeMinutes": 861,
+        "percentage": "100.0"
+      }
+    ],
+    "topProjects": [
+      {
+        "name": "xwebsite",
+        "timeMinutes": 295,
+        "timeHours": 4.9,
+        "percentage": "34.3"
+      },
+      {
+        "name": "proj-nexus",
+        "timeMinutes": 125,
+        "timeHours": 2.1,
+        "percentage": "14.5"
+      },
+      {
+        "name": "myWebsite",
+        "timeMinutes": 263,
+        "timeHours": 4.4,
+        "percentage": "30.6"
+      },
+      {
+        "name": "NixOS",
+        "timeMinutes": 68,
+        "timeHours": 1.1,
+        "percentage": "7.9"
+      },
+      {
+        "name": "wlmr-site",
+        "timeMinutes": 0,
+        "timeHours": 0,
+        "percentage": "0.0"
+      },
+      {
+        "name": "Unknown Project",
+        "timeMinutes": 99,
+        "timeHours": 1.6,
+        "percentage": "11.5"
+      },
+      {
+        "name": "Rust",
+        "timeMinutes": 7,
+        "timeHours": 0.1,
+        "percentage": "0.8"
+      },
+      {
+        "name": "fsrs-rs",
+        "timeMinutes": 3,
+        "timeHours": 0.1,
+        "percentage": "0.4"
+      }
+    ],
     "consistency": "Good"
-  }
+  },
+  "languages": [
+    {
+      "name": "TypeScript",
+      "timeMinutes": 425,
+      "timeHours": 7.1,
+      "totalSeconds": 25475,
+      "percentage": "49.3",
+      "color": "#3178c6"
+    },
+    {
+      "name": "Nix",
+      "timeMinutes": 89,
+      "timeHours": 1.5,
+      "totalSeconds": 5361,
+      "percentage": "10.4",
+      "color": "#64748b"
+    },
+    {
+      "name": "JavaScript",
+      "timeMinutes": 85,
+      "timeHours": 1.4,
+      "totalSeconds": 5086,
+      "percentage": "9.9",
+      "color": "#f7df1e"
+    },
+    {
+      "name": "CSS",
+      "timeMinutes": 74,
+      "timeHours": 1.2,
+      "totalSeconds": 4420,
+      "percentage": "8.6",
+      "color": "#1572b6"
+    }
+  ],
+  "timeTodayMinutes": 103
 }

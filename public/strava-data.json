@@ -3,31 +3,62 @@
   "runs": [
     {
       "day": "Sun",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-07",
+      "runs": []
     },
     {
       "day": "Mon",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-08",
+      "runs": []
     },
     {
       "day": "Tue",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-09",
+      "runs": []
     },
     {
       "day": "Wed",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-10",
+      "runs": []
     },
     {
       "day": "Thu",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-11",
+      "runs": []
     },
     {
       "day": "Fri",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-12",
+      "runs": []
     },
     {
       "day": "Sat",
-      "km": 0
+      "km": 0,
+      "date": "2025-06-13",
+      "runs": []
     }
-  ]
+  ],
+  "recentRuns": [],
+  "bestRuns": {
+    "longestRun": null,
+    "fastestPace": null,
+    "mostElevation": null
+  },
+  "weeklyStats": {
+    "totalRuns": 0,
+    "totalDistanceKm": 0,
+    "totalTimeSeconds": 0,
+    "totalElevationGain": 0,
+    "averagePacePerKm": null,
+    "weekStartDate": "2025-06-07",
+    "weekEndDate": "2025-06-14"
+  },
+  "totalActivitiesAnalyzed": 0,
+  "lastUpdated": "2025-06-13T17:09:39.808Z"
 }

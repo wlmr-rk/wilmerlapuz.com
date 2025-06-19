@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2025-06-19T14:41:58.885Z",
+  "lastUpdated": "2025-06-19T15:38:49.452Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 177,
-    "primaryLanguage": "JSON",
+    "codingMinutes": 228,
+    "primaryLanguage": "TypeScript",
     "environment": {
       "editor": "Neovim",
       "os": "Linux"
     }
   },
   "weeklyStats": {
-    "totalHoursLast7Days": "21.8",
+    "totalHoursLast7Days": "22.6",
     "activeDaysCount": 7,
-    "dailyAverageMinutes": 187,
+    "dailyAverageMinutes": 194,
     "languages": {
       "primary": "Svelte",
       "secondary": "TypeScript",
-      "primaryPercentage": "62.1",
-      "secondaryPercentage": "10.8"
+      "primaryPercentage": "59.7",
+      "secondaryPercentage": "13.5"
     },
     "consistency": "High"
   }

@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2025-06-20T23:32:49.399Z",
+  "lastUpdated": "2025-06-21T03:33:11.371Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 331,
-    "primaryLanguage": "Python",
+    "codingMinutes": 0,
+    "primaryLanguage": "Various",
     "environment": {
-      "editor": "Neovim",
-      "os": "Linux"
+      "editor": "Unknown",
+      "os": "Unknown"
     }
   },
   "weeklyStats": {
-    "totalHoursLast7Days": "26.7",
-    "activeDaysCount": 7,
-    "dailyAverageMinutes": 229,
+    "totalHoursLast7Days": "24.4",
+    "activeDaysCount": 6,
+    "dailyAverageMinutes": 209,
     "languages": {
       "primary": "Svelte",
       "secondary": "Python",
-      "primaryPercentage": "50.3",
-      "secondaryPercentage": "18.4"
+      "primaryPercentage": "54.5",
+      "secondaryPercentage": "19.9"
     },
     "consistency": "High"
   }

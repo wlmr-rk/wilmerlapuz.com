@@ -1,17 +1,17 @@
 {
-  "lastUpdated": "2025-06-21T03:33:11.371Z",
+  "lastUpdated": "2025-06-21T04:47:32.566Z",
   "status": "Active Developer",
   "today": {
     "codingMinutes": 0,
-    "primaryLanguage": "Various",
+    "primaryLanguage": "Nix",
     "environment": {
-      "editor": "Unknown",
-      "os": "Unknown"
+      "editor": "Neovim",
+      "os": "Linux"
     }
   },
   "weeklyStats": {
     "totalHoursLast7Days": "24.4",
-    "activeDaysCount": 6,
+    "activeDaysCount": 7,
     "dailyAverageMinutes": 209,
     "languages": {
       "primary": "Svelte",

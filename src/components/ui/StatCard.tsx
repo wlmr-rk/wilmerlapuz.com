@@ -9,10 +9,12 @@ interface StatCardProps {
   value: string;
   unit?: string;
   icon: LucideIcon;
+  iconClassName?: string; // Added iconClassName prop
   gradient: string;
   description?: string;
-  layout?: "default" | "compact" | "wide";
+  layout?: "default" | "compact" | "wide" | "custom";
   className?: string;
+  children?: React.ReactNode;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -20,10 +22,12 @@ const StatCard: React.FC<StatCardProps> = ({
   value,
   unit,
   icon: Icon,
+  iconClassName = "text-white", // Default icon color
   gradient,
   description,
   layout = "default",
   className = "",
+  children,
 }) => {
   return (
     <div
@@ -40,7 +44,7 @@ const StatCard: React.FC<StatCardProps> = ({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center">
             <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
-              <Icon size={18} className="text-white" />
+              <Icon size={18} className={iconClassName} />
             </div>
             <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wide">
               {title}
@@ -48,8 +52,10 @@ const StatCard: React.FC<StatCardProps> = ({
           </div>
         </div>
 
-        {/* Value */}
-        {layout === "wide" ? (
+        {/* Value / Custom Content */}
+        {layout === "custom" ? (
+          children // Render children if layout is custom
+        ) : layout === "wide" ? (
           <div className="mb-2">
             <div className="text-lg font-bold text-white leading-tight line-clamp-2">
               {value}
@@ -72,8 +78,8 @@ const StatCard: React.FC<StatCardProps> = ({
           </div>
         )}
 
-        {/* Description */}
-        {description && (
+        {/* Description (only if not custom layout) */}
+        {layout !== "custom" && description && (
           <div className="text-xs text-white/50 leading-relaxed line-clamp-2">
             {description}
           </div>

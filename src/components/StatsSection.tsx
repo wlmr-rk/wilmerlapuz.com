@@ -303,34 +303,26 @@ const StatsSection: React.FC = () => {
             </div>
           )}
 
+import StatCard from "./ui/StatCard"; // Added import
+
           {/* Spotify - Small Card */}
           {stats?.spotify && (
-            <div className="lg:col-span-1 xl:col-span-2 bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14">
-              {/* Background Gradient */}
-              <div className="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 opacity-50" />
-
+            <StatCard
+              title={stats.spotify.isPlaying ? "Now Playing" : "Last Played"}
+              value={stats.spotify.title}
+              icon={stats.spotify.isPlaying ? Play : Music}
+              iconClassName={stats.spotify.isPlaying ? "text-green-400" : "text-white"}
+              gradient="from-green-500/20 to-emerald-500/20"
+              className="lg:col-span-1 xl:col-span-2"
+              layout="custom"
+            >
               <div className="relative z-10">
-                <div className="flex items-center mb-4">
-                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-3">
-                    {stats.spotify.isPlaying ? (
-                      <Play size={18} className="text-green-400" />
-                    ) : (
-                      <Music size={18} className="text-white" />
-                    )}
+                {stats.spotify.isPlaying && (
+                  <div className="flex items-center text-green-400 text-xs mb-2">
+                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1 animate-pulse" />
+                    Live
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-white">
-                      {stats.spotify.isPlaying ? "Now Playing" : "Last Played"}
-                    </h3>
-                    {stats.spotify.isPlaying && (
-                      <div className="flex items-center text-green-400 text-xs">
-                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1 animate-pulse" />
-                        Live
-                      </div>
-                    )}
-                  </div>
-                </div>
-
+                )}
                 <div className="flex items-center">
                   {/* Album Art */}
                   <div className="relative mr-3 flex-shrink-0">
@@ -350,9 +342,7 @@ const StatsSection: React.FC = () => {
 
                   {/* Track Info */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-white font-bold text-sm leading-tight line-clamp-2 mb-1">
-                      {stats.spotify.title}
-                    </h4>
+                    {/* Value (song title) is already handled by StatCard, this is for artist and link */}
                     <p className="text-white/70 text-xs mb-1 line-clamp-1">
                       {stats.spotify.artist}
                     </p>
@@ -368,26 +358,23 @@ const StatsSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </StatCard>
           )}
 
           {/* LeetCode Progress - Medium Card */}
           {stats?.leetcode && (
-            <div className="lg:col-span-1 xl:col-span-2 bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14">
-              {/* Background Gradient */}
-              <div className="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-yellow-500/20 to-amber-500/20 opacity-50" />
-
+            <StatCard
+              title="LeetCode"
+              // Value is part of the children for more complex layout
+              value=""
+              icon={Trophy}
+              iconClassName="text-yellow-400"
+              gradient="from-yellow-500/20 to-amber-500/20"
+              className="lg:col-span-1 xl:col-span-2"
+              layout="custom"
+            >
               <div className="relative z-10">
-                <div className="flex items-center mb-4">
-                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-3">
-                    <Trophy size={18} className="text-yellow-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-white">LeetCode</h3>
-                    <p className="text-white/60 text-sm">Problem Solving</p>
-                  </div>
-                </div>
-
+                <p className="text-white/60 text-sm mb-3 -mt-2">Problem Solving</p>
                 <div className="text-center mb-4">
                   <div className="text-2xl font-black text-white mb-1">
                     {stats.leetcode.totalSolved}
@@ -427,26 +414,22 @@ const StatsSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </StatCard>
           )}
 
           {/* Strava Running - Small Card */}
           {stats?.strava && (
-            <div className="lg:col-span-1 xl:col-span-2 bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14">
-              {/* Background Gradient */}
-              <div className="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-red-500/20 to-orange-500/20 opacity-50" />
-
+            <StatCard
+              title="Running"
+              value="" // Value is part of the children for more complex layout
+              icon={Activity}
+              iconClassName="text-red-400"
+              gradient="from-red-500/20 to-orange-500/20"
+              className="lg:col-span-1 xl:col-span-2"
+              layout="custom"
+            >
               <div className="relative z-10">
-                <div className="flex items-center mb-4">
-                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-3">
-                    <Activity size={18} className="text-red-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-white">Running</h3>
-                    <p className="text-white/60 text-sm">Strava Activity</p>
-                  </div>
-                </div>
-
+                <p className="text-white/60 text-sm mb-3 -mt-2">Strava Activity</p>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-white/70 text-sm">Total Runs</span>
@@ -475,7 +458,7 @@ const StatsSection: React.FC = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </StatCard>
           )}
         </div>
 

@@ -55,9 +55,9 @@ const StatsSection: React.FC = () => {
   };
 
   const getDeckDisplayName = (deckName: string) => {
-    if (deckName.includes("Core")) return "Core Vocabulary";
+    if (deckName.includes("Core")) return "Core 2k/6k Vocabulary";
     if (deckName.includes("決まり文句")) return "Set Phrases";
-    if (deckName.includes("開始")) return "Beginner Kanji";
+    if (deckName.includes("開始")) return "Kaishi 1.5k";
     if (deckName.includes("都道府県")) return "Prefectures";
     if (deckName.includes("Radicals")) return "Radicals";
     return deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim();

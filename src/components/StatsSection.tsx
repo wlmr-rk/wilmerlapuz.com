@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   Activity,
   Brain,
@@ -21,6 +22,16 @@ import {
   Database,
   GitBranch,
   ExternalLink,
+  Calendar,
+  Clock,
+  Target,
+  BarChart3,
+  PieChart as PieChartIcon,
+  TrendingDown,
+  Award,
+  BookOpen,
+  Headphones,
+  Music,
 } from "lucide-react";
 import {
   LineChart,
@@ -41,6 +52,9 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
+  ComposedChart,
+  Tooltip,
+  Legend,
 } from "recharts";
 
 // TODO: Parse from /public/wakatime-data.json
@@ -56,6 +70,7 @@ const mockWakatimeStats = {
   weeklyStats: {
     totalHoursLast7Days: "42.3",
     activeDaysCount: 7,
+    dailyAverageMinutes: 363,
     languages: {
       primary: "TypeScript",
       secondary: "Python",
@@ -66,20 +81,45 @@ const mockWakatimeStats = {
   },
   detailed: {
     last30Days: [
-      { date: "2025-05-27", hours: 6.2, productivity: 94 },
-      { date: "2025-05-28", hours: 8.1, productivity: 87 },
-      { date: "2025-05-29", hours: 5.8, productivity: 91 },
-      { date: "2025-05-30", hours: 7.3, productivity: 89 },
-      { date: "2025-05-31", hours: 6.9, productivity: 92 },
-      { date: "2025-06-01", hours: 8.7, productivity: 96 },
-      { date: "2025-06-02", hours: 7.4, productivity: 88 },
+      { date: "May 27", hours: 6.2, productivity: 94, commits: 12 },
+      { date: "May 28", hours: 8.1, productivity: 87, commits: 8 },
+      { date: "May 29", hours: 5.8, productivity: 91, commits: 15 },
+      { date: "May 30", hours: 7.3, productivity: 89, commits: 11 },
+      { date: "May 31", hours: 6.9, productivity: 92, commits: 9 },
+      { date: "Jun 01", hours: 8.7, productivity: 96, commits: 18 },
+      { date: "Jun 02", hours: 7.4, productivity: 88, commits: 14 },
+      { date: "Jun 03", hours: 6.1, productivity: 85, commits: 7 },
+      { date: "Jun 04", hours: 8.9, productivity: 93, commits: 16 },
+      { date: "Jun 05", hours: 7.8, productivity: 90, commits: 13 },
+      { date: "Jun 06", hours: 6.5, productivity: 94, commits: 10 },
+      { date: "Jun 07", hours: 9.2, productivity: 97, commits: 22 },
+      { date: "Jun 08", hours: 7.1, productivity: 86, commits: 9 },
+      { date: "Jun 09", hours: 8.4, productivity: 91, commits: 17 },
     ],
     languages: [
-      { name: "TypeScript", hours: 284.5, percentage: 67, color: "#3178c6" },
-      { name: "Python", hours: 76.2, percentage: 18, color: "#3776ab" },
-      { name: "JavaScript", hours: 42.1, percentage: 10, color: "#f7df1e" },
-      { name: "Rust", hours: 21.3, percentage: 5, color: "#ce422b" },
+      { name: "TypeScript", hours: 284.5, percentage: 67, color: "#3178c6", trend: 12 },
+      { name: "Python", hours: 76.2, percentage: 18, color: "#3776ab", trend: -3 },
+      { name: "JavaScript", hours: 42.1, percentage: 10, color: "#f7df1e", trend: 5 },
+      { name: "Rust", hours: 21.3, percentage: 5, color: "#ce422b", trend: 8 },
     ],
+    projects: [
+      { name: "Portfolio Website", hours: 89.4, commits: 47, files: 23, completion: 85 },
+      { name: "AI Dashboard", hours: 76.8, commits: 31, files: 18, completion: 72 },
+      { name: "React Components", hours: 54.2, commits: 28, files: 15, completion: 90 },
+      { name: "API Gateway", hours: 42.1, commits: 19, files: 12, completion: 65 },
+    ],
+    streak: {
+      current: 47,
+      longest: 89,
+      weekAverage: 6.8,
+    },
+    productivity: {
+      focusScore: 94,
+      deepWorkHours: 6.7,
+      distractions: 3,
+      efficiency: 92,
+      peakHours: "14:00-17:00",
+    },
   },
 };
 
@@ -107,6 +147,7 @@ const mockAnkiStats = {
       matureCards: 687,
       newCards: 12,
       totalCards: 756,
+      accuracy: 92,
     },
     {
       deckName: "💬 決まり文句",
@@ -114,6 +155,7 @@ const mockAnkiStats = {
       matureCards: 234,
       newCards: 8,
       totalCards: 298,
+      accuracy: 89,
     },
     {
       deckName: "🔰 開始 1.5k",
@@ -121,17 +163,29 @@ const mockAnkiStats = {
       matureCards: 445,
       newCards: 15,
       totalCards: 512,
+      accuracy: 95,
     },
   ],
   analytics: {
     dailyReviews: [
-      { day: "Mon", reviews: 145, accuracy: 92 },
-      { day: "Tue", reviews: 123, accuracy: 94 },
-      { day: "Wed", reviews: 156, accuracy: 89 },
-      { day: "Thu", reviews: 134, accuracy: 93 },
-      { day: "Fri", reviews: 127, accuracy: 91 },
-      { day: "Sat", reviews: 98, accuracy: 96 },
-      { day: "Sun", reviews: 112, accuracy: 88 },
+      { day: "Mon", reviews: 145, accuracy: 92, timeMinutes: 28 },
+      { day: "Tue", reviews: 123, accuracy: 94, timeMinutes: 24 },
+      { day: "Wed", reviews: 156, accuracy: 89, timeMinutes: 31 },
+      { day: "Thu", reviews: 134, accuracy: 93, timeMinutes: 26 },
+      { day: "Fri", reviews: 127, accuracy: 91, timeMinutes: 23 },
+      { day: "Sat", reviews: 98, accuracy: 96, timeMinutes: 19 },
+      { day: "Sun", reviews: 112, accuracy: 88, timeMinutes: 21 },
+    ],
+    retentionTrend: [
+      { week: "Week 1", retention: 89, cards: 1200 },
+      { week: "Week 2", retention: 91, cards: 1350 },
+      { week: "Week 3", retention: 93, cards: 1500 },
+      { week: "Week 4", retention: 94.2, cards: 1650 },
+    ],
+    cardTypes: [
+      { type: "Vocabulary", count: 1200, mastered: 890 },
+      { type: "Grammar", count: 450, mastered: 320 },
+      { type: "Kanji", count: 565, mastered: 437 },
     ],
   },
 };
@@ -147,10 +201,24 @@ const mockSpotifyStats = {
   songUrl: "https://open.spotify.com/track/26c8pvUxWO1FhxbGM1k8fJ",
   analytics: {
     topGenres: [
-      { genre: "Synthwave", percentage: 34, color: "#ff6b6b" },
-      { genre: "Lo-fi Hip Hop", percentage: 28, color: "#4ecdc4" },
-      { genre: "Ambient", percentage: 22, color: "#45b7d1" },
-      { genre: "Classical", percentage: 16, color: "#96ceb4" },
+      { genre: "Synthwave", percentage: 34, color: "#ff6b6b", hours: 45 },
+      { genre: "Lo-fi Hip Hop", percentage: 28, color: "#4ecdc4", hours: 37 },
+      { genre: "Ambient", percentage: 22, color: "#45b7d1", hours: 29 },
+      { genre: "Classical", percentage: 16, color: "#96ceb4", hours: 21 },
+    ],
+    listeningHours: [
+      { month: "Jan", hours: 67, tracks: 890 },
+      { month: "Feb", hours: 72, tracks: 945 },
+      { month: "Mar", hours: 89, tracks: 1120 },
+      { month: "Apr", hours: 94, tracks: 1200 },
+      { month: "May", hours: 103, tracks: 1350 },
+      { month: "Jun", hours: 87, tracks: 1100 },
+    ],
+    topArtists: [
+      { name: "HOME", plays: 234 },
+      { name: "Boards of Canada", plays: 189 },
+      { name: "Tycho", plays: 156 },
+      { name: "Emancipator", plays: 134 },
     ],
   },
 };
@@ -169,12 +237,29 @@ const mockLeetcodeStats = {
   hardAvailable: 845,
   analytics: {
     solvingTrend: [
-      { date: "Jan", solved: 45 },
-      { date: "Feb", solved: 62 },
-      { date: "Mar", solved: 78 },
-      { date: "Apr", solved: 91 },
-      { date: "May", solved: 104 },
-      { date: "Jun", solved: 116 },
+      { date: "Jan", solved: 45, easy: 28, medium: 15, hard: 2 },
+      { date: "Feb", solved: 62, easy: 35, medium: 22, hard: 5 },
+      { date: "Mar", solved: 78, easy: 42, medium: 28, hard: 8 },
+      { date: "Apr", solved: 91, easy: 48, medium: 32, hard: 11 },
+      { date: "May", solved: 104, easy: 55, medium: 36, hard: 13 },
+      { date: "Jun", solved: 116, easy: 60, medium: 40, hard: 16 },
+    ],
+    topicDistribution: [
+      { topic: "Arrays", solved: 45, total: 120, difficulty: "Medium" },
+      { topic: "Trees", solved: 32, total: 89, difficulty: "Hard" },
+      { topic: "Dynamic Programming", solved: 28, total: 156, difficulty: "Hard" },
+      { topic: "Graphs", solved: 23, total: 87, difficulty: "Hard" },
+      { topic: "Strings", solved: 38, total: 94, difficulty: "Easy" },
+      { topic: "Hash Tables", solved: 41, total: 76, difficulty: "Medium" },
+    ],
+    weeklyActivity: [
+      { day: "Mon", problems: 3, timeMinutes: 45 },
+      { day: "Tue", problems: 2, timeMinutes: 30 },
+      { day: "Wed", problems: 4, timeMinutes: 60 },
+      { day: "Thu", problems: 1, timeMinutes: 15 },
+      { day: "Fri", problems: 3, timeMinutes: 45 },
+      { day: "Sat", problems: 5, timeMinutes: 75 },
+      { day: "Sun", problems: 2, timeMinutes: 30 },
     ],
   },
 };
@@ -185,18 +270,27 @@ const mockStravaStats = {
   totalRuns: 89,
   totalDistanceKm: "456.7",
   recentRuns: [
-    { name: "Greenway Park Morning Run", distanceKm: "4.8", date: "2025-06-23" },
-    { name: "Day 3 of Running/Walk", distanceKm: "10.2", date: "2025-03-23" },
-    { name: "Lunch Walk", distanceKm: "4.7", date: "2019-07-20" },
+    { name: "Greenway Park Morning Run", distanceKm: "4.8", date: "2025-06-23", pace: "5:12", elevation: 45 },
+    { name: "Day 3 of Running/Walk", distanceKm: "10.2", date: "2025-03-23", pace: "5:45", elevation: 120 },
+    { name: "Lunch Walk", distanceKm: "4.7", date: "2019-07-20", pace: "6:30", elevation: 20 },
   ],
   analytics: {
     monthlyDistance: [
-      { month: "Jan", distance: 42.3 },
-      { month: "Feb", distance: 67.8 },
-      { month: "Mar", distance: 78.4 },
-      { month: "Apr", distance: 89.2 },
-      { month: "May", distance: 94.7 },
-      { month: "Jun", distance: 84.3 },
+      { month: "Jan", distance: 42.3, runs: 12, avgPace: "5:45" },
+      { month: "Feb", distance: 67.8, runs: 18, avgPace: "5:30" },
+      { month: "Mar", distance: 78.4, runs: 21, avgPace: "5:20" },
+      { month: "Apr", distance: 89.2, runs: 24, avgPace: "5:15" },
+      { month: "May", distance: 94.7, runs: 26, avgPace: "5:10" },
+      { month: "Jun", distance: 84.3, runs: 22, avgPace: "5:12" },
+    ],
+    weeklyPattern: [
+      { day: "Mon", distance: 5.2, frequency: 85 },
+      { day: "Tue", distance: 3.8, frequency: 60 },
+      { day: "Wed", distance: 6.1, frequency: 90 },
+      { day: "Thu", distance: 4.5, frequency: 70 },
+      { day: "Fri", distance: 5.8, frequency: 80 },
+      { day: "Sat", distance: 8.2, frequency: 95 },
+      { day: "Sun", distance: 7.1, frequency: 88 },
     ],
   },
 };
@@ -237,15 +331,17 @@ const StatsSection: React.FC = () => {
     return deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim();
   };
 
-  // Compact Stats Card Component
-  const CompactStatsCard = ({
+  // Enhanced Stats Card Component
+  const EnhancedStatsCard = ({
     icon: Icon,
     title,
     value,
     subtitle,
     color,
     trend,
+    trendDirection = "up",
     className = "",
+    children,
   }: {
     icon: React.ComponentType<{ size: number; className?: string }>;
     title: string;
@@ -253,7 +349,9 @@ const StatsSection: React.FC = () => {
     subtitle?: string;
     color: string;
     trend?: number;
+    trendDirection?: "up" | "down";
     className?: string;
+    children?: React.ReactNode;
   }) => (
     <div
       className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
@@ -275,8 +373,15 @@ const StatsSection: React.FC = () => {
             <Icon size={20} style={{ color }} />
           </div>
           {trend && (
-            <div className="flex items-center text-accent-main text-xs font-semibold">
-              <TrendingUp size={12} className="mr-1" />+{trend}%
+            <div className={`flex items-center text-xs font-semibold ${
+              trendDirection === "up" ? "text-accent-main" : "text-red-400"
+            }`}>
+              {trendDirection === "up" ? (
+                <TrendingUp size={12} className="mr-1" />
+              ) : (
+                <TrendingDown size={12} className="mr-1" />
+              )}
+              {trendDirection === "up" ? "+" : ""}{trend}%
             </div>
           )}
         </div>
@@ -288,6 +393,8 @@ const StatsSection: React.FC = () => {
             <div className="text-white/40 text-xs mt-1">{subtitle}</div>
           )}
         </div>
+
+        {children}
       </div>
     </div>
   );
@@ -299,19 +406,26 @@ const StatsSection: React.FC = () => {
     className = "",
     expandable = false,
     cardId,
+    subtitle,
   }: {
     title: string;
     children: React.ReactNode;
     className?: string;
     expandable?: boolean;
     cardId?: string;
+    subtitle?: string;
   }) => (
     <div
       className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
     >
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-white">{title}</h3>
+          <div>
+            <h3 className="text-lg font-bold text-white">{title}</h3>
+            {subtitle && (
+              <p className="text-white/60 text-sm mt-1">{subtitle}</p>
+            )}
+          </div>
           {expandable && cardId && (
             <button
               onClick={() => toggleCard(cardId)}
@@ -330,6 +444,23 @@ const StatsSection: React.FC = () => {
     </div>
   );
 
+  // Custom Tooltip Component
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-black/90 border border-white/20 rounded-lg p-3 backdrop-blur-xl">
+          <p className="text-white font-semibold">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} className="text-white/80 text-sm">
+              {entry.name}: {entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <section
       id="stats"
@@ -345,7 +476,7 @@ const StatsSection: React.FC = () => {
             Live Dashboard
           </h2>
           <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
-            Real-time insights into development, learning, and creative pursuits
+            Real-time insights into development, learning, and creative pursuits powered by intelligent automation
           </p>
 
           {/* Status Indicator */}
@@ -363,7 +494,7 @@ const StatsSection: React.FC = () => {
           {/* Navigation */}
           <div className="flex justify-center mb-12">
             <div className="flex rounded-2xl p-2 bg-white/5 border border-white/10 backdrop-blur-xl">
-              {["overview", "coding", "learning"].map((view) => (
+              {["overview", "coding", "learning", "analytics"].map((view) => (
                 <button
                   key={view}
                   onClick={() => setActiveView(view)}
@@ -384,41 +515,77 @@ const StatsSection: React.FC = () => {
           <div className="space-y-8">
             {/* Hero Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <CompactStatsCard
+              <EnhancedStatsCard
                 icon={Code2}
                 title="Coding Today"
                 value={formatHours(mockWakatimeStats.today.codingMinutes)}
                 subtitle={`${mockWakatimeStats.today.primaryLanguage} focus`}
                 color="#3b82f6"
                 trend={12}
-              />
+              >
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <div className="flex justify-between text-xs text-white/60">
+                    <span>Efficiency</span>
+                    <span className="text-accent-main font-semibold">
+                      {mockWakatimeStats.detailed.productivity.efficiency}%
+                    </span>
+                  </div>
+                </div>
+              </EnhancedStatsCard>
 
-              <CompactStatsCard
+              <EnhancedStatsCard
                 icon={Brain}
                 title="Study Cards"
                 value={mockAnkiStats.overall.reviewsToday}
                 subtitle={`${mockAnkiStats.overall.matureCardRetentionPercent}% retention`}
                 color="#8b5cf6"
                 trend={8}
-              />
+              >
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <div className="flex justify-between text-xs text-white/60">
+                    <span>Streak</span>
+                    <span className="text-purple-400 font-semibold">
+                      {mockAnkiStats.overall.currentStreakDays} days
+                    </span>
+                  </div>
+                </div>
+              </EnhancedStatsCard>
 
-              <CompactStatsCard
+              <EnhancedStatsCard
                 icon={Trophy}
                 title="Problems Solved"
                 value={mockLeetcodeStats.totalSolved}
                 subtitle="LeetCode progress"
                 color="#f59e0b"
                 trend={15}
-              />
+              >
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <div className="flex justify-between text-xs text-white/60">
+                    <span>This Month</span>
+                    <span className="text-amber-400 font-semibold">
+                      +{mockLeetcodeStats.analytics.solvingTrend[5].solved - mockLeetcodeStats.analytics.solvingTrend[4].solved}
+                    </span>
+                  </div>
+                </div>
+              </EnhancedStatsCard>
 
-              <CompactStatsCard
+              <EnhancedStatsCard
                 icon={Activity}
                 title="Running Distance"
                 value={`${mockStravaStats.totalDistanceKm}km`}
                 subtitle="Total distance"
                 color="#ef4444"
                 trend={6}
-              />
+              >
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <div className="flex justify-between text-xs text-white/60">
+                    <span>Avg Pace</span>
+                    <span className="text-red-400 font-semibold">
+                      {mockStravaStats.analytics.monthlyDistance[5].avgPace}/km
+                    </span>
+                  </div>
+                </div>
+              </EnhancedStatsCard>
             </div>
 
             {/* Main Dashboard Grid */}
@@ -426,14 +593,15 @@ const StatsSection: React.FC = () => {
               {/* Coding Activity - Large */}
               <div className="lg:col-span-8">
                 <ChartCard
-                  title="Coding Activity & Productivity"
+                  title="Development Velocity & Productivity"
+                  subtitle="Daily coding hours and productivity metrics"
                   expandable
                   cardId="coding"
                 >
                   <div className="space-y-6">
-                    <div className="h-48">
+                    <div className="h-64">
                       <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={mockWakatimeStats.detailed.last30Days}>
+                        <ComposedChart data={mockWakatimeStats.detailed.last30Days}>
                           <defs>
                             <linearGradient
                               id="codingGradient"
@@ -464,14 +632,30 @@ const StatsSection: React.FC = () => {
                             fontSize={12}
                           />
                           <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                          <Tooltip content={<CustomTooltip />} />
                           <Area
                             type="monotone"
                             dataKey="hours"
                             stroke="#3b82f6"
                             fillOpacity={1}
                             fill="url(#codingGradient)"
+                            name="Hours"
                           />
-                        </AreaChart>
+                          <Line
+                            type="monotone"
+                            dataKey="productivity"
+                            stroke="#10b981"
+                            strokeWidth={2}
+                            dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
+                            name="Productivity %"
+                          />
+                          <Bar
+                            dataKey="commits"
+                            fill="#f59e0b"
+                            opacity={0.7}
+                            name="Commits"
+                          />
+                        </ComposedChart>
                       </ResponsiveContainer>
                     </div>
 
@@ -484,50 +668,93 @@ const StatsSection: React.FC = () => {
                       </div>
                       <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                         <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.weeklyStats.activeDaysCount}
+                          {mockWakatimeStats.detailed.streak.current}
                         </div>
-                        <div className="text-white/60 text-xs">Active Days</div>
+                        <div className="text-white/60 text-xs">Day Streak</div>
                       </div>
                       <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                         <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.today.environment.editor}
+                          {mockWakatimeStats.detailed.productivity.focusScore}%
                         </div>
-                        <div className="text-white/60 text-xs">Editor</div>
+                        <div className="text-white/60 text-xs">Focus Score</div>
                       </div>
                       <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                         <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.weeklyStats.consistency}
+                          {mockWakatimeStats.detailed.productivity.peakHours}
                         </div>
-                        <div className="text-white/60 text-xs">Consistency</div>
+                        <div className="text-white/60 text-xs">Peak Hours</div>
                       </div>
                     </div>
 
                     {expandedCards.has("coding") && (
-                      <div className="pt-6 border-t border-white/10">
-                        <h4 className="text-white font-semibold mb-4">
-                          Language Distribution
-                        </h4>
-                        <div className="space-y-3">
-                          {mockWakatimeStats.detailed.languages.map((lang) => (
-                            <div
-                              key={lang.name}
-                              className="flex items-center justify-between"
-                            >
-                              <div className="flex items-center">
-                                <div
-                                  className="w-3 h-3 rounded-full mr-3"
-                                  style={{ backgroundColor: lang.color }}
-                                />
-                                <span className="text-white/80">{lang.name}</span>
+                      <div className="pt-6 border-t border-white/10 space-y-6">
+                        <div>
+                          <h4 className="text-white font-semibold mb-4">
+                            Language Distribution & Trends
+                          </h4>
+                          <div className="space-y-3">
+                            {mockWakatimeStats.detailed.languages.map((lang) => (
+                              <div
+                                key={lang.name}
+                                className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10"
+                              >
+                                <div className="flex items-center">
+                                  <div
+                                    className="w-3 h-3 rounded-full mr-3"
+                                    style={{ backgroundColor: lang.color }}
+                                  />
+                                  <span className="text-white/80">{lang.name}</span>
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                  <span className="text-white/60 text-sm">
+                                    {lang.hours}h ({lang.percentage}%)
+                                  </span>
+                                  <div className={`flex items-center text-xs ${
+                                    lang.trend > 0 ? "text-accent-main" : "text-red-400"
+                                  }`}>
+                                    {lang.trend > 0 ? (
+                                      <TrendingUp size={12} className="mr-1" />
+                                    ) : (
+                                      <TrendingDown size={12} className="mr-1" />
+                                    )}
+                                    {lang.trend > 0 ? "+" : ""}{lang.trend}%
+                                  </div>
+                                </div>
                               </div>
-                              <div className="flex items-center text-white/60">
-                                <span className="mr-2">{lang.hours}h</span>
-                                <span className="text-sm">
-                                  ({lang.percentage}%)
-                                </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="text-white font-semibold mb-4">
+                            Active Projects
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {mockWakatimeStats.detailed.projects.map((project) => (
+                              <div
+                                key={project.name}
+                                className="p-3 rounded-lg bg-white/5 border border-white/10"
+                              >
+                                <div className="flex justify-between items-start mb-2">
+                                  <div className="text-white font-medium text-sm">
+                                    {project.name}
+                                  </div>
+                                  <div className="text-accent-main text-xs font-semibold">
+                                    {project.completion}%
+                                  </div>
+                                </div>
+                                <div className="text-white/60 text-xs mb-2">
+                                  {project.hours}h • {project.commits} commits • {project.files} files
+                                </div>
+                                <div className="w-full bg-white/10 rounded-full h-1">
+                                  <div
+                                    className="h-1 bg-gradient-to-r from-accent-main to-accent-mid rounded-full"
+                                    style={{ width: `${project.completion}%` }}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -537,13 +764,15 @@ const StatsSection: React.FC = () => {
 
               {/* Live Music */}
               <div className="lg:col-span-4">
-                <ChartCard title="Currently Playing">
+                <ChartCard title="Music & Audio Analytics">
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
                       <div className="relative">
-                        <img
+                        <Image
                           src={mockSpotifyStats.albumImageUrl}
                           alt={mockSpotifyStats.album}
+                          width={64}
+                          height={64}
                           className="w-16 h-16 rounded-xl shadow-lg"
                         />
                         {mockSpotifyStats.isPlaying && (
@@ -583,22 +812,50 @@ const StatsSection: React.FC = () => {
 
                     <div className="pt-4 border-t border-white/10">
                       <h5 className="text-white/80 text-sm font-semibold mb-3">
-                        Genre Distribution
+                        Listening Habits
                       </h5>
-                      <div className="space-y-2">
-                        {mockSpotifyStats.analytics.topGenres.map((genre) => (
-                          <div
-                            key={genre.genre}
-                            className="flex items-center justify-between"
-                          >
-                            <span className="text-white/70 text-sm">
-                              {genre.genre}
-                            </span>
-                            <span className="text-white/50 text-sm">
-                              {genre.percentage}%
-                            </span>
-                          </div>
-                        ))}
+                      <div className="space-y-3">
+                        <div className="h-24">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={mockSpotifyStats.analytics.topGenres}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={20}
+                                outerRadius={40}
+                                paddingAngle={5}
+                                dataKey="percentage"
+                              >
+                                {mockSpotifyStats.analytics.topGenres.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                              <Tooltip content={<CustomTooltip />} />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+                        <div className="space-y-2">
+                          {mockSpotifyStats.analytics.topGenres.map((genre) => (
+                            <div
+                              key={genre.genre}
+                              className="flex items-center justify-between"
+                            >
+                              <div className="flex items-center">
+                                <div
+                                  className="w-2 h-2 rounded-full mr-2"
+                                  style={{ backgroundColor: genre.color }}
+                                />
+                                <span className="text-white/70 text-xs">
+                                  {genre.genre}
+                                </span>
+                              </div>
+                              <span className="text-white/50 text-xs">
+                                {genre.hours}h ({genre.percentage}%)
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -608,7 +865,8 @@ const StatsSection: React.FC = () => {
               {/* Anki Learning Progress */}
               <div className="lg:col-span-6">
                 <ChartCard
-                  title="Japanese Study Progress"
+                  title="Japanese Study Analytics"
+                  subtitle="Comprehensive learning progress tracking"
                   expandable
                   cardId="anki"
                 >
@@ -640,9 +898,9 @@ const StatsSection: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="h-32">
+                    <div className="h-40">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={mockAnkiStats.analytics.dailyReviews}>
+                        <ComposedChart data={mockAnkiStats.analytics.dailyReviews}>
                           <CartesianGrid
                             strokeDasharray="3 3"
                             stroke="rgba(255,255,255,0.1)"
@@ -653,35 +911,81 @@ const StatsSection: React.FC = () => {
                             fontSize={12}
                           />
                           <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                          <Tooltip content={<CustomTooltip />} />
                           <Bar
                             dataKey="reviews"
                             fill="#8b5cf6"
                             radius={[4, 4, 0, 0]}
+                            name="Reviews"
                           />
-                        </BarChart>
+                          <Line
+                            type="monotone"
+                            dataKey="accuracy"
+                            stroke="#10b981"
+                            strokeWidth={2}
+                            dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
+                            name="Accuracy %"
+                          />
+                        </ComposedChart>
                       </ResponsiveContainer>
                     </div>
 
                     {expandedCards.has("anki") && (
-                      <div className="pt-6 border-t border-white/10">
-                        <h4 className="text-white font-semibold mb-4">
-                          Deck Performance
-                        </h4>
-                        <div className="space-y-3">
-                          {mockAnkiStats.decks.slice(0, 3).map((deck) => (
-                            <div
-                              key={deck.deckName}
-                              className="p-3 rounded-lg bg-white/5 border border-white/10"
-                            >
-                              <div className="text-white font-medium text-sm mb-1">
-                                {getDeckDisplayName(deck.deckName)}
+                      <div className="pt-6 border-t border-white/10 space-y-6">
+                        <div>
+                          <h4 className="text-white font-semibold mb-4">
+                            Card Type Distribution
+                          </h4>
+                          <div className="space-y-3">
+                            {mockAnkiStats.analytics.cardTypes.map((type) => (
+                              <div
+                                key={type.type}
+                                className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10"
+                              >
+                                <span className="text-white/80 text-sm">{type.type}</span>
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-20 h-2 bg-white/10 rounded-full">
+                                    <div
+                                      className="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                                      style={{
+                                        width: `${(type.mastered / type.count) * 100}%`,
+                                      }}
+                                    />
+                                  </div>
+                                  <span className="text-white/60 text-sm">
+                                    {type.mastered}/{type.count}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="flex justify-between text-xs text-white/60">
-                                <span>{deck.reviewsToday} reviews</span>
-                                <span>{deck.matureCards} mature</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="text-white font-semibold mb-4">
+                            Deck Performance
+                          </h4>
+                          <div className="space-y-3">
+                            {mockAnkiStats.decks.map((deck) => (
+                              <div
+                                key={deck.deckName}
+                                className="p-3 rounded-lg bg-white/5 border border-white/10"
+                              >
+                                <div className="flex justify-between items-start mb-2">
+                                  <div className="text-white font-medium text-sm">
+                                    {getDeckDisplayName(deck.deckName)}
+                                  </div>
+                                  <div className="text-accent-main text-xs font-semibold">
+                                    {deck.accuracy}% accuracy
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-xs text-white/60">
+                                  <span>{deck.reviewsToday} reviews today</span>
+                                  <span>{deck.matureCards} mature cards</span>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -692,7 +996,8 @@ const StatsSection: React.FC = () => {
               {/* LeetCode & Problem Solving */}
               <div className="lg:col-span-6">
                 <ChartCard
-                  title="Problem Solving Journey"
+                  title="Problem Solving Analytics"
+                  subtitle="Algorithmic thinking and coding challenges"
                   expandable
                   cardId="leetcode"
                 >
@@ -746,6 +1051,7 @@ const StatsSection: React.FC = () => {
                                 <Cell key={`cell-${index}`} fill={entry.fill} />
                               ))}
                             </Pie>
+                            <Tooltip content={<CustomTooltip />} />
                           </PieChart>
                         </ResponsiveContainer>
 
@@ -766,57 +1072,128 @@ const StatsSection: React.FC = () => {
                           {mockLeetcodeStats.easySolved}
                         </div>
                         <div className="text-emerald-400 text-xs">Easy</div>
+                        <div className="text-white/50 text-xs mt-1">
+                          {Math.round((mockLeetcodeStats.easySolved / mockLeetcodeStats.easyAvailable) * 100)}%
+                        </div>
                       </div>
                       <div className="text-center p-3 rounded-lg bg-amber-500/20 border border-amber-500/30">
                         <div className="text-lg font-bold text-white">
                           {mockLeetcodeStats.mediumSolved}
                         </div>
                         <div className="text-amber-400 text-xs">Medium</div>
+                        <div className="text-white/50 text-xs mt-1">
+                          {Math.round((mockLeetcodeStats.mediumSolved / mockLeetcodeStats.mediumAvailable) * 100)}%
+                        </div>
                       </div>
                       <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
                         <div className="text-lg font-bold text-white">
                           {mockLeetcodeStats.hardSolved}
                         </div>
                         <div className="text-red-400 text-xs">Hard</div>
+                        <div className="text-white/50 text-xs mt-1">
+                          {Math.round((mockLeetcodeStats.hardSolved / mockLeetcodeStats.hardAvailable) * 100)}%
+                        </div>
                       </div>
                     </div>
 
                     {expandedCards.has("leetcode") && (
-                      <div className="pt-6 border-t border-white/10">
-                        <h4 className="text-white font-semibold mb-3">
-                          Monthly Progress
-                        </h4>
-                        <div className="h-24">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <LineChart
-                              data={mockLeetcodeStats.analytics.solvingTrend}
-                            >
-                              <CartesianGrid
-                                strokeDasharray="3 3"
-                                stroke="rgba(255,255,255,0.1)"
-                              />
-                              <XAxis
-                                dataKey="date"
-                                stroke="rgba(255,255,255,0.6)"
-                                fontSize={10}
-                              />
-                              <YAxis
-                                stroke="rgba(255,255,255,0.6)"
-                                fontSize={10}
-                              />
-                              <Line
-                                type="monotone"
-                                dataKey="solved"
-                                stroke="#f59e0b"
-                                strokeWidth={2}
-                                dot={{
-                                  fill: "#f59e0b",
-                                  strokeWidth: 2,
-                                  r: 3,
-                                }}
-                              />
-                            </LineChart>
-                          </ResponsiveContainer>
+                      <div className="pt-6 border-t border-white/10 space-y-6">
+                        <div>
+                          <h4 className="text-white font-semibold mb-3">
+                            Monthly Progress Trend
+                          </h4>
+                          <div className="h-32">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <AreaChart
+                                data={mockLeetcodeStats.analytics.solvingTrend}
+                              >
+                                <defs>
+                                  <linearGradient
+                                    id="leetcodeGradient"
+                                    x1="0"
+                                    y1="0"
+                                    x2="0"
+                                    y2="1"
+                                  >
+                                    <stop
+                                      offset="5%"
+                                      stopColor="#f59e0b"
+                                      stopOpacity={0.8}
+                                    />
+                                    <stop
+                                      offset="95%"
+                                      stopColor="#f59e0b"
+                                      stopOpacity={0.1}
+                                    />
+                                  </linearGradient>
+                                </defs>
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  stroke="rgba(255,255,255,0.1)"
+                                />
+                                <XAxis
+                                  dataKey="date"
+                                  stroke="rgba(255,255,255,0.6)"
+                                  fontSize={10}
+                                />
+                                <YAxis
+                                  stroke="rgba(255,255,255,0.6)"
+                                  fontSize={10}
+                                />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Area
+                                  type="monotone"
+                                  dataKey="solved"
+                                  stroke="#f59e0b"
+                                  fillOpacity={1}
+                                  fill="url(#leetcodeGradient)"
+                                  name="Total Solved"
+                                />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="text-white font-semibold mb-3">
+                            Topic Mastery
+                          </h4>
+                          <div className="space-y-2">
+                            {mockLeetcodeStats.analytics.topicDistribution.map(
+                              (topic) => (
+                                <div
+                                  key={topic.topic}
+                                  className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
+                                >
+                                  <div className="flex items-center">
+                                    <span className="text-white/80 text-sm">
+                                      {topic.topic}
+                                    </span>
+                                    <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                                      topic.difficulty === "Easy" ? "bg-emerald-500/20 text-emerald-400" :
+                                      topic.difficulty === "Medium" ? "bg-amber-500/20 text-amber-400" :
+                                      "bg-red-500/20 text-red-400"
+                                    }`}>
+                                      {topic.difficulty}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center space-x-3">
+                                    <div className="w-16 h-2 bg-white/10 rounded-full">
+                                      <div
+                                        className="h-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"
+                                        style={{
+                                          width: `${(topic.solved / topic.total) * 100}%`,
+                                        }}
+                                      />
+                                    </div>
+                                    <span className="text-white/60 text-sm">
+                                      {topic.solved}/{topic.total}
+                                    </span>
+                                  </div>
+                                </div>
+                              ),
+                            )}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -826,12 +1203,12 @@ const StatsSection: React.FC = () => {
 
               {/* Strava Running */}
               <div className="lg:col-span-12">
-                <ChartCard title="Fitness Journey" expandable cardId="strava">
+                <ChartCard title="Fitness & Health Analytics" expandable cardId="strava">
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
-                      <div className="h-32">
+                      <div className="h-48">
                         <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart
+                          <ComposedChart
                             data={mockStravaStats.analytics.monthlyDistance}
                           >
                             <defs>
@@ -864,14 +1241,22 @@ const StatsSection: React.FC = () => {
                               fontSize={12}
                             />
                             <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <Tooltip content={<CustomTooltip />} />
                             <Area
                               type="monotone"
                               dataKey="distance"
                               stroke="#ef4444"
                               fillOpacity={1}
                               fill="url(#stravaGradient)"
+                              name="Distance (km)"
                             />
-                          </AreaChart>
+                            <Bar
+                              dataKey="runs"
+                              fill="#f97316"
+                              opacity={0.7}
+                              name="Number of Runs"
+                            />
+                          </ComposedChart>
                         </ResponsiveContainer>
                       </div>
                     </div>
@@ -894,6 +1279,21 @@ const StatsSection: React.FC = () => {
                         </div>
                       </div>
 
+                      <div className="space-y-3">
+                        <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                          <div className="text-white/70 text-xs mb-1">Average Pace</div>
+                          <div className="text-white font-semibold">
+                            {mockStravaStats.analytics.monthlyDistance[5].avgPace}/km
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                          <div className="text-white/70 text-xs mb-1">This Month</div>
+                          <div className="text-white font-semibold">
+                            {mockStravaStats.analytics.monthlyDistance[5].distance}km
+                          </div>
+                        </div>
+                      </div>
+
                       {expandedCards.has("strava") && (
                         <div>
                           <h4 className="text-white font-semibold mb-3 text-sm">
@@ -901,28 +1301,29 @@ const StatsSection: React.FC = () => {
                           </h4>
                           <div className="space-y-2">
                             {mockStravaStats.recentRuns
-                              .slice(0, 2)
+                              .slice(0, 3)
                               .map((run, index) => (
                                 <div
                                   key={index}
-                                  className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
+                                  className="p-3 rounded-lg bg-white/5 border border-white/10"
                                 >
-                                  <div className="flex items-center">
-                                    <Activity
-                                      size={14}
-                                      className="text-red-400 mr-2"
-                                    />
-                                    <div>
+                                  <div className="flex items-center justify-between mb-1">
+                                    <div className="flex items-center">
+                                      <Activity
+                                        size={14}
+                                        className="text-red-400 mr-2"
+                                      />
                                       <div className="text-white text-xs font-medium">
                                         {run.name}
                                       </div>
-                                      <div className="text-white/60 text-xs">
-                                        {formatDate(run.date)}
-                                      </div>
+                                    </div>
+                                    <div className="text-white font-semibold text-sm">
+                                      {run.distanceKm} km
                                     </div>
                                   </div>
-                                  <div className="text-white font-semibold text-sm">
-                                    {run.distanceKm} km
+                                  <div className="flex justify-between text-xs text-white/60">
+                                    <span>{formatDate(run.date)}</span>
+                                    <span>{run.pace}/km • {run.elevation}m elevation</span>
                                   </div>
                                 </div>
                               ))}
@@ -939,11 +1340,11 @@ const StatsSection: React.FC = () => {
 
         {activeView === "coding" && (
           <div className="space-y-8">
-            <ChartCard title="Development Deep Dive">
+            <ChartCard title="Development Deep Dive" subtitle="Comprehensive coding analytics and insights">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                   <h4 className="text-white font-semibold mb-4">
-                    Technology Stack
+                    Technology Stack & Trends
                   </h4>
                   <div className="space-y-4">
                     {mockWakatimeStats.detailed.languages.map((lang) => (
@@ -958,9 +1359,21 @@ const StatsSection: React.FC = () => {
                               {lang.name}
                             </span>
                           </div>
-                          <span className="text-white/60 text-sm">
-                            {lang.percentage}%
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-white/60 text-sm">
+                              {lang.percentage}%
+                            </span>
+                            <div className={`flex items-center text-xs ${
+                              lang.trend > 0 ? "text-accent-main" : "text-red-400"
+                            }`}>
+                              {lang.trend > 0 ? (
+                                <TrendingUp size={12} className="mr-1" />
+                              ) : (
+                                <TrendingDown size={12} className="mr-1" />
+                              )}
+                              {lang.trend > 0 ? "+" : ""}{lang.trend}%
+                            </div>
+                          </div>
                         </div>
                         <div className="w-full bg-white/10 rounded-full h-2">
                           <div
@@ -968,6 +1381,7 @@ const StatsSection: React.FC = () => {
                             style={{
                               width: `${lang.percentage}%`,
                               backgroundColor: lang.color,
+                              boxShadow: `0 0 8px ${lang.color}50`,
                             }}
                           />
                         </div>
@@ -1010,8 +1424,81 @@ const StatsSection: React.FC = () => {
                         {mockWakatimeStats.today.primaryLanguage}
                       </span>
                     </div>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                      <div className="flex items-center">
+                        <Clock size={16} className="text-amber-400 mr-3" />
+                        <span className="text-white text-sm">Peak Hours</span>
+                      </div>
+                      <span className="text-white/80 text-sm font-medium">
+                        {mockWakatimeStats.detailed.productivity.peakHours}
+                      </span>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </ChartCard>
+
+            <ChartCard title="Project Portfolio & Productivity">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {mockWakatimeStats.detailed.projects.map((project, index) => (
+                  <div
+                    key={project.name}
+                    className="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-accent-main/30 transition-all duration-500 hover:scale-105"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent-main/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-4">
+                        <Layers size={20} className="text-accent-main" />
+                        <div className="text-white/40 text-xs">
+                          #{index + 1}
+                        </div>
+                      </div>
+
+                      <h3 className="text-white font-bold text-lg mb-2 group-hover:text-accent-main transition-colors">
+                        {project.name}
+                      </h3>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-white/60">Hours</span>
+                          <span className="text-white font-semibold">
+                            {project.hours}h
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/60">Commits</span>
+                          <span className="text-white font-semibold">
+                            {project.commits}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/60">Files</span>
+                          <span className="text-white font-semibold">
+                            {project.files}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/60">Progress</span>
+                          <span className="text-accent-main font-semibold">
+                            {project.completion}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-4 border-t border-white/10">
+                        <div className="w-full bg-white/10 rounded-full h-2">
+                          <div
+                            className="h-2 bg-gradient-to-r from-accent-main to-accent-mid rounded-full transition-all duration-1000"
+                            style={{
+                              width: `${project.completion}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </ChartCard>
           </div>
@@ -1032,6 +1519,36 @@ const StatsSection: React.FC = () => {
                     <div className="text-white/60 text-sm">
                       Current study streak
                     </div>
+                  </div>
+
+                  <div className="h-32">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={mockAnkiStats.analytics.retentionTrend}>
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="rgba(255,255,255,0.1)"
+                        />
+                        <XAxis
+                          dataKey="week"
+                          stroke="rgba(255,255,255,0.6)"
+                          fontSize={12}
+                        />
+                        <YAxis
+                          stroke="rgba(255,255,255,0.6)"
+                          fontSize={12}
+                          domain={[85, 100]}
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Line
+                          type="monotone"
+                          dataKey="retention"
+                          stroke="#8b5cf6"
+                          strokeWidth={3}
+                          dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 6 }}
+                          name="Retention %"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -1055,7 +1572,7 @@ const StatsSection: React.FC = () => {
                 <div className="space-y-6">
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={mockAnkiStats.analytics.dailyReviews}>
+                      <ComposedChart data={mockAnkiStats.analytics.dailyReviews}>
                         <CartesianGrid
                           strokeDasharray="3 3"
                           stroke="rgba(255,255,255,0.1)"
@@ -1066,17 +1583,358 @@ const StatsSection: React.FC = () => {
                           fontSize={12}
                         />
                         <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                        <Tooltip content={<CustomTooltip />} />
                         <Bar
                           dataKey="reviews"
                           fill="#8b5cf6"
                           radius={[4, 4, 0, 0]}
+                          name="Reviews"
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="accuracy"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
+                          name="Accuracy %"
+                        />
+                        <Bar
+                          dataKey="timeMinutes"
+                          fill="#f59e0b"
+                          opacity={0.6}
+                          name="Time (min)"
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/80">
+                        Average Daily Reviews
+                      </span>
+                      <span className="text-white font-semibold">
+                        {Math.round(
+                          mockAnkiStats.analytics.dailyReviews.reduce(
+                            (sum, day) => sum + day.reviews,
+                            0,
+                          ) / 7,
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/80">Average Accuracy</span>
+                      <span className="text-emerald-400 font-semibold">
+                        {Math.round(
+                          mockAnkiStats.analytics.dailyReviews.reduce(
+                            (sum, day) => sum + day.accuracy,
+                            0,
+                          ) / 7,
+                        )}
+                        %
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/80">Study Time Today</span>
+                      <span className="text-white font-semibold">
+                        {mockAnkiStats.overall.timeMinutesToday}m
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ChartCard>
+            </div>
+
+            {/* Detailed Deck Analysis */}
+            <ChartCard title="Detailed Deck Analysis">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {mockAnkiStats.decks.map((deck, index) => (
+                  <div
+                    key={deck.deckName}
+                    className="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-purple-500/30 transition-all duration-500"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-4">
+                        <Brain size={20} className="text-purple-400" />
+                        <div className="text-purple-400 text-xs font-semibold">
+                          {deck.accuracy}% accuracy
+                        </div>
+                      </div>
+
+                      <h3 className="text-white font-bold text-lg mb-4 group-hover:text-purple-400 transition-colors">
+                        {getDeckDisplayName(deck.deckName)}
+                      </h3>
+
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-white/60 text-sm">
+                            Reviews Today
+                          </span>
+                          <span className="text-white font-semibold">
+                            {deck.reviewsToday}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/60 text-sm">
+                            Mature Cards
+                          </span>
+                          <span className="text-purple-400 font-semibold">
+                            {deck.matureCards}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-white/60 text-sm">
+                            New Cards
+                          </span>
+                          <span className="text-emerald-400 font-semibold">
+                            {deck.newCards}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-4 border-t border-white/10">
+                        <div className="flex justify-between text-sm mb-2">
+                          <span className="text-white/60">Progress</span>
+                          <span className="text-white">
+                            {Math.round(
+                              (deck.matureCards / deck.totalCards) * 100,
+                            )}
+                            %
+                          </span>
+                        </div>
+                        <div className="w-full bg-white/10 rounded-full h-2">
+                          <div
+                            className="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
+                            style={{
+                              width: `${(deck.matureCards / deck.totalCards) * 100}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ChartCard>
+          </div>
+        )}
+
+        {activeView === "analytics" && (
+          <div className="space-y-8">
+            {/* Advanced Analytics Dashboard */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ChartCard title="Performance Correlation Matrix">
+                <div className="space-y-6">
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart
+                        data={[
+                          { subject: "Coding", A: 95, fullMark: 100 },
+                          { subject: "Learning", A: 88, fullMark: 100 },
+                          { subject: "Problem Solving", A: 82, fullMark: 100 },
+                          { subject: "Consistency", A: 94, fullMark: 100 },
+                          { subject: "Growth", A: 91, fullMark: 100 },
+                          { subject: "Focus", A: 89, fullMark: 100 },
+                        ]}
+                      >
+                        <PolarGrid />
+                        <PolarAngleAxis
+                          dataKey="subject"
+                          className="text-white/60"
+                          fontSize={12}
+                        />
+                        <PolarRadiusAxis
+                          angle={90}
+                          domain={[0, 100]}
+                          className="text-white/40"
+                          fontSize={10}
+                        />
+                        <Radar
+                          name="Performance"
+                          dataKey="A"
+                          stroke="#3b82f6"
+                          fill="#3b82f6"
+                          fillOpacity={0.3}
+                          strokeWidth={2}
+                        />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center p-3 rounded-lg bg-blue-500/20 border border-blue-500/30">
+                      <div className="text-lg font-bold text-white">91.5</div>
+                      <div className="text-blue-400 text-xs">Overall Score</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
+                      <div className="text-lg font-bold text-white">+8.3</div>
+                      <div className="text-emerald-400 text-xs">
+                        Monthly Gain
+                      </div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-purple-500/20 border border-purple-500/30">
+                      <div className="text-lg font-bold text-white">A+</div>
+                      <div className="text-purple-400 text-xs">
+                        Performance Grade
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ChartCard>
+
+              <ChartCard title="Productivity & Focus Analysis">
+                <div className="space-y-6">
+                  <div className="relative w-48 h-48 mx-auto">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={[
+                            {
+                              name: "Focus",
+                              value: mockWakatimeStats.detailed.productivity.focusScore,
+                              fill: "#10b981",
+                            },
+                            {
+                              name: "Background",
+                              value: 100 - mockWakatimeStats.detailed.productivity.focusScore,
+                              fill: "rgba(255,255,255,0.1)",
+                            },
+                          ]}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={70}
+                          outerRadius={85}
+                          startAngle={90}
+                          endAngle={-270}
+                          dataKey="value"
+                          cornerRadius={20}
+                        >
+                          <Cell key="cell-0" fill="#10b981" />
+                          <Cell
+                            key="cell-1"
+                            fill="rgba(255,255,255,0.1)"
+                            stroke="none"
+                          />
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <Flame size={24} className="text-emerald-400 mb-2" />
+                      <div className="text-4xl font-black text-white">
+                        {mockWakatimeStats.detailed.productivity.focusScore}%
+                      </div>
+                      <div className="text-white/60 text-sm">Focus Score</div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-white/10">
+                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                      <Coffee
+                        size={20}
+                        className="mx-auto mb-2 text-orange-400"
+                      />
+                      <div className="text-lg font-bold text-white">
+                        {mockWakatimeStats.detailed.productivity.deepWorkHours}h
+                      </div>
+                      <div className="text-white/60 text-xs">Deep Work</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                      <Zap size={20} className="mx-auto mb-2 text-blue-400" />
+                      <div className="text-lg font-bold text-white">
+                        {mockWakatimeStats.detailed.productivity.efficiency}%
+                      </div>
+                      <div className="text-white/60 text-xs">Efficiency</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                      <Eye size={20} className="mx-auto mb-2 text-red-400" />
+                      <div className="text-lg font-bold text-white">
+                        {mockWakatimeStats.detailed.productivity.distractions}
+                      </div>
+                      <div className="text-white/60 text-xs">Distractions</div>
+                    </div>
+                  </div>
+                </div>
+              </ChartCard>
+            </div>
+
+            {/* Cross-Platform Analytics */}
+            <ChartCard title="Cross-Platform Activity Correlation">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-white font-semibold mb-4">
+                    Weekly Activity Patterns
+                  </h4>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ComposedChart data={mockLeetcodeStats.analytics.weeklyActivity}>
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="rgba(255,255,255,0.1)"
+                        />
+                        <XAxis
+                          dataKey="day"
+                          stroke="rgba(255,255,255,0.6)"
+                          fontSize={12}
+                        />
+                        <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Bar
+                          dataKey="problems"
+                          fill="#f59e0b"
+                          radius={[4, 4, 0, 0]}
+                          name="Problems Solved"
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="timeMinutes"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
+                          name="Time (minutes)"
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-white font-semibold mb-4">
+                    Fitness Activity Distribution
+                  </h4>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={mockStravaStats.analytics.weeklyPattern}>
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="rgba(255,255,255,0.1)"
+                        />
+                        <XAxis
+                          dataKey="day"
+                          stroke="rgba(255,255,255,0.6)"
+                          fontSize={12}
+                        />
+                        <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Bar
+                          dataKey="distance"
+                          fill="#ef4444"
+                          radius={[4, 4, 0, 0]}
+                          name="Distance (km)"
+                        />
+                        <Bar
+                          dataKey="frequency"
+                          fill="#f97316"
+                          opacity={0.6}
+                          name="Frequency %"
                         />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
-              </ChartCard>
-            </div>
+              </div>
+            </ChartCard>
           </div>
         )}
 

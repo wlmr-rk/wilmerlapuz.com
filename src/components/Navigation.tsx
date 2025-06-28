@@ -62,9 +62,7 @@ const Navigation: React.FC = () => {
 
   return (
     <div className="fixed right-8 top-1/2 z-50 -translate-y-1/2 transform perspective-normal hidden lg:block">
-      {/* Main Navigation Pill */}
-      <nav className="ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 bg-linear-to-b/oklch from-white/8 via-white/4 to-white/6 p-4 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_2px_4px_rgba(255,255,255,0.2),0_-2px_4px_rgba(0,0,0,0.9)] shadow-[0_4px_16px_rgba(0,255,136,0.05),0_8px_32px_rgba(0,0,0,0.4),0_16px_64px_rgba(0,0,0,0.3)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-400">
-        {/* Navigation Items */}
+      <nav className="ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 bg-linear-to-b/oklch from-white/8 via-white/4 to-white/6 p-4 backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-400">
         <div className="space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -77,14 +75,13 @@ const Navigation: React.FC = () => {
                 onClick={() => scrollToSection(item.href)}
                 className={`ease-snappy relative w-full flex items-center justify-start rounded-xl p-3 text-sm font-semibold tracking-tight transition-all duration-400 group ${
                   isActive
-                    ? "text-white bg-white/15 inset-shadow-[0_1px_1px_rgba(255,255,255,0.15)] shadow-[0_4px_12px_rgba(0,255,136,0.15)]"
-                    : "text-white/70 hover:text-white hover:bg-white/10 hover:inset-shadow-[0_1px_1px_rgba(255,255,255,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                    ? "text-white bg-white/15"
+                    : "text-white/70 hover:text-white hover:bg-white/10"
                 }`}
               >
                 <Icon size={16} className="mr-3 flex-shrink-0" />
                 <span className="text-xs">{item.label}</span>
 
-                {/* Active Indicator */}
                 {isActive && (
                   <motion.div
                     layoutId="activeIndicator"
@@ -93,14 +90,12 @@ const Navigation: React.FC = () => {
                   />
                 )}
 
-                {/* Hover Glow Effect */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </motion.button>
             );
           })}
         </div>
 
-        {/* Social Links */}
         <div className="mt-4 pt-3 border-t border-white/10">
           <div className="flex justify-center space-x-1">
             {socialLinks.map((social) => {
@@ -112,7 +107,7 @@ const Navigation: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileTap={{ scale: 0.95 }}
-                  className="ease-snappy relative rounded-lg p-2.5 text-white/60 transition-all duration-400 hover:text-white hover:bg-white/10 hover:inset-shadow-[0_1px_1px_rgba(255,255,255,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                  className="ease-snappy relative rounded-lg p-2.5 text-white/60 transition-all duration-400 hover:text-white hover:bg-white/10"
                   aria-label={social.label}
                 >
                   <Icon size={14} />

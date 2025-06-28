@@ -66,9 +66,7 @@ const ContactSection: React.FC = () => {
         body: JSON.stringify(formData),
       });
 
-      // NEW, SMARTER LOGIC
       if (response.status === 200) {
-        // This is a complete success (200 OK)
         setStatus({
           type: "success",
           message: "Message sent successfully! I'll get back to you soon.",
@@ -81,10 +79,9 @@ const ContactSection: React.FC = () => {
           message: "",
         });
       } else if (response.status === 207) {
-        // This is a partial success (207 Multi-Status)
         const result = await response.json();
         setStatus({
-          type: "success", // Still a success, but with a different message
+          type: "success",
           message:
             result.message ||
             "Your message was saved, but the email notification failed.",
@@ -97,7 +94,6 @@ const ContactSection: React.FC = () => {
           message: "",
         });
       } else {
-        // Any other status is a failure
         throw new Error("Failed to send message");
       }
     } catch {
@@ -164,22 +160,17 @@ const ContactSection: React.FC = () => {
   return (
     <section
       id="contact"
-      className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8"
+      className="relative min-h-screen bg-black p-6 lg:p-8"
     >
-      {/* Background noise */}
-      <div className="bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]" />
-
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase mb-4">
             Let&apos;s Connect
           </h2>
           <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
             Ready to contribute to your team or collaborate on exciting projects
           </p>
 
-          {/* Availability Status */}
           <div className="inline-flex items-center px-4 py-2 rounded-full border border-accent-main/20 bg-accent-main/5 backdrop-blur-[40px]">
             <span className="status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-2 mr-3 shadow-[0_0_12px_rgba(0,255,136,0.8)]" />
             <span className="text-sm font-semibold text-accent-main">
@@ -189,11 +180,9 @@ const ContactSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          {/* Contact Form */}
           <div className="lg:col-span-2">
             <div className="card-container relative perspective-distant">
               <div className="card card-glass ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 p-8 lg:p-12 backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-800 hover:border-white/22">
-                {/* Floating accent */}
                 <div className="floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.9)]" />
 
                 <div className="flex items-center mb-8">
@@ -211,7 +200,6 @@ const ContactSection: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name and Email Row */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label
@@ -251,7 +239,6 @@ const ContactSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Company and Subject Row */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label
@@ -301,7 +288,6 @@ const ContactSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Message */}
                   <div>
                     <label
                       htmlFor="message"
@@ -321,7 +307,6 @@ const ContactSection: React.FC = () => {
                     />
                   </div>
 
-                  {/* Status Message */}
                   {status.type !== "idle" && (
                     <div
                       className={`flex items-center p-4 rounded-xl border ${
@@ -345,11 +330,10 @@ const ContactSection: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={status.type === "loading"}
-                    className="ease-snappy w-full flex items-center justify-center px-8 py-4 rounded-xl border border-accent-main/20 bg-linear-to-br/oklch from-accent-main/15 via-accent-light/10 to-accent-mid/15 text-white font-semibold inset-shadow-[0_2px_4px_rgba(255,255,255,0.1)] shadow-[0_8px_24px_rgba(0,255,136,0.2)] transition-all duration-400 hover:border-accent-main/30 hover:bg-linear-to-br hover:from-accent-main/25 hover:via-accent-light/15 hover:to-accent-mid/25 hover:inset-shadow-[0_4px_8px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_32px_rgba(0,255,136,0.3)] hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    className="ease-snappy w-full flex items-center justify-center px-8 py-4 rounded-xl border border-accent-main/20 bg-linear-to-br/oklch from-accent-main/15 via-accent-light/10 to-accent-mid/15 text-white font-semibold transition-all duration-400 hover:border-accent-main/30 hover:bg-linear-to-br hover:from-accent-main/25 hover:via-accent-light/15 hover:to-accent-mid/25 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     <Send size={18} className="mr-2" />
                     {status.type === "loading" ? "Sending..." : "Send Message"}
@@ -359,9 +343,7 @@ const ContactSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Contact Info Sidebar */}
           <div className="space-y-6">
-            {/* Contact Information */}
             <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
               <h3 className="text-lg font-bold text-white mb-6 flex items-center">
                 <Mail size={20} className="mr-3 text-accent-main" />
@@ -402,7 +384,6 @@ const ContactSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Social Links */}
             <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
               <h3 className="text-lg font-bold text-white mb-6">
                 Connect With Me

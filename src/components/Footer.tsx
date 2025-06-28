@@ -42,13 +42,9 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative bg-black border-t border-white/10 p-4 sm:p-6 lg:p-8">
-      {/* Background noise */}
-      <div className="bg-noise bg-cinematic absolute inset-0 opacity-30" />
-
+    <footer className="relative bg-black border-t border-white/10 p-6 lg:p-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
               <div className="p-2 rounded-lg bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.4)] mr-3">
@@ -81,7 +77,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2">
@@ -98,7 +93,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Connect */}
           <div>
             <h4 className="text-lg font-bold text-white mb-4">Connect</h4>
             <div className="space-y-3">
@@ -137,7 +131,6 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Section */}
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">

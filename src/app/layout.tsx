@@ -1,12 +1,13 @@
 //src/app/layout.tsx
-import { Space_Grotesk } from "next/font/google";
+import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -23,7 +24,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
         />
       </head>
-      <body className={`${spaceGrotesk.variable} antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
         <SpeedInsights />
         <Analytics />

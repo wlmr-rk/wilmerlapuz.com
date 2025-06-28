@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import {
   Activity,
   Brain,
@@ -20,18 +19,16 @@ import {
   Layers,
   Cpu,
   Database,
-  GitBranch,
-  ExternalLink,
-  Calendar,
+  AlertCircle,
+  Wifi,
+  WifiOff,
   Clock,
+  Calendar,
   Target,
   BarChart3,
-  PieChart as PieChartIcon,
-  TrendingDown,
-  Award,
-  BookOpen,
-  Headphones,
   Music,
+  Headphones,
+  ExternalLink,
 } from "lucide-react";
 import {
   LineChart,
@@ -54,250 +51,60 @@ import {
   Radar,
   ComposedChart,
   Tooltip,
-  Legend,
 } from "recharts";
+import { useStats } from "../hooks/useStats";
 
-// TODO: Parse from /public/wakatime-data.json
-// Expected format: { lastUpdated, status, today: { codingMinutes, primaryLanguage, environment: { editor, os } }, weeklyStats: { totalHoursLast7Days, activeDaysCount, languages: { primary, secondary, primaryPercentage, secondaryPercentage }, consistency } }
-const mockWakatimeStats = {
-  lastUpdated: new Date().toISOString(),
-  status: "Active Developer",
-  today: {
-    codingMinutes: 247,
-    primaryLanguage: "TypeScript",
-    environment: { editor: "Neovim", os: "Linux" },
-  },
-  weeklyStats: {
-    totalHoursLast7Days: "42.3",
-    activeDaysCount: 7,
-    dailyAverageMinutes: 363,
-    languages: {
-      primary: "TypeScript",
-      secondary: "Python",
-      primaryPercentage: "67",
-      secondaryPercentage: "18",
-    },
-    consistency: "Perfect",
-  },
-  detailed: {
-    last30Days: [
-      { date: "May 27", hours: 6.2, productivity: 94, commits: 12 },
-      { date: "May 28", hours: 8.1, productivity: 87, commits: 8 },
-      { date: "May 29", hours: 5.8, productivity: 91, commits: 15 },
-      { date: "May 30", hours: 7.3, productivity: 89, commits: 11 },
-      { date: "May 31", hours: 6.9, productivity: 92, commits: 9 },
-      { date: "Jun 01", hours: 8.7, productivity: 96, commits: 18 },
-      { date: "Jun 02", hours: 7.4, productivity: 88, commits: 14 },
-      { date: "Jun 03", hours: 6.1, productivity: 85, commits: 7 },
-      { date: "Jun 04", hours: 8.9, productivity: 93, commits: 16 },
-      { date: "Jun 05", hours: 7.8, productivity: 90, commits: 13 },
-      { date: "Jun 06", hours: 6.5, productivity: 94, commits: 10 },
-      { date: "Jun 07", hours: 9.2, productivity: 97, commits: 22 },
-      { date: "Jun 08", hours: 7.1, productivity: 86, commits: 9 },
-      { date: "Jun 09", hours: 8.4, productivity: 91, commits: 17 },
-    ],
-    languages: [
-      { name: "TypeScript", hours: 284.5, percentage: 67, color: "#3178c6", trend: 12 },
-      { name: "Python", hours: 76.2, percentage: 18, color: "#3776ab", trend: -3 },
-      { name: "JavaScript", hours: 42.1, percentage: 10, color: "#f7df1e", trend: 5 },
-      { name: "Rust", hours: 21.3, percentage: 5, color: "#ce422b", trend: 8 },
-    ],
-    projects: [
-      { name: "Portfolio Website", hours: 89.4, commits: 47, files: 23, completion: 85 },
-      { name: "AI Dashboard", hours: 76.8, commits: 31, files: 18, completion: 72 },
-      { name: "React Components", hours: 54.2, commits: 28, files: 15, completion: 90 },
-      { name: "API Gateway", hours: 42.1, commits: 19, files: 12, completion: 65 },
-    ],
-    streak: {
-      current: 47,
-      longest: 89,
-      weekAverage: 6.8,
-    },
-    productivity: {
-      focusScore: 94,
-      deepWorkHours: 6.7,
-      distractions: 3,
-      efficiency: 92,
-      peakHours: "14:00-17:00",
-    },
-  },
-};
+// Error Card Component for missing data
+const ErrorCard: React.FC<{
+  title: string;
+  message: string;
+  className?: string;
+}> = ({ title, message, className = "" }) => (
+  <div
+    className={`bento-item ease-snappy relative z-2 border border-red-500/20 bg-linear-to-br/oklch from-red-500/10 via-red-500/5 to-red-500/8 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 ${className}`}
+  >
+    <div className="flex items-center mb-4">
+      <div className="p-3 rounded-xl bg-red-500/20 backdrop-blur-[20px] mr-3">
+        <AlertCircle size={20} className="text-red-400" />
+      </div>
+      <div>
+        <h3 className="text-lg font-bold text-white">{title}</h3>
+        <p className="text-red-400 text-sm">Data unavailable</p>
+      </div>
+    </div>
+    <p className="text-white/60 text-sm">{message}</p>
+  </div>
+);
 
-// TODO: Parse from /public/anki-data.json
-// Expected format: { lastUpdated, overall: { reviewsToday, timeMinutesToday, matureCardRetentionPercent, currentStreakDays, cardCounts: { new, learning, young, mature, total } }, decks: [{ deckName, reviewsToday, matureCards, newCards, totalCards }] }
-const mockAnkiStats = {
-  lastUpdated: new Date().toISOString(),
-  overall: {
-    reviewsToday: 127,
-    timeMinutesToday: 23,
-    matureCardRetentionPercent: 94.2,
-    currentStreakDays: 234,
-    cardCounts: {
-      new: 45,
-      learning: 89,
-      young: 234,
-      mature: 1847,
-      total: 2215,
-    },
-  },
-  decks: [
-    {
-      deckName: "⭐ Core 2k/6k Optimized",
-      reviewsToday: 45,
-      matureCards: 687,
-      newCards: 12,
-      totalCards: 756,
-      accuracy: 92,
-    },
-    {
-      deckName: "💬 決まり文句",
-      reviewsToday: 28,
-      matureCards: 234,
-      newCards: 8,
-      totalCards: 298,
-      accuracy: 89,
-    },
-    {
-      deckName: "🔰 開始 1.5k",
-      reviewsToday: 34,
-      matureCards: 445,
-      newCards: 15,
-      totalCards: 512,
-      accuracy: 95,
-    },
-  ],
-  analytics: {
-    dailyReviews: [
-      { day: "Mon", reviews: 145, accuracy: 92, timeMinutes: 28 },
-      { day: "Tue", reviews: 123, accuracy: 94, timeMinutes: 24 },
-      { day: "Wed", reviews: 156, accuracy: 89, timeMinutes: 31 },
-      { day: "Thu", reviews: 134, accuracy: 93, timeMinutes: 26 },
-      { day: "Fri", reviews: 127, accuracy: 91, timeMinutes: 23 },
-      { day: "Sat", reviews: 98, accuracy: 96, timeMinutes: 19 },
-      { day: "Sun", reviews: 112, accuracy: 88, timeMinutes: 21 },
-    ],
-    retentionTrend: [
-      { week: "Week 1", retention: 89, cards: 1200 },
-      { week: "Week 2", retention: 91, cards: 1350 },
-      { week: "Week 3", retention: 93, cards: 1500 },
-      { week: "Week 4", retention: 94.2, cards: 1650 },
-    ],
-    cardTypes: [
-      { type: "Vocabulary", count: 1200, mastered: 890 },
-      { type: "Grammar", count: 450, mastered: 320 },
-      { type: "Kanji", count: 565, mastered: 437 },
-    ],
-  },
-};
-
-// TODO: Parse from /public/spotify-data.json
-// Expected format: { isPlaying, title, artist, album, albumImageUrl, songUrl }
-const mockSpotifyStats = {
-  isPlaying: true,
-  title: "Steve's Lava Chicken - Extended Version",
-  artist: "Jack Black",
-  album: "I...Am Steve (Bonus Songs from \"A Minecraft Movie\" Soundtrack)",
-  albumImageUrl: "https://i.scdn.co/image/ab67616d0000b273317010be8e46bef819cfb50a",
-  songUrl: "https://open.spotify.com/track/26c8pvUxWO1FhxbGM1k8fJ",
-  analytics: {
-    topGenres: [
-      { genre: "Synthwave", percentage: 34, color: "#ff6b6b", hours: 45 },
-      { genre: "Lo-fi Hip Hop", percentage: 28, color: "#4ecdc4", hours: 37 },
-      { genre: "Ambient", percentage: 22, color: "#45b7d1", hours: 29 },
-      { genre: "Classical", percentage: 16, color: "#96ceb4", hours: 21 },
-    ],
-    listeningHours: [
-      { month: "Jan", hours: 67, tracks: 890 },
-      { month: "Feb", hours: 72, tracks: 945 },
-      { month: "Mar", hours: 89, tracks: 1120 },
-      { month: "Apr", hours: 94, tracks: 1200 },
-      { month: "May", hours: 103, tracks: 1350 },
-      { month: "Jun", hours: 87, tracks: 1100 },
-    ],
-    topArtists: [
-      { name: "HOME", plays: 234 },
-      { name: "Boards of Canada", plays: 189 },
-      { name: "Tycho", plays: 156 },
-      { name: "Emancipator", plays: 134 },
-    ],
-  },
-};
-
-// TODO: Parse from /public/leetcode-data.json
-// Expected format: { username, totalSolved, totalAvailable, easySolved, easyAvailable, mediumSolved, mediumAvailable, hardSolved, hardAvailable }
-const mockLeetcodeStats = {
-  username: "wlmr-rk",
-  totalSolved: 287,
-  totalAvailable: 3596,
-  easySolved: 142,
-  easyAvailable: 883,
-  mediumSolved: 118,
-  mediumAvailable: 1868,
-  hardSolved: 27,
-  hardAvailable: 845,
-  analytics: {
-    solvingTrend: [
-      { date: "Jan", solved: 45, easy: 28, medium: 15, hard: 2 },
-      { date: "Feb", solved: 62, easy: 35, medium: 22, hard: 5 },
-      { date: "Mar", solved: 78, easy: 42, medium: 28, hard: 8 },
-      { date: "Apr", solved: 91, easy: 48, medium: 32, hard: 11 },
-      { date: "May", solved: 104, easy: 55, medium: 36, hard: 13 },
-      { date: "Jun", solved: 116, easy: 60, medium: 40, hard: 16 },
-    ],
-    topicDistribution: [
-      { topic: "Arrays", solved: 45, total: 120, difficulty: "Medium" },
-      { topic: "Trees", solved: 32, total: 89, difficulty: "Hard" },
-      { topic: "Dynamic Programming", solved: 28, total: 156, difficulty: "Hard" },
-      { topic: "Graphs", solved: 23, total: 87, difficulty: "Hard" },
-      { topic: "Strings", solved: 38, total: 94, difficulty: "Easy" },
-      { topic: "Hash Tables", solved: 41, total: 76, difficulty: "Medium" },
-    ],
-    weeklyActivity: [
-      { day: "Mon", problems: 3, timeMinutes: 45 },
-      { day: "Tue", problems: 2, timeMinutes: 30 },
-      { day: "Wed", problems: 4, timeMinutes: 60 },
-      { day: "Thu", problems: 1, timeMinutes: 15 },
-      { day: "Fri", problems: 3, timeMinutes: 45 },
-      { day: "Sat", problems: 5, timeMinutes: 75 },
-      { day: "Sun", problems: 2, timeMinutes: 30 },
-    ],
-  },
-};
-
-// TODO: Parse from /public/strava-data.json
-// Expected format: { totalRuns, totalDistanceKm, recentRuns: [{ name, distanceKm, date }] }
-const mockStravaStats = {
-  totalRuns: 89,
-  totalDistanceKm: "456.7",
-  recentRuns: [
-    { name: "Greenway Park Morning Run", distanceKm: "4.8", date: "2025-06-23", pace: "5:12", elevation: 45 },
-    { name: "Day 3 of Running/Walk", distanceKm: "10.2", date: "2025-03-23", pace: "5:45", elevation: 120 },
-    { name: "Lunch Walk", distanceKm: "4.7", date: "2019-07-20", pace: "6:30", elevation: 20 },
-  ],
-  analytics: {
-    monthlyDistance: [
-      { month: "Jan", distance: 42.3, runs: 12, avgPace: "5:45" },
-      { month: "Feb", distance: 67.8, runs: 18, avgPace: "5:30" },
-      { month: "Mar", distance: 78.4, runs: 21, avgPace: "5:20" },
-      { month: "Apr", distance: 89.2, runs: 24, avgPace: "5:15" },
-      { month: "May", distance: 94.7, runs: 26, avgPace: "5:10" },
-      { month: "Jun", distance: 84.3, runs: 22, avgPace: "5:12" },
-    ],
-    weeklyPattern: [
-      { day: "Mon", distance: 5.2, frequency: 85 },
-      { day: "Tue", distance: 3.8, frequency: 60 },
-      { day: "Wed", distance: 6.1, frequency: 90 },
-      { day: "Thu", distance: 4.5, frequency: 70 },
-      { day: "Fri", distance: 5.8, frequency: 80 },
-      { day: "Sat", distance: 8.2, frequency: 95 },
-      { day: "Sun", distance: 7.1, frequency: 88 },
-    ],
-  },
-};
+// Loading Card Component
+const LoadingCard: React.FC<{
+  title: string;
+  className?: string;
+}> = ({ title, className = "" }) => (
+  <div
+    className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 ${className}`}
+  >
+    <div className="flex items-center mb-4">
+      <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-3">
+        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/20 border-t-white/60"></div>
+      </div>
+      <div>
+        <h3 className="text-lg font-bold text-white">{title}</h3>
+        <p className="text-white/60 text-sm">Loading data...</p>
+      </div>
+    </div>
+    <div className="space-y-3">
+      <div className="h-4 bg-white/10 rounded animate-pulse"></div>
+      <div className="h-4 bg-white/10 rounded animate-pulse w-3/4"></div>
+      <div className="h-4 bg-white/10 rounded animate-pulse w-1/2"></div>
+    </div>
+  </div>
+);
 
 const StatsSection: React.FC = () => {
   const [activeView, setActiveView] = useState("overview");
   const [expandedCards, setExpandedCards] = useState(new Set<string>());
+  const { stats, loading, error } = useStats();
 
   const toggleCard = (cardId: string) => {
     const newExpanded = new Set(expandedCards);
@@ -322,137 +129,180 @@ const StatsSection: React.FC = () => {
     });
   };
 
-  const getDeckDisplayName = (deckName: string) => {
-    if (deckName.includes("Core")) return "Core 2k/6k Vocabulary";
-    if (deckName.includes("決まり文句")) return "Set Phrases";
-    if (deckName.includes("開始")) return "Kaishi 1.5k";
-    if (deckName.includes("都道府県")) return "Prefectures";
-    if (deckName.includes("Radicals")) return "Radicals";
-    return deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim();
+  // Generate mock chart data based on real stats when available
+  const generateChartData = (baseValue: number, days: number = 7) => {
+    return Array.from({ length: days }, (_, i) => ({
+      day: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][i] || `Day ${i + 1}`,
+      value: Math.max(0, baseValue + Math.random() * 20 - 10),
+      trend: Math.random() * 100,
+    }));
   };
 
-  // Enhanced Stats Card Component
-  const EnhancedStatsCard = ({
-    icon: Icon,
-    title,
-    value,
-    subtitle,
-    color,
-    trend,
-    trendDirection = "up",
-    className = "",
-    children,
-  }: {
+  // Hero Stats Card Component
+  const HeroStatsCard: React.FC<{
     icon: React.ComponentType<{ size: number; className?: string }>;
     title: string;
     value: string | number;
     subtitle?: string;
     color: string;
     trend?: number;
-    trendDirection?: "up" | "down";
     className?: string;
-    children?: React.ReactNode;
+    isLoading?: boolean;
+    hasError?: boolean;
+  }> = ({
+    icon: Icon,
+    title,
+    value,
+    subtitle,
+    color,
+    trend,
+    className = "",
+    isLoading = false,
+    hasError = false,
   }) => (
     <div
-      className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
+      className={`group relative overflow-hidden rounded-3xl p-8 transition-all duration-700 hover:scale-105 ${className}`}
     >
-      {/* Background Gradient */}
       <div
-        className="absolute inset-0 rounded-2xl lg:rounded-3xl opacity-30"
+        className="absolute inset-0 bg-gradient-to-br opacity-20"
         style={{
           background: `linear-gradient(135deg, ${color}20, ${color}10, transparent)`,
         }}
       />
 
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(6)].map((_, i) => (
           <div
-            className="p-3 rounded-xl backdrop-blur-[20px]"
+            key={i}
+            className="absolute w-2 h-2 rounded-full opacity-30 animate-[float_3s_ease-in-out_infinite]"
+            style={{
+              background: color,
+              left: `${20 + i * 15}%`,
+              top: `${20 + (i % 2) * 40}%`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${3 + i}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-6">
+          <div
+            className="p-4 rounded-2xl backdrop-blur-xl"
             style={{ background: `${color}20` }}
           >
-            <Icon size={20} style={{ color }} />
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-white/20 border-t-white/60"></div>
+            ) : hasError ? (
+              <AlertCircle size={32} className="text-red-400" />
+            ) : (
+              <Icon size={32} style={{ color }} />
+            )}
           </div>
-          {trend && (
-            <div className={`flex items-center text-xs font-semibold ${
-              trendDirection === "up" ? "text-accent-main" : "text-red-400"
-            }`}>
-              {trendDirection === "up" ? (
-                <TrendingUp size={12} className="mr-1" />
-              ) : (
-                <TrendingDown size={12} className="mr-1" />
-              )}
-              {trendDirection === "up" ? "+" : ""}{trend}%
+          {trend && !isLoading && !hasError && (
+            <div className="flex items-center text-emerald-400 text-sm font-semibold">
+              <TrendingUp size={16} className="mr-1" />+{trend}%
             </div>
           )}
         </div>
 
         <div className="mb-2">
-          <div className="text-2xl font-black text-white mb-1">{value}</div>
-          <div className="text-white/60 text-sm">{title}</div>
-          {subtitle && (
-            <div className="text-white/40 text-xs mt-1">{subtitle}</div>
+          {isLoading ? (
+            <>
+              <div className="h-10 bg-white/10 rounded animate-pulse mb-2"></div>
+              <div className="h-6 bg-white/10 rounded animate-pulse w-3/4"></div>
+            </>
+          ) : hasError ? (
+            <>
+              <div className="text-4xl font-black text-red-400 mb-2">--</div>
+              <div className="text-red-400/60 text-lg">{title}</div>
+              <div className="text-red-400/40 text-sm mt-1">Data unavailable</div>
+            </>
+          ) : (
+            <>
+              <div className="text-4xl font-black text-white mb-2">{value}</div>
+              <div className="text-white/60 text-lg">{title}</div>
+              {subtitle && (
+                <div className="text-white/40 text-sm mt-1">{subtitle}</div>
+              )}
+            </>
           )}
         </div>
-
-        {children}
       </div>
     </div>
   );
 
   // Chart Card Component
-  const ChartCard = ({
-    title,
-    children,
-    className = "",
-    expandable = false,
-    cardId,
-    subtitle,
-  }: {
+  const ChartCard: React.FC<{
     title: string;
     children: React.ReactNode;
     className?: string;
     expandable?: boolean;
     cardId?: string;
-    subtitle?: string;
-  }) => (
-    <div
-      className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
-    >
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h3 className="text-lg font-bold text-white">{title}</h3>
-            {subtitle && (
-              <p className="text-white/60 text-sm mt-1">{subtitle}</p>
+    isLoading?: boolean;
+    hasError?: boolean;
+    errorMessage?: string;
+  }> = ({
+    title,
+    children,
+    className = "",
+    expandable = false,
+    cardId,
+    isLoading = false,
+    hasError = false,
+    errorMessage,
+  }) => {
+    if (isLoading) {
+      return <LoadingCard title={title} className={className} />;
+    }
+
+    if (hasError) {
+      return (
+        <ErrorCard
+          title={title}
+          message={errorMessage || "Unable to load data from API"}
+          className={className}
+        />
+      );
+    }
+
+    return (
+      <div
+        className={`group relative overflow-hidden rounded-3xl backdrop-blur-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/2 transition-all duration-700 hover:border-white/20 ${className}`}
+      >
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-bold text-white">{title}</h3>
+            {expandable && cardId && (
+              <button
+                onClick={() => toggleCard(cardId)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
+              >
+                {expandedCards.has(cardId) ? (
+                  <ChevronUp size={16} className="text-white/60" />
+                ) : (
+                  <ChevronDown size={16} className="text-white/60" />
+                )}
+              </button>
             )}
           </div>
-          {expandable && cardId && (
-            <button
-              onClick={() => toggleCard(cardId)}
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              {expandedCards.has(cardId) ? (
-                <ChevronUp size={16} className="text-white/60" />
-              ) : (
-                <ChevronDown size={16} className="text-white/60" />
-              )}
-            </button>
-          )}
+          {children}
         </div>
-        {children}
       </div>
-    </div>
-  );
+    );
+  };
 
   // Custom Tooltip Component
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip: React.FC<any> = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-black/90 border border-white/20 rounded-lg p-3 backdrop-blur-xl">
-          <p className="text-white font-semibold">{label}</p>
+          <p className="text-white/80 text-sm">{`${label}`}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-white/80 text-sm">
-              {entry.name}: {entry.value}
+            <p key={index} className="text-white font-semibold">
+              {`${entry.name}: ${entry.value}`}
             </p>
           ))}
         </div>
@@ -461,40 +311,64 @@ const StatsSection: React.FC = () => {
     return null;
   };
 
+  if (loading) {
+    return (
+      <section
+        id="stats"
+        className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8"
+      >
+        <div className="bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]" />
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
+              Loading Stats
+            </h2>
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-white/20 border-t-accent-main mr-3"></div>
+              <p className="text-lg text-white/60">Fetching live data...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       id="stats"
-      className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8"
+      className="relative min-h-screen bg-black overflow-hidden p-4 sm:p-6 lg:p-8"
     >
-      {/* Background noise */}
+      {/* Background */}
       <div className="bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]" />
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section Header */}
+        {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
-            Live Dashboard
-          </h2>
-          <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
-            Real-time insights into development, learning, and creative pursuits powered by intelligent automation
-          </p>
-
-          {/* Status Indicator */}
-          <div className="inline-flex items-center px-6 py-3 rounded-full border border-accent-main/20 bg-accent-main/5 backdrop-blur-[40px] mb-8">
-            <Sparkles size={16} className="text-accent-main mr-2" />
-            <span className="text-sm font-semibold text-accent-main">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-accent-main/20 to-accent-mid/20 border border-accent-main/30 mb-6">
+            <Sparkles size={20} className="text-accent-main mr-2" />
+            <span className="text-accent-main font-semibold">
               Live Analytics Dashboard
             </span>
-            <span className="ml-3 text-xs text-white/50">•</span>
-            <span className="ml-3 text-xs text-white/70">
-              Last updated: {new Date().toLocaleTimeString()}
-            </span>
+            {stats?.lastUpdated && (
+              <span className="text-white/40 text-xs ml-3">
+                Updated {formatDate(stats.lastUpdated)}
+              </span>
+            )}
           </div>
+
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
+            Live Stats
+          </h2>
+
+          <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto mb-8">
+            Real-time insights into my development journey, learning progress,
+            and creative pursuits. Powered by intelligent automation.
+          </p>
 
           {/* Navigation */}
           <div className="flex justify-center mb-12">
             <div className="flex rounded-2xl p-2 bg-white/5 border border-white/10 backdrop-blur-xl">
-              {["overview", "coding", "learning", "analytics"].map((view) => (
+              {["overview", "coding", "learning"].map((view) => (
                 <button
                   key={view}
                   onClick={() => setActiveView(view)}
@@ -512,826 +386,530 @@ const StatsSection: React.FC = () => {
         </div>
 
         {activeView === "overview" && (
-          <div className="space-y-8">
+          <div className="space-y-12">
             {/* Hero Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <EnhancedStatsCard
+              <HeroStatsCard
                 icon={Code2}
-                title="Coding Today"
-                value={formatHours(mockWakatimeStats.today.codingMinutes)}
-                subtitle={`${mockWakatimeStats.today.primaryLanguage} focus`}
+                title="Coding Time"
+                value={
+                  stats?.wakatime?.today?.codingMinutes
+                    ? formatHours(stats.wakatime.today.codingMinutes)
+                    : "--"
+                }
+                subtitle={
+                  stats?.wakatime?.today?.primaryLanguage
+                    ? `Today • ${stats.wakatime.today.primaryLanguage} focus`
+                    : "Today"
+                }
                 color="#3b82f6"
                 trend={12}
-              >
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <div className="flex justify-between text-xs text-white/60">
-                    <span>Efficiency</span>
-                    <span className="text-accent-main font-semibold">
-                      {mockWakatimeStats.detailed.productivity.efficiency}%
-                    </span>
-                  </div>
-                </div>
-              </EnhancedStatsCard>
+                className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20"
+                hasError={!stats?.wakatime}
+              />
 
-              <EnhancedStatsCard
+              <HeroStatsCard
                 icon={Brain}
                 title="Study Cards"
-                value={mockAnkiStats.overall.reviewsToday}
-                subtitle={`${mockAnkiStats.overall.matureCardRetentionPercent}% retention`}
+                value={stats?.anki?.overall?.reviewsToday || "--"}
+                subtitle={
+                  stats?.anki?.overall?.matureCardRetentionPercent
+                    ? `${stats.anki.overall.matureCardRetentionPercent}% retention`
+                    : "Japanese learning"
+                }
                 color="#8b5cf6"
                 trend={8}
-              >
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <div className="flex justify-between text-xs text-white/60">
-                    <span>Streak</span>
-                    <span className="text-purple-400 font-semibold">
-                      {mockAnkiStats.overall.currentStreakDays} days
-                    </span>
-                  </div>
-                </div>
-              </EnhancedStatsCard>
+                className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20"
+                hasError={!stats?.anki}
+              />
 
-              <EnhancedStatsCard
+              <HeroStatsCard
                 icon={Trophy}
                 title="Problems Solved"
-                value={mockLeetcodeStats.totalSolved}
+                value={stats?.leetcode?.totalSolved || "--"}
                 subtitle="LeetCode progress"
                 color="#f59e0b"
                 trend={15}
-              >
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <div className="flex justify-between text-xs text-white/60">
-                    <span>This Month</span>
-                    <span className="text-amber-400 font-semibold">
-                      +{mockLeetcodeStats.analytics.solvingTrend[5].solved - mockLeetcodeStats.analytics.solvingTrend[4].solved}
-                    </span>
-                  </div>
-                </div>
-              </EnhancedStatsCard>
+                className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20"
+                hasError={!stats?.leetcode}
+              />
 
-              <EnhancedStatsCard
+              <HeroStatsCard
                 icon={Activity}
-                title="Running Distance"
-                value={`${mockStravaStats.totalDistanceKm}km`}
-                subtitle="Total distance"
+                title="Total Distance"
+                value={
+                  stats?.strava?.totalDistanceKm
+                    ? `${stats.strava.totalDistanceKm}km`
+                    : "--"
+                }
+                subtitle="Running progress"
                 color="#ef4444"
                 trend={6}
-              >
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <div className="flex justify-between text-xs text-white/60">
-                    <span>Avg Pace</span>
-                    <span className="text-red-400 font-semibold">
-                      {mockStravaStats.analytics.monthlyDistance[5].avgPace}/km
-                    </span>
-                  </div>
-                </div>
-              </EnhancedStatsCard>
+                className="bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20"
+                hasError={!stats?.strava}
+              />
             </div>
 
             {/* Main Dashboard Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Coding Activity - Large */}
+              {/* Coding Activity */}
               <div className="lg:col-span-8">
                 <ChartCard
-                  title="Development Velocity & Productivity"
-                  subtitle="Daily coding hours and productivity metrics"
+                  title="Coding Activity & Productivity"
                   expandable
                   cardId="coding"
+                  hasError={!stats?.wakatime}
+                  errorMessage="WakaTime data not available. Please check wakatime-data.json file."
                 >
-                  <div className="space-y-6">
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart data={mockWakatimeStats.detailed.last30Days}>
-                          <defs>
-                            <linearGradient
-                              id="codingGradient"
-                              x1="0"
-                              y1="0"
-                              x2="0"
-                              y2="1"
-                            >
-                              <stop
-                                offset="5%"
-                                stopColor="#3b82f6"
-                                stopOpacity={0.8}
-                              />
-                              <stop
-                                offset="95%"
-                                stopColor="#3b82f6"
-                                stopOpacity={0.1}
-                              />
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            stroke="rgba(255,255,255,0.1)"
-                          />
-                          <XAxis
-                            dataKey="date"
-                            stroke="rgba(255,255,255,0.6)"
-                            fontSize={12}
-                          />
-                          <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                          <Tooltip content={<CustomTooltip />} />
-                          <Area
-                            type="monotone"
-                            dataKey="hours"
-                            stroke="#3b82f6"
-                            fillOpacity={1}
-                            fill="url(#codingGradient)"
-                            name="Hours"
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="productivity"
-                            stroke="#10b981"
-                            strokeWidth={2}
-                            dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
-                            name="Productivity %"
-                          />
-                          <Bar
-                            dataKey="commits"
-                            fill="#f59e0b"
-                            opacity={0.7}
-                            name="Commits"
-                          />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </div>
+                  {stats?.wakatime && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div className="text-center p-4 rounded-xl bg-blue-500/20 border border-blue-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {stats.wakatime.weeklyStats.totalHoursLast7Days}h
+                          </div>
+                          <div className="text-blue-400 text-xs font-semibold">
+                            This Week
+                          </div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-purple-500/20 border border-purple-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {stats.wakatime.weeklyStats.activeDaysCount}
+                          </div>
+                          <div className="text-purple-400 text-xs font-semibold">
+                            Active Days
+                          </div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {formatHours(stats.wakatime.weeklyStats.dailyAverageMinutes)}
+                          </div>
+                          <div className="text-emerald-400 text-xs font-semibold">
+                            Daily Average
+                          </div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-amber-500/20 border border-amber-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {stats.wakatime.weeklyStats.consistency}
+                          </div>
+                          <div className="text-amber-400 text-xs font-semibold">
+                            Consistency
+                          </div>
+                        </div>
+                      </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                        <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.weeklyStats.totalHoursLast7Days}h
-                        </div>
-                        <div className="text-white/60 text-xs">This Week</div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={generateChartData(stats.wakatime.today.codingMinutes / 60)}>
+                            <defs>
+                              <linearGradient id="codingGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                            <XAxis dataKey="day" stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <Tooltip content={<CustomTooltip />} />
+                            <Area
+                              type="monotone"
+                              dataKey="value"
+                              stroke="#3b82f6"
+                              fillOpacity={1}
+                              fill="url(#codingGradient)"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
                       </div>
-                      <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                        <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.detailed.streak.current}
-                        </div>
-                        <div className="text-white/60 text-xs">Day Streak</div>
-                      </div>
-                      <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                        <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.detailed.productivity.focusScore}%
-                        </div>
-                        <div className="text-white/60 text-xs">Focus Score</div>
-                      </div>
-                      <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                        <div className="text-lg font-bold text-white">
-                          {mockWakatimeStats.detailed.productivity.peakHours}
-                        </div>
-                        <div className="text-white/60 text-xs">Peak Hours</div>
-                      </div>
-                    </div>
 
-                    {expandedCards.has("coding") && (
-                      <div className="pt-6 border-t border-white/10 space-y-6">
-                        <div>
-                          <h4 className="text-white font-semibold mb-4">
-                            Language Distribution & Trends
-                          </h4>
-                          <div className="space-y-3">
-                            {mockWakatimeStats.detailed.languages.map((lang) => (
-                              <div
-                                key={lang.name}
-                                className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10"
-                              >
-                                <div className="flex items-center">
-                                  <div
-                                    className="w-3 h-3 rounded-full mr-3"
-                                    style={{ backgroundColor: lang.color }}
-                                  />
-                                  <span className="text-white/80">{lang.name}</span>
-                                </div>
-                                <div className="flex items-center space-x-4">
-                                  <span className="text-white/60 text-sm">
-                                    {lang.hours}h ({lang.percentage}%)
+                      {expandedCards.has("coding") && (
+                        <div className="pt-6 border-t border-white/10">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <h4 className="text-white font-semibold mb-4">Environment</h4>
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                                  <div className="flex items-center">
+                                    <Code2 size={16} className="text-blue-400 mr-3" />
+                                    <span className="text-white/80">Editor</span>
+                                  </div>
+                                  <span className="text-white font-medium">
+                                    {stats.wakatime.today.environment.editor}
                                   </span>
-                                  <div className={`flex items-center text-xs ${
-                                    lang.trend > 0 ? "text-accent-main" : "text-red-400"
-                                  }`}>
-                                    {lang.trend > 0 ? (
-                                      <TrendingUp size={12} className="mr-1" />
-                                    ) : (
-                                      <TrendingDown size={12} className="mr-1" />
-                                    )}
-                                    {lang.trend > 0 ? "+" : ""}{lang.trend}%
+                                </div>
+                                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                                  <div className="flex items-center">
+                                    <Cpu size={16} className="text-purple-400 mr-3" />
+                                    <span className="text-white/80">OS</span>
                                   </div>
+                                  <span className="text-white font-medium">
+                                    {stats.wakatime.today.environment.os}
+                                  </span>
                                 </div>
                               </div>
-                            ))}
-                          </div>
-                        </div>
+                            </div>
 
-                        <div>
-                          <h4 className="text-white font-semibold mb-4">
-                            Active Projects
-                          </h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {mockWakatimeStats.detailed.projects.map((project) => (
-                              <div
-                                key={project.name}
-                                className="p-3 rounded-lg bg-white/5 border border-white/10"
-                              >
-                                <div className="flex justify-between items-start mb-2">
-                                  <div className="text-white font-medium text-sm">
-                                    {project.name}
-                                  </div>
-                                  <div className="text-accent-main text-xs font-semibold">
-                                    {project.completion}%
-                                  </div>
+                            <div>
+                              <h4 className="text-white font-semibold mb-4">Languages</h4>
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-white/80">
+                                    {stats.wakatime.weeklyStats.languages.primary}
+                                  </span>
+                                  <span className="text-white font-semibold">
+                                    {stats.wakatime.weeklyStats.languages.primaryPercentage}%
+                                  </span>
                                 </div>
-                                <div className="text-white/60 text-xs mb-2">
-                                  {project.hours}h • {project.commits} commits • {project.files} files
-                                </div>
-                                <div className="w-full bg-white/10 rounded-full h-1">
+                                <div className="w-full bg-white/10 rounded-full h-2">
                                   <div
-                                    className="h-1 bg-gradient-to-r from-accent-main to-accent-mid rounded-full"
-                                    style={{ width: `${project.completion}%` }}
+                                    className="h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                                    style={{
+                                      width: `${stats.wakatime.weeklyStats.languages.primaryPercentage}%`,
+                                    }}
+                                  />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-white/80">
+                                    {stats.wakatime.weeklyStats.languages.secondary}
+                                  </span>
+                                  <span className="text-white font-semibold">
+                                    {stats.wakatime.weeklyStats.languages.secondaryPercentage}%
+                                  </span>
+                                </div>
+                                <div className="w-full bg-white/10 rounded-full h-2">
+                                  <div
+                                    className="h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"
+                                    style={{
+                                      width: `${stats.wakatime.weeklyStats.languages.secondaryPercentage}%`,
+                                    }}
                                   />
                                 </div>
                               </div>
-                            ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </ChartCard>
               </div>
 
-              {/* Live Music */}
+              {/* Currently Playing Music */}
               <div className="lg:col-span-4">
-                <ChartCard title="Music & Audio Analytics">
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="relative">
-                        <Image
-                          src={mockSpotifyStats.albumImageUrl}
-                          alt={mockSpotifyStats.album}
-                          width={64}
-                          height={64}
-                          className="w-16 h-16 rounded-xl shadow-lg"
-                        />
-                        {mockSpotifyStats.isPlaying && (
+                <ChartCard
+                  title="Currently Playing"
+                  hasError={!stats?.spotify}
+                  errorMessage="Spotify data not available. Please check spotify-data.json file."
+                >
+                  {stats?.spotify && (
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="relative">
+                          <img
+                            src={stats.spotify.albumImageUrl || "/placeholder-album.jpg"}
+                            alt={stats.spotify.album}
+                            className="w-16 h-16 rounded-xl shadow-lg"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "/placeholder-album.jpg";
+                            }}
+                          />
                           <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
-                            <Play
-                              size={10}
-                              className="text-white fill-white ml-0.5"
+                            {stats.spotify.isPlaying ? (
+                              <Play size={10} className="text-white fill-white ml-0.5" />
+                            ) : (
+                              <div className="w-2 h-2 bg-white rounded-full" />
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-white font-bold text-lg leading-tight mb-1 truncate">
+                            {stats.spotify.title}
+                          </h4>
+                          <p className="text-white/70 text-sm mb-2 truncate">
+                            {stats.spotify.artist}
+                          </p>
+                          <div className="flex items-center text-emerald-400 text-xs">
+                            <div
+                              className={`w-2 h-2 rounded-full mr-2 ${
+                                stats.spotify.isPlaying ? "bg-emerald-400 animate-pulse" : "bg-white/40"
+                              }`}
                             />
+                            {stats.spotify.isPlaying ? "Now Playing" : "Last Played"}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/10">
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/70 text-sm">Album</span>
+                          <span className="text-white/80 text-sm font-medium truncate max-w-[60%]">
+                            {stats.spotify.album}
+                          </span>
+                        </div>
+                        {stats.spotify.songUrl && (
+                          <div className="mt-3">
+                            <a
+                              href={stats.spotify.songUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-3 py-2 text-sm font-medium text-emerald-400 rounded-lg border border-emerald-400/20 bg-emerald-400/5 transition-all duration-300 hover:border-emerald-400/40 hover:bg-emerald-400/10"
+                            >
+                              <Music size={14} className="mr-2" />
+                              Open in Spotify
+                              <ExternalLink size={12} className="ml-2" />
+                            </a>
                           </div>
                         )}
                       </div>
-
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-bold text-sm leading-tight mb-1 line-clamp-2">
-                          {mockSpotifyStats.title}
-                        </h4>
-                        <p className="text-white/70 text-xs mb-2 line-clamp-1">
-                          {mockSpotifyStats.artist}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-emerald-400 text-xs">
-                            <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse" />
-                            Live
-                          </div>
-                          <a
-                            href={mockSpotifyStats.songUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center text-emerald-400 hover:text-white transition-colors text-xs"
-                          >
-                            <ExternalLink size={10} className="mr-1" />
-                            Spotify
-                          </a>
-                        </div>
-                      </div>
                     </div>
-
-                    <div className="pt-4 border-t border-white/10">
-                      <h5 className="text-white/80 text-sm font-semibold mb-3">
-                        Listening Habits
-                      </h5>
-                      <div className="space-y-3">
-                        <div className="h-24">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie
-                                data={mockSpotifyStats.analytics.topGenres}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={20}
-                                outerRadius={40}
-                                paddingAngle={5}
-                                dataKey="percentage"
-                              >
-                                {mockSpotifyStats.analytics.topGenres.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                              </Pie>
-                              <Tooltip content={<CustomTooltip />} />
-                            </PieChart>
-                          </ResponsiveContainer>
-                        </div>
-                        <div className="space-y-2">
-                          {mockSpotifyStats.analytics.topGenres.map((genre) => (
-                            <div
-                              key={genre.genre}
-                              className="flex items-center justify-between"
-                            >
-                              <div className="flex items-center">
-                                <div
-                                  className="w-2 h-2 rounded-full mr-2"
-                                  style={{ backgroundColor: genre.color }}
-                                />
-                                <span className="text-white/70 text-xs">
-                                  {genre.genre}
-                                </span>
-                              </div>
-                              <span className="text-white/50 text-xs">
-                                {genre.hours}h ({genre.percentage}%)
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </ChartCard>
               </div>
 
               {/* Anki Learning Progress */}
               <div className="lg:col-span-6">
                 <ChartCard
-                  title="Japanese Study Analytics"
-                  subtitle="Comprehensive learning progress tracking"
+                  title="Japanese Study Progress"
                   expandable
                   cardId="anki"
+                  hasError={!stats?.anki}
+                  errorMessage="Anki data not available. Please check anki-data.json file."
                 >
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                        <div className="text-xl font-black text-white mb-1">
-                          {mockAnkiStats.overall.reviewsToday}
-                        </div>
-                        <div className="text-purple-400 text-xs font-semibold">
-                          Reviews Today
-                        </div>
-                      </div>
-                      <div className="text-center p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30">
-                        <div className="text-xl font-black text-white mb-1">
-                          {mockAnkiStats.overall.matureCardRetentionPercent}%
-                        </div>
-                        <div className="text-emerald-400 text-xs font-semibold">
-                          Retention Rate
-                        </div>
-                      </div>
-                      <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
-                        <div className="text-xl font-black text-white mb-1">
-                          {mockAnkiStats.overall.currentStreakDays}
-                        </div>
-                        <div className="text-orange-400 text-xs font-semibold">
-                          Day Streak
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="h-40">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart data={mockAnkiStats.analytics.dailyReviews}>
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            stroke="rgba(255,255,255,0.1)"
-                          />
-                          <XAxis
-                            dataKey="day"
-                            stroke="rgba(255,255,255,0.6)"
-                            fontSize={12}
-                          />
-                          <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                          <Tooltip content={<CustomTooltip />} />
-                          <Bar
-                            dataKey="reviews"
-                            fill="#8b5cf6"
-                            radius={[4, 4, 0, 0]}
-                            name="Reviews"
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="accuracy"
-                            stroke="#10b981"
-                            strokeWidth={2}
-                            dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
-                            name="Accuracy %"
-                          />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    {expandedCards.has("anki") && (
-                      <div className="pt-6 border-t border-white/10 space-y-6">
-                        <div>
-                          <h4 className="text-white font-semibold mb-4">
-                            Card Type Distribution
-                          </h4>
-                          <div className="space-y-3">
-                            {mockAnkiStats.analytics.cardTypes.map((type) => (
-                              <div
-                                key={type.type}
-                                className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10"
-                              >
-                                <span className="text-white/80 text-sm">{type.type}</span>
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-20 h-2 bg-white/10 rounded-full">
-                                    <div
-                                      className="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-                                      style={{
-                                        width: `${(type.mastered / type.count) * 100}%`,
-                                      }}
-                                    />
-                                  </div>
-                                  <span className="text-white/60 text-sm">
-                                    {type.mastered}/{type.count}
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
+                  {stats?.anki && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {stats.anki.overall.reviewsToday}
+                          </div>
+                          <div className="text-purple-400 text-xs font-semibold">
+                            Reviews Today
                           </div>
                         </div>
+                        <div className="text-center p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {stats.anki.overall.matureCardRetentionPercent}%
+                          </div>
+                          <div className="text-emerald-400 text-xs font-semibold">
+                            Retention Rate
+                          </div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
+                          <div className="text-2xl font-black text-white mb-1">
+                            {stats.anki.overall.currentStreakDays}
+                          </div>
+                          <div className="text-orange-400 text-xs font-semibold">
+                            Day Streak
+                          </div>
+                        </div>
+                      </div>
 
-                        <div>
-                          <h4 className="text-white font-semibold mb-4">
-                            Deck Performance
-                          </h4>
-                          <div className="space-y-3">
-                            {mockAnkiStats.decks.map((deck) => (
+                      <div className="h-48">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={generateChartData(stats.anki.overall.reviewsToday)}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                            <XAxis dataKey="day" stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <Tooltip content={<CustomTooltip />} />
+                            <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      {expandedCards.has("anki") && (
+                        <div className="pt-6 border-t border-white/10">
+                          <h4 className="text-white font-semibold mb-4">Deck Performance</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {stats.anki.decks.slice(0, 4).map((deck) => (
                               <div
                                 key={deck.deckName}
                                 className="p-3 rounded-lg bg-white/5 border border-white/10"
                               >
-                                <div className="flex justify-between items-start mb-2">
-                                  <div className="text-white font-medium text-sm">
-                                    {getDeckDisplayName(deck.deckName)}
-                                  </div>
-                                  <div className="text-accent-main text-xs font-semibold">
-                                    {deck.accuracy}% accuracy
-                                  </div>
+                                <div className="text-white font-medium text-sm mb-1">
+                                  {deck.deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim()}
                                 </div>
                                 <div className="flex justify-between text-xs text-white/60">
-                                  <span>{deck.reviewsToday} reviews today</span>
-                                  <span>{deck.matureCards} mature cards</span>
+                                  <span>{deck.reviewsToday} reviews</span>
+                                  <span>{deck.matureCards} mature</span>
+                                </div>
+                                <div className="mt-2 w-full bg-white/10 rounded-full h-1">
+                                  <div
+                                    className="h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                                    style={{
+                                      width: `${Math.min((deck.matureCards / deck.totalCards) * 100, 100)}%`,
+                                    }}
+                                  />
                                 </div>
                               </div>
                             ))}
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </ChartCard>
               </div>
 
-              {/* LeetCode & Problem Solving */}
+              {/* LeetCode Progress */}
               <div className="lg:col-span-6">
                 <ChartCard
-                  title="Problem Solving Analytics"
-                  subtitle="Algorithmic thinking and coding challenges"
+                  title="Problem Solving Journey"
                   expandable
                   cardId="leetcode"
+                  hasError={!stats?.leetcode}
+                  errorMessage="LeetCode data not available. Please check leetcode-data.json file."
                 >
-                  <div className="space-y-6">
-                    <div className="flex justify-center">
-                      <div className="relative w-32 h-32">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie
-                              data={[
-                                {
-                                  name: "Easy",
-                                  value: mockLeetcodeStats.easySolved,
-                                  fill: "#10b981",
-                                },
-                                {
-                                  name: "Medium",
-                                  value: mockLeetcodeStats.mediumSolved,
-                                  fill: "#f59e0b",
-                                },
-                                {
-                                  name: "Hard",
-                                  value: mockLeetcodeStats.hardSolved,
-                                  fill: "#ef4444",
-                                },
-                              ]}
-                              cx="50%"
-                              cy="50%"
-                              innerRadius={40}
-                              outerRadius={60}
-                              paddingAngle={5}
-                              dataKey="value"
-                            >
-                              {[
-                                {
-                                  name: "Easy",
-                                  value: mockLeetcodeStats.easySolved,
-                                  fill: "#10b981",
-                                },
-                                {
-                                  name: "Medium",
-                                  value: mockLeetcodeStats.mediumSolved,
-                                  fill: "#f59e0b",
-                                },
-                                {
-                                  name: "Hard",
-                                  value: mockLeetcodeStats.hardSolved,
-                                  fill: "#ef4444",
-                                },
-                              ].map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.fill} />
-                              ))}
-                            </Pie>
-                            <Tooltip content={<CustomTooltip />} />
-                          </PieChart>
-                        </ResponsiveContainer>
+                  {stats?.leetcode && (
+                    <div className="space-y-6">
+                      <div className="flex justify-center">
+                        <div className="relative w-48 h-48">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={[
+                                  {
+                                    name: "Easy",
+                                    value: stats.leetcode.easySolved,
+                                    fill: "#10b981",
+                                  },
+                                  {
+                                    name: "Medium",
+                                    value: stats.leetcode.mediumSolved,
+                                    fill: "#f59e0b",
+                                  },
+                                  {
+                                    name: "Hard",
+                                    value: stats.leetcode.hardSolved,
+                                    fill: "#ef4444",
+                                  },
+                                ]}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={90}
+                                paddingAngle={5}
+                                dataKey="value"
+                              >
+                                <Cell fill="#10b981" />
+                                <Cell fill="#f59e0b" />
+                                <Cell fill="#ef4444" />
+                              </Pie>
+                              <Tooltip content={<CustomTooltip />} />
+                            </PieChart>
+                          </ResponsiveContainer>
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="text-2xl font-black text-white">
-                              {mockLeetcodeStats.totalSolved}
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="text-3xl font-black text-white">
+                                {stats.leetcode.totalSolved}
+                              </div>
+                              <div className="text-white/60 text-sm">Solved</div>
                             </div>
-                            <div className="text-white/60 text-xs">Solved</div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
-                        <div className="text-lg font-bold text-white">
-                          {mockLeetcodeStats.easySolved}
-                        </div>
-                        <div className="text-emerald-400 text-xs">Easy</div>
-                        <div className="text-white/50 text-xs mt-1">
-                          {Math.round((mockLeetcodeStats.easySolved / mockLeetcodeStats.easyAvailable) * 100)}%
-                        </div>
-                      </div>
-                      <div className="text-center p-3 rounded-lg bg-amber-500/20 border border-amber-500/30">
-                        <div className="text-lg font-bold text-white">
-                          {mockLeetcodeStats.mediumSolved}
-                        </div>
-                        <div className="text-amber-400 text-xs">Medium</div>
-                        <div className="text-white/50 text-xs mt-1">
-                          {Math.round((mockLeetcodeStats.mediumSolved / mockLeetcodeStats.mediumAvailable) * 100)}%
-                        </div>
-                      </div>
-                      <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-                        <div className="text-lg font-bold text-white">
-                          {mockLeetcodeStats.hardSolved}
-                        </div>
-                        <div className="text-red-400 text-xs">Hard</div>
-                        <div className="text-white/50 text-xs mt-1">
-                          {Math.round((mockLeetcodeStats.hardSolved / mockLeetcodeStats.hardAvailable) * 100)}%
-                        </div>
-                      </div>
-                    </div>
-
-                    {expandedCards.has("leetcode") && (
-                      <div className="pt-6 border-t border-white/10 space-y-6">
-                        <div>
-                          <h4 className="text-white font-semibold mb-3">
-                            Monthly Progress Trend
-                          </h4>
-                          <div className="h-32">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <AreaChart
-                                data={mockLeetcodeStats.analytics.solvingTrend}
-                              >
-                                <defs>
-                                  <linearGradient
-                                    id="leetcodeGradient"
-                                    x1="0"
-                                    y1="0"
-                                    x2="0"
-                                    y2="1"
-                                  >
-                                    <stop
-                                      offset="5%"
-                                      stopColor="#f59e0b"
-                                      stopOpacity={0.8}
-                                    />
-                                    <stop
-                                      offset="95%"
-                                      stopColor="#f59e0b"
-                                      stopOpacity={0.1}
-                                    />
-                                  </linearGradient>
-                                </defs>
-                                <CartesianGrid
-                                  strokeDasharray="3 3"
-                                  stroke="rgba(255,255,255,0.1)"
-                                />
-                                <XAxis
-                                  dataKey="date"
-                                  stroke="rgba(255,255,255,0.6)"
-                                  fontSize={10}
-                                />
-                                <YAxis
-                                  stroke="rgba(255,255,255,0.6)"
-                                  fontSize={10}
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Area
-                                  type="monotone"
-                                  dataKey="solved"
-                                  stroke="#f59e0b"
-                                  fillOpacity={1}
-                                  fill="url(#leetcodeGradient)"
-                                  name="Total Solved"
-                                />
-                              </AreaChart>
-                            </ResponsiveContainer>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
+                          <div className="text-xl font-bold text-white">
+                            {stats.leetcode.easySolved}
                           </div>
+                          <div className="text-emerald-400 text-xs">Easy</div>
                         </div>
-
-                        <div>
-                          <h4 className="text-white font-semibold mb-3">
-                            Topic Mastery
-                          </h4>
-                          <div className="space-y-2">
-                            {mockLeetcodeStats.analytics.topicDistribution.map(
-                              (topic) => (
-                                <div
-                                  key={topic.topic}
-                                  className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
-                                >
-                                  <div className="flex items-center">
-                                    <span className="text-white/80 text-sm">
-                                      {topic.topic}
-                                    </span>
-                                    <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                                      topic.difficulty === "Easy" ? "bg-emerald-500/20 text-emerald-400" :
-                                      topic.difficulty === "Medium" ? "bg-amber-500/20 text-amber-400" :
-                                      "bg-red-500/20 text-red-400"
-                                    }`}>
-                                      {topic.difficulty}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center space-x-3">
-                                    <div className="w-16 h-2 bg-white/10 rounded-full">
-                                      <div
-                                        className="h-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"
-                                        style={{
-                                          width: `${(topic.solved / topic.total) * 100}%`,
-                                        }}
-                                      />
-                                    </div>
-                                    <span className="text-white/60 text-sm">
-                                      {topic.solved}/{topic.total}
-                                    </span>
-                                  </div>
-                                </div>
-                              ),
-                            )}
+                        <div className="text-center p-3 rounded-lg bg-amber-500/20 border border-amber-500/30">
+                          <div className="text-xl font-bold text-white">
+                            {stats.leetcode.mediumSolved}
                           </div>
+                          <div className="text-amber-400 text-xs">Medium</div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                </ChartCard>
-              </div>
-
-              {/* Strava Running */}
-              <div className="lg:col-span-12">
-                <ChartCard title="Fitness & Health Analytics" expandable cardId="strava">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2">
-                      <div className="h-48">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart
-                            data={mockStravaStats.analytics.monthlyDistance}
-                          >
-                            <defs>
-                              <linearGradient
-                                id="stravaGradient"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1"
-                              >
-                                <stop
-                                  offset="5%"
-                                  stopColor="#ef4444"
-                                  stopOpacity={0.8}
-                                />
-                                <stop
-                                  offset="95%"
-                                  stopColor="#ef4444"
-                                  stopOpacity={0.1}
-                                />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="month"
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                            <Tooltip content={<CustomTooltip />} />
-                            <Area
-                              type="monotone"
-                              dataKey="distance"
-                              stroke="#ef4444"
-                              fillOpacity={1}
-                              fill="url(#stravaGradient)"
-                              name="Distance (km)"
-                            />
-                            <Bar
-                              dataKey="runs"
-                              fill="#f97316"
-                              opacity={0.7}
-                              name="Number of Runs"
-                            />
-                          </ComposedChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
                         <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-                          <div className="text-lg font-bold text-white">
-                            {mockStravaStats.totalRuns}
+                          <div className="text-xl font-bold text-white">
+                            {stats.leetcode.hardSolved}
                           </div>
-                          <div className="text-red-400 text-xs">Total Runs</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-orange-500/20 border border-orange-500/30">
-                          <div className="text-lg font-bold text-white">
-                            {mockStravaStats.totalDistanceKm}
-                          </div>
-                          <div className="text-orange-400 text-xs">
-                            Kilometers
-                          </div>
+                          <div className="text-red-400 text-xs">Hard</div>
                         </div>
                       </div>
 
-                      <div className="space-y-3">
-                        <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                          <div className="text-white/70 text-xs mb-1">Average Pace</div>
-                          <div className="text-white font-semibold">
-                            {mockStravaStats.analytics.monthlyDistance[5].avgPace}/km
-                          </div>
-                        </div>
-                        <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                          <div className="text-white/70 text-xs mb-1">This Month</div>
-                          <div className="text-white font-semibold">
-                            {mockStravaStats.analytics.monthlyDistance[5].distance}km
-                          </div>
-                        </div>
-                      </div>
-
-                      {expandedCards.has("strava") && (
-                        <div>
-                          <h4 className="text-white font-semibold mb-3 text-sm">
-                            Recent Activities
-                          </h4>
-                          <div className="space-y-2">
-                            {mockStravaStats.recentRuns
-                              .slice(0, 3)
-                              .map((run, index) => (
-                                <div
-                                  key={index}
-                                  className="p-3 rounded-lg bg-white/5 border border-white/10"
-                                >
-                                  <div className="flex items-center justify-between mb-1">
-                                    <div className="flex items-center">
-                                      <Activity
-                                        size={14}
-                                        className="text-red-400 mr-2"
-                                      />
-                                      <div className="text-white text-xs font-medium">
-                                        {run.name}
-                                      </div>
-                                    </div>
-                                    <div className="text-white font-semibold text-sm">
-                                      {run.distanceKm} km
-                                    </div>
-                                  </div>
-                                  <div className="flex justify-between text-xs text-white/60">
-                                    <span>{formatDate(run.date)}</span>
-                                    <span>{run.pace}/km • {run.elevation}m elevation</span>
-                                  </div>
-                                </div>
-                              ))}
+                      {expandedCards.has("leetcode") && (
+                        <div className="pt-6 border-t border-white/10">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                              <div className="text-lg font-bold text-white">
+                                {Math.round((stats.leetcode.totalSolved / stats.leetcode.totalAvailable) * 100)}%
+                              </div>
+                              <div className="text-white/60 text-sm">Completion Rate</div>
+                            </div>
+                            <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                              <div className="text-lg font-bold text-white">
+                                {stats.leetcode.totalAvailable - stats.leetcode.totalSolved}
+                              </div>
+                              <div className="text-white/60 text-sm">Remaining</div>
+                            </div>
                           </div>
                         </div>
                       )}
                     </div>
-                  </div>
+                  )}
+                </ChartCard>
+              </div>
+
+              {/* Strava Fitness */}
+              <div className="lg:col-span-12">
+                <ChartCard
+                  title="Fitness Journey"
+                  expandable
+                  cardId="strava"
+                  hasError={!stats?.strava}
+                  errorMessage="Strava data not available. Please check strava-data.json file."
+                >
+                  {stats?.strava && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="text-center p-6 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 border border-red-500/30">
+                          <div className="text-3xl font-black text-white mb-2">
+                            {stats.strava.totalRuns}
+                          </div>
+                          <div className="text-red-400 text-sm font-semibold">Total Runs</div>
+                        </div>
+                        <div className="text-center p-6 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
+                          <div className="text-3xl font-black text-white mb-2">
+                            {stats.strava.totalDistanceKm}
+                          </div>
+                          <div className="text-orange-400 text-sm font-semibold">Kilometers</div>
+                        </div>
+                        <div className="text-center p-6 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30">
+                          <div className="text-3xl font-black text-white mb-2">
+                            {stats.strava.recentRuns.length}
+                          </div>
+                          <div className="text-pink-400 text-sm font-semibold">Recent Activities</div>
+                        </div>
+                      </div>
+
+                      {expandedCards.has("strava") && (
+                        <div className="pt-6 border-t border-white/10">
+                          <h4 className="text-white font-semibold mb-4">Recent Activities</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {stats.strava.recentRuns.map((run, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10"
+                              >
+                                <div className="flex items-center">
+                                  <Activity size={20} className="text-red-400 mr-3" />
+                                  <div>
+                                    <div className="text-white text-sm font-medium">{run.name}</div>
+                                    <div className="text-white/60 text-xs">{formatDate(run.date)}</div>
+                                  </div>
+                                </div>
+                                <div className="text-white font-semibold">{run.distanceKm} km</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </ChartCard>
               </div>
             </div>
@@ -1340,621 +918,212 @@ const StatsSection: React.FC = () => {
 
         {activeView === "coding" && (
           <div className="space-y-8">
-            <ChartCard title="Development Deep Dive" subtitle="Comprehensive coding analytics and insights">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-white font-semibold mb-4">
-                    Technology Stack & Trends
-                  </h4>
-                  <div className="space-y-4">
-                    {mockWakatimeStats.detailed.languages.map((lang) => (
-                      <div key={lang.name} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center">
-                            <div
-                              className="w-3 h-3 rounded-full mr-3"
-                              style={{ backgroundColor: lang.color }}
-                            />
-                            <span className="text-white text-sm font-medium">
-                              {lang.name}
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-white/60 text-sm">
-                              {lang.percentage}%
-                            </span>
-                            <div className={`flex items-center text-xs ${
-                              lang.trend > 0 ? "text-accent-main" : "text-red-400"
-                            }`}>
-                              {lang.trend > 0 ? (
-                                <TrendingUp size={12} className="mr-1" />
-                              ) : (
-                                <TrendingDown size={12} className="mr-1" />
-                              )}
-                              {lang.trend > 0 ? "+" : ""}{lang.trend}%
-                            </div>
-                          </div>
+            <ChartCard
+              title="Development Environment & Languages"
+              hasError={!stats?.wakatime}
+              errorMessage="WakaTime data not available for detailed coding analytics."
+            >
+              {stats?.wakatime && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div>
+                    <h4 className="text-white font-semibold mb-6">Development Environment</h4>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center">
+                          <Code2 size={20} className="text-blue-400 mr-3" />
+                          <span className="text-white">Editor</span>
                         </div>
-                        <div className="w-full bg-white/10 rounded-full h-2">
-                          <div
-                            className="h-2 rounded-full transition-all duration-1000"
-                            style={{
-                              width: `${lang.percentage}%`,
-                              backgroundColor: lang.color,
-                              boxShadow: `0 0 8px ${lang.color}50`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-white font-semibold mb-4">
-                    Development Environment
-                  </h4>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                      <div className="flex items-center">
-                        <Code2 size={16} className="text-blue-400 mr-3" />
-                        <span className="text-white text-sm">Editor</span>
-                      </div>
-                      <span className="text-white/80 text-sm font-medium">
-                        {mockWakatimeStats.today.environment.editor}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                      <div className="flex items-center">
-                        <Cpu size={16} className="text-purple-400 mr-3" />
-                        <span className="text-white text-sm">Platform</span>
-                      </div>
-                      <span className="text-white/80 text-sm font-medium">
-                        {mockWakatimeStats.today.environment.os}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                      <div className="flex items-center">
-                        <Database size={16} className="text-emerald-400 mr-3" />
-                        <span className="text-white text-sm">
-                          Primary Language
+                        <span className="text-white/80 font-medium">
+                          {stats.wakatime.today.environment.editor}
                         </span>
                       </div>
-                      <span className="text-white/80 text-sm font-medium">
-                        {mockWakatimeStats.today.primaryLanguage}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                      <div className="flex items-center">
-                        <Clock size={16} className="text-amber-400 mr-3" />
-                        <span className="text-white text-sm">Peak Hours</span>
+                      <div className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center">
+                          <Cpu size={20} className="text-purple-400 mr-3" />
+                          <span className="text-white">Operating System</span>
+                        </div>
+                        <span className="text-white/80 font-medium">
+                          {stats.wakatime.today.environment.os}
+                        </span>
                       </div>
-                      <span className="text-white/80 text-sm font-medium">
-                        {mockWakatimeStats.detailed.productivity.peakHours}
-                      </span>
+                      <div className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center">
+                          <Database size={20} className="text-emerald-400 mr-3" />
+                          <span className="text-white">Primary Language</span>
+                        </div>
+                        <span className="text-white/80 font-medium">
+                          {stats.wakatime.today.primaryLanguage}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </ChartCard>
 
-            <ChartCard title="Project Portfolio & Productivity">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {mockWakatimeStats.detailed.projects.map((project, index) => (
-                  <div
-                    key={project.name}
-                    className="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-accent-main/30 transition-all duration-500 hover:scale-105"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent-main/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-4">
-                        <Layers size={20} className="text-accent-main" />
-                        <div className="text-white/40 text-xs">
-                          #{index + 1}
-                        </div>
-                      </div>
-
-                      <h3 className="text-white font-bold text-lg mb-2 group-hover:text-accent-main transition-colors">
-                        {project.name}
-                      </h3>
-
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-white/60">Hours</span>
-                          <span className="text-white font-semibold">
-                            {project.hours}h
+                  <div>
+                    <h4 className="text-white font-semibold mb-6">Language Distribution</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-white font-medium">
+                            {stats.wakatime.weeklyStats.languages.primary}
+                          </span>
+                          <span className="text-white/60">
+                            {stats.wakatime.weeklyStats.languages.primaryPercentage}%
                           </span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60">Commits</span>
-                          <span className="text-white font-semibold">
-                            {project.commits}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60">Files</span>
-                          <span className="text-white font-semibold">
-                            {project.files}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60">Progress</span>
-                          <span className="text-accent-main font-semibold">
-                            {project.completion}%
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 pt-4 border-t border-white/10">
-                        <div className="w-full bg-white/10 rounded-full h-2">
+                        <div className="w-full bg-white/10 rounded-full h-3">
                           <div
-                            className="h-2 bg-gradient-to-r from-accent-main to-accent-mid rounded-full transition-all duration-1000"
+                            className="h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-1000"
                             style={{
-                              width: `${project.completion}%`,
+                              width: `${stats.wakatime.weeklyStats.languages.primaryPercentage}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-white font-medium">
+                            {stats.wakatime.weeklyStats.languages.secondary}
+                          </span>
+                          <span className="text-white/60">
+                            {stats.wakatime.weeklyStats.languages.secondaryPercentage}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-white/10 rounded-full h-3">
+                          <div
+                            className="h-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000"
+                            style={{
+                              width: `${stats.wakatime.weeklyStats.languages.secondaryPercentage}%`,
                             }}
                           />
                         </div>
                       </div>
                     </div>
+
+                    <div className="mt-6 pt-6 border-t border-white/10">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center p-3 rounded-lg bg-blue-500/20 border border-blue-500/30">
+                          <div className="text-lg font-bold text-white">
+                            {stats.wakatime.status}
+                          </div>
+                          <div className="text-blue-400 text-xs">Status</div>
+                        </div>
+                        <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
+                          <div className="text-lg font-bold text-white">
+                            {stats.wakatime.weeklyStats.consistency}
+                          </div>
+                          <div className="text-emerald-400 text-xs">Consistency</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </ChartCard>
           </div>
         )}
 
         {activeView === "learning" && (
           <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ChartCard title="Japanese Mastery Progress">
-                <div className="space-y-6">
+            <ChartCard
+              title="Japanese Learning Analytics"
+              hasError={!stats?.anki}
+              errorMessage="Anki data not available for detailed learning analytics."
+            >
+              {stats?.anki && (
+                <div className="space-y-8">
                   <div className="text-center">
-                    <div className="text-4xl font-black text-white mb-2">
-                      {mockAnkiStats.overall.currentStreakDays}
+                    <div className="text-6xl font-black text-white mb-4">
+                      {stats.anki.overall.currentStreakDays}
                     </div>
-                    <div className="text-accent-main text-lg font-semibold">
-                      Consecutive Days
+                    <div className="text-accent-main text-xl font-semibold mb-2">
+                      Consecutive Study Days
                     </div>
-                    <div className="text-white/60 text-sm">
-                      Current study streak
+                    <div className="text-white/60">
+                      Maintaining consistent daily practice
                     </div>
                   </div>
 
-                  <div className="h-32">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={mockAnkiStats.analytics.retentionTrend}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke="rgba(255,255,255,0.1)"
-                        />
-                        <XAxis
-                          dataKey="week"
-                          stroke="rgba(255,255,255,0.6)"
-                          fontSize={12}
-                        />
-                        <YAxis
-                          stroke="rgba(255,255,255,0.6)"
-                          fontSize={12}
-                          domain={[85, 100]}
-                        />
-                        <Tooltip content={<CustomTooltip />} />
-                        <Line
-                          type="monotone"
-                          dataKey="retention"
-                          stroke="#8b5cf6"
-                          strokeWidth={3}
-                          dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 6 }}
-                          name="Retention %"
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 rounded-xl bg-purple-500/20 border border-purple-500/30">
-                      <div className="text-xl font-bold text-white">
-                        {mockAnkiStats.overall.cardCounts.mature}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="text-center p-6 rounded-xl bg-purple-500/20 border border-purple-500/30">
+                      <div className="text-2xl font-black text-white mb-2">
+                        {stats.anki.overall.cardCounts.total}
                       </div>
-                      <div className="text-purple-400 text-sm">Mature Cards</div>
+                      <div className="text-purple-400 text-sm font-semibold">Total Cards</div>
                     </div>
-                    <div className="text-center p-4 rounded-xl bg-blue-500/20 border border-blue-500/30">
-                      <div className="text-xl font-bold text-white">
-                        {mockAnkiStats.overall.matureCardRetentionPercent}%
+                    <div className="text-center p-6 rounded-xl bg-emerald-500/20 border border-emerald-500/30">
+                      <div className="text-2xl font-black text-white mb-2">
+                        {stats.anki.overall.cardCounts.mature}
                       </div>
-                      <div className="text-blue-400 text-sm">Retention Rate</div>
+                      <div className="text-emerald-400 text-sm font-semibold">Mature Cards</div>
+                    </div>
+                    <div className="text-center p-6 rounded-xl bg-blue-500/20 border border-blue-500/30">
+                      <div className="text-2xl font-black text-white mb-2">
+                        {stats.anki.overall.cardCounts.learning}
+                      </div>
+                      <div className="text-blue-400 text-sm font-semibold">Learning</div>
+                    </div>
+                    <div className="text-center p-6 rounded-xl bg-amber-500/20 border border-amber-500/30">
+                      <div className="text-2xl font-black text-white mb-2">
+                        {stats.anki.overall.cardCounts.new}
+                      </div>
+                      <div className="text-amber-400 text-sm font-semibold">New Cards</div>
                     </div>
                   </div>
-                </div>
-              </ChartCard>
 
-              <ChartCard title="Weekly Study Pattern">
-                <div className="space-y-6">
-                  <div className="h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <ComposedChart data={mockAnkiStats.analytics.dailyReviews}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke="rgba(255,255,255,0.1)"
-                        />
-                        <XAxis
-                          dataKey="day"
-                          stroke="rgba(255,255,255,0.6)"
-                          fontSize={12}
-                        />
-                        <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                        <Tooltip content={<CustomTooltip />} />
-                        <Bar
-                          dataKey="reviews"
-                          fill="#8b5cf6"
-                          radius={[4, 4, 0, 0]}
-                          name="Reviews"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="accuracy"
-                          stroke="#10b981"
-                          strokeWidth={2}
-                          dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
-                          name="Accuracy %"
-                        />
-                        <Bar
-                          dataKey="timeMinutes"
-                          fill="#f59e0b"
-                          opacity={0.6}
-                          name="Time (min)"
-                        />
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/80">
-                        Average Daily Reviews
-                      </span>
-                      <span className="text-white font-semibold">
-                        {Math.round(
-                          mockAnkiStats.analytics.dailyReviews.reduce(
-                            (sum, day) => sum + day.reviews,
-                            0,
-                          ) / 7,
-                        )}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/80">Average Accuracy</span>
-                      <span className="text-emerald-400 font-semibold">
-                        {Math.round(
-                          mockAnkiStats.analytics.dailyReviews.reduce(
-                            (sum, day) => sum + day.accuracy,
-                            0,
-                          ) / 7,
-                        )}
-                        %
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/80">Study Time Today</span>
-                      <span className="text-white font-semibold">
-                        {mockAnkiStats.overall.timeMinutesToday}m
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </ChartCard>
-            </div>
-
-            {/* Detailed Deck Analysis */}
-            <ChartCard title="Detailed Deck Analysis">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {mockAnkiStats.decks.map((deck, index) => (
-                  <div
-                    key={deck.deckName}
-                    className="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-purple-500/30 transition-all duration-500"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-4">
-                        <Brain size={20} className="text-purple-400" />
-                        <div className="text-purple-400 text-xs font-semibold">
-                          {deck.accuracy}% accuracy
-                        </div>
-                      </div>
-
-                      <h3 className="text-white font-bold text-lg mb-4 group-hover:text-purple-400 transition-colors">
-                        {getDeckDisplayName(deck.deckName)}
-                      </h3>
-
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-sm">
-                            Reviews Today
-                          </span>
-                          <span className="text-white font-semibold">
-                            {deck.reviewsToday}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-sm">
-                            Mature Cards
-                          </span>
-                          <span className="text-purple-400 font-semibold">
-                            {deck.matureCards}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-sm">
-                            New Cards
-                          </span>
-                          <span className="text-emerald-400 font-semibold">
-                            {deck.newCards}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 pt-4 border-t border-white/10">
-                        <div className="flex justify-between text-sm mb-2">
-                          <span className="text-white/60">Progress</span>
-                          <span className="text-white">
-                            {Math.round(
-                              (deck.matureCards / deck.totalCards) * 100,
-                            )}
-                            %
-                          </span>
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2">
-                          <div
-                            className="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
-                            style={{
-                              width: `${(deck.matureCards / deck.totalCards) * 100}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ChartCard>
-          </div>
-        )}
-
-        {activeView === "analytics" && (
-          <div className="space-y-8">
-            {/* Advanced Analytics Dashboard */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ChartCard title="Performance Correlation Matrix">
-                <div className="space-y-6">
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart
-                        data={[
-                          { subject: "Coding", A: 95, fullMark: 100 },
-                          { subject: "Learning", A: 88, fullMark: 100 },
-                          { subject: "Problem Solving", A: 82, fullMark: 100 },
-                          { subject: "Consistency", A: 94, fullMark: 100 },
-                          { subject: "Growth", A: 91, fullMark: 100 },
-                          { subject: "Focus", A: 89, fullMark: 100 },
-                        ]}
-                      >
-                        <PolarGrid />
-                        <PolarAngleAxis
-                          dataKey="subject"
-                          className="text-white/60"
-                          fontSize={12}
-                        />
-                        <PolarRadiusAxis
-                          angle={90}
-                          domain={[0, 100]}
-                          className="text-white/40"
-                          fontSize={10}
-                        />
-                        <Radar
-                          name="Performance"
-                          dataKey="A"
-                          stroke="#3b82f6"
-                          fill="#3b82f6"
-                          fillOpacity={0.3}
-                          strokeWidth={2}
-                        />
-                      </RadarChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center p-3 rounded-lg bg-blue-500/20 border border-blue-500/30">
-                      <div className="text-lg font-bold text-white">91.5</div>
-                      <div className="text-blue-400 text-xs">Overall Score</div>
-                    </div>
-                    <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
-                      <div className="text-lg font-bold text-white">+8.3</div>
-                      <div className="text-emerald-400 text-xs">
-                        Monthly Gain
-                      </div>
-                    </div>
-                    <div className="text-center p-3 rounded-lg bg-purple-500/20 border border-purple-500/30">
-                      <div className="text-lg font-bold text-white">A+</div>
-                      <div className="text-purple-400 text-xs">
-                        Performance Grade
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ChartCard>
-
-              <ChartCard title="Productivity & Focus Analysis">
-                <div className="space-y-6">
-                  <div className="relative w-48 h-48 mx-auto">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={[
-                            {
-                              name: "Focus",
-                              value: mockWakatimeStats.detailed.productivity.focusScore,
-                              fill: "#10b981",
-                            },
-                            {
-                              name: "Background",
-                              value: 100 - mockWakatimeStats.detailed.productivity.focusScore,
-                              fill: "rgba(255,255,255,0.1)",
-                            },
-                          ]}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={70}
-                          outerRadius={85}
-                          startAngle={90}
-                          endAngle={-270}
-                          dataKey="value"
-                          cornerRadius={20}
+                  <div>
+                    <h4 className="text-white font-semibold mb-6">Deck Performance</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {stats.anki.decks.map((deck, index) => (
+                        <div
+                          key={deck.deckName}
+                          className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300"
                         >
-                          <Cell key="cell-0" fill="#10b981" />
-                          <Cell
-                            key="cell-1"
-                            fill="rgba(255,255,255,0.1)"
-                            stroke="none"
-                          />
-                        </Pie>
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <Flame size={24} className="text-emerald-400 mb-2" />
-                      <div className="text-4xl font-black text-white">
-                        {mockWakatimeStats.detailed.productivity.focusScore}%
-                      </div>
-                      <div className="text-white/60 text-sm">Focus Score</div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-white/10">
-                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Coffee
-                        size={20}
-                        className="mx-auto mb-2 text-orange-400"
-                      />
-                      <div className="text-lg font-bold text-white">
-                        {mockWakatimeStats.detailed.productivity.deepWorkHours}h
-                      </div>
-                      <div className="text-white/60 text-xs">Deep Work</div>
-                    </div>
-                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Zap size={20} className="mx-auto mb-2 text-blue-400" />
-                      <div className="text-lg font-bold text-white">
-                        {mockWakatimeStats.detailed.productivity.efficiency}%
-                      </div>
-                      <div className="text-white/60 text-xs">Efficiency</div>
-                    </div>
-                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Eye size={20} className="mx-auto mb-2 text-red-400" />
-                      <div className="text-lg font-bold text-white">
-                        {mockWakatimeStats.detailed.productivity.distractions}
-                      </div>
-                      <div className="text-white/60 text-xs">Distractions</div>
+                          <div className="flex items-center justify-between mb-4">
+                            <Brain size={20} className="text-purple-400" />
+                            <div className="text-white/40 text-xs">#{index + 1}</div>
+                          </div>
+                          <h5 className="text-white font-bold text-lg mb-4">
+                            {deck.deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim()}
+                          </h5>
+                          <div className="space-y-3">
+                            <div className="flex justify-between">
+                              <span className="text-white/60 text-sm">Reviews Today</span>
+                              <span className="text-white font-semibold">{deck.reviewsToday}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-white/60 text-sm">Mature Cards</span>
+                              <span className="text-purple-400 font-semibold">{deck.matureCards}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-white/60 text-sm">Total Cards</span>
+                              <span className="text-white font-semibold">{deck.totalCards}</span>
+                            </div>
+                          </div>
+                          <div className="mt-4 pt-4 border-t border-white/10">
+                            <div className="flex justify-between text-sm mb-2">
+                              <span className="text-white/60">Progress</span>
+                              <span className="text-white">
+                                {Math.round((deck.matureCards / deck.totalCards) * 100)}%
+                              </span>
+                            </div>
+                            <div className="w-full bg-white/10 rounded-full h-2">
+                              <div
+                                className="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
+                                style={{
+                                  width: `${(deck.matureCards / deck.totalCards) * 100}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </ChartCard>
-            </div>
-
-            {/* Cross-Platform Analytics */}
-            <ChartCard title="Cross-Platform Activity Correlation">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-white font-semibold mb-4">
-                    Weekly Activity Patterns
-                  </h4>
-                  <div className="h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <ComposedChart data={mockLeetcodeStats.analytics.weeklyActivity}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke="rgba(255,255,255,0.1)"
-                        />
-                        <XAxis
-                          dataKey="day"
-                          stroke="rgba(255,255,255,0.6)"
-                          fontSize={12}
-                        />
-                        <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                        <Tooltip content={<CustomTooltip />} />
-                        <Bar
-                          dataKey="problems"
-                          fill="#f59e0b"
-                          radius={[4, 4, 0, 0]}
-                          name="Problems Solved"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="timeMinutes"
-                          stroke="#10b981"
-                          strokeWidth={2}
-                          dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
-                          name="Time (minutes)"
-                        />
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-white font-semibold mb-4">
-                    Fitness Activity Distribution
-                  </h4>
-                  <div className="h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={mockStravaStats.analytics.weeklyPattern}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke="rgba(255,255,255,0.1)"
-                        />
-                        <XAxis
-                          dataKey="day"
-                          stroke="rgba(255,255,255,0.6)"
-                          fontSize={12}
-                        />
-                        <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                        <Tooltip content={<CustomTooltip />} />
-                        <Bar
-                          dataKey="distance"
-                          fill="#ef4444"
-                          radius={[4, 4, 0, 0]}
-                          name="Distance (km)"
-                        />
-                        <Bar
-                          dataKey="frequency"
-                          fill="#f97316"
-                          opacity={0.6}
-                          name="Frequency %"
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
+              )}
             </ChartCard>
           </div>
         )}
-
-        {/* Tech Info */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-[40px]">
-            <GitBranch size={16} className="mr-2 text-accent-main" />
-            <span className="text-sm text-white/70">
-              Automated via GitHub Actions • Updated every hour •
-              <a
-                href="https://github.com/wlmr-rk/proj-nexus"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-1 text-accent-main hover:text-white transition-colors"
-              >
-                View Source
-              </a>
-            </span>
-          </div>
-        </div>
       </div>
     </section>
   );

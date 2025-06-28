@@ -111,6 +111,7 @@ const projects: Project[] = [
     ],
     category: "Mobile",
     status: "In Progress",
+    // githubUrl: "https://github.com/yourusername/productivity-tracker",
     features: [
       "Habit tracking with streaks",
       "Data visualization charts",
@@ -166,6 +167,9 @@ const categories = ["All", "Web App", "Tool", "System", "Mobile"] as const;
 
 const ProjectsSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  // We disable the lint rule here because the modal to display the project isn't built yet.
+  // This is a placeholder for future functionality.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects =
@@ -202,17 +206,22 @@ const ProjectsSection: React.FC = () => {
   return (
     <section
       id="projects"
-      className="relative min-h-screen bg-black p-6 lg:p-8"
+      className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8"
     >
+      {/* Background noise */}
+      <div className="bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]" />
+
       <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase mb-4">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
             Projects
           </h2>
           <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-8">
             Building solutions that solve real problems with modern technologies
           </p>
 
+          {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-3">
             {categories.map((category) => (
               <button
@@ -220,7 +229,7 @@ const ProjectsSection: React.FC = () => {
                 onClick={() => setSelectedCategory(category)}
                 className={`ease-snappy px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-400 ${
                   selectedCategory === category
-                    ? "border border-white/20 bg-white/12 text-white"
+                    ? "border border-white/20 bg-white/12 text-white inset-shadow-[0_1px_1px_rgba(255,255,255,0.15)] shadow-[0_4px_12px_rgba(0,255,136,0.15)]"
                     : "border border-white/8 bg-white/5 text-white/70 hover:border-white/15 hover:bg-white/8 hover:text-white"
                 }`}
               >
@@ -230,20 +239,24 @@ const ProjectsSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project) => {
             const Icon = project.icon;
             return (
               <div
                 key={project.id}
-                className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-2 hover:border-white/14 cursor-pointer group"
+                className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-2 hover:border-white/14 hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)] cursor-pointer group"
                 onClick={() => setSelectedProject(project)}
               >
+                {/* Background Gradient */}
                 <div
                   className={`absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br ${project.gradient} opacity-30 group-hover:opacity-50 transition-opacity duration-400`}
                 />
 
+                {/* Content */}
                 <div className="relative z-10">
+                  {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center">
                       <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-3">
@@ -259,6 +272,7 @@ const ProjectsSection: React.FC = () => {
                       </div>
                     </div>
 
+                    {/* Status */}
                     <div className="flex items-center">
                       <span
                         className={`inline-block size-2 rounded-full mr-2 ${getStatusDot(project.status)}`}
@@ -271,10 +285,12 @@ const ProjectsSection: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Description */}
                   <p className="text-white/70 text-sm leading-relaxed mb-4">
                     {project.description}
                   </p>
 
+                  {/* Technologies */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.slice(0, 3).map((tech) => (
                       <span
@@ -291,6 +307,7 @@ const ProjectsSection: React.FC = () => {
                     )}
                   </div>
 
+                  {/* Actions */}
                   <div className="flex gap-3">
                     {project.githubUrl && (
                       <a
@@ -319,12 +336,14 @@ const ProjectsSection: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Hover Effect */}
                 <div className="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none" />
               </div>
             );
           })}
         </div>
 
+        {/* Empty State */}
         {filteredProjects.length === 0 && (
           <div className="text-center py-16">
             <Code2 size={48} className="text-white/30 mx-auto mb-4" />
@@ -335,6 +354,7 @@ const ProjectsSection: React.FC = () => {
           </div>
         )}
 
+        {/* Call to Action */}
         <div className="text-center mt-16">
           <div className="inline-flex items-center px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-[40px]">
             <Target size={16} className="mr-2 text-accent-main" />
@@ -353,6 +373,9 @@ const ProjectsSection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Project Detail Modal would go here */}
+      {/* We can implement this in a separate component if needed */}
     </section>
   );
 };

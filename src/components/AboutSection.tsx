@@ -64,11 +64,13 @@ const AboutSection: React.FC = () => {
   return (
     <section
       id="about"
-      className="relative min-h-screen bg-black p-6 lg:p-8"
+      className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8"
     >
+      <div className="bg-noise bg-cinematic absolute inset-0 animate-[float_25s_ease-in-out_infinite]" />
+
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase mb-4">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
             About Me
           </h2>
           <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto">
@@ -80,7 +82,7 @@ const AboutSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           <div className="lg:col-span-2">
             <div className="card-container relative perspective-distant">
-              <div className="card card-glass ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 p-8 lg:p-12 backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-800 hover:border-white/22">
+              <div className="card card-glass ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 p-8 lg:p-12 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08)] shadow-[0_2px_8px_rgba(0,255,136,0.05),0_8px_32px_rgba(0,0,0,0.7),0_32px_64px_rgba(0,0,0,0.8)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-800 hover:border-white/22">
                 <div className="floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.9)]" />
 
                 <div className="flex items-start mb-6">

@@ -8,12 +8,12 @@ body {
 }
 
 @theme {
-  /* Modern 2025 color system */
-  --color-accent-main: oklch(0.75 0.15 145);
-  --color-accent-mid: oklch(0.75 0.12 210);
-  --color-accent-light: oklch(0.75 0.13 195);
+  /* REVERTED: Original color values with the new variable names */
+  --color-accent-main: oklch(0.75 0.15 145); /* Original Green */
+  --color-accent-mid: oklch(0.75 0.12 210); /* Original Blue */
+  --color-accent-light: oklch(0.75 0.13 195); /* Original Cyan */
 
-  /* Clean glass system without texture */
+  /* REVERTED: Original glass color hue */
   --color-glass-dark: oklch(0.12 0.02 240 / 0.96);
   --color-glass-mid: oklch(0.16 0.02 240 / 0.92);
   --color-glass-light: oklch(0.14 0.02 240 / 0.94);
@@ -28,22 +28,8 @@ body {
   --perspective-normal: 1000px;
   --perspective-distant: 1500px;
 
-  /* Consistent spacing scale */
+  /* Dynamic spacing scale */
   --spacing: 0.25rem;
-
-  /* Typography scale */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
-  --font-size-6xl: 3.75rem;
-  --font-size-7xl: 4.5rem;
-  --font-size-8xl: 6rem;
 }
 
 @keyframes float {
@@ -129,6 +115,10 @@ body {
   }
 }
 
+.bg-noise {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><filter id="n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="10" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.07"/></svg>');
+}
+
 .card-glass {
   background: linear-gradient(
     135deg in oklch,
@@ -139,6 +129,8 @@ body {
     oklch(0.02 0 0 / 0.99) 100%
   );
 }
+
+/* --- The following classes are where the color changes will appear --- */
 
 .card::before {
   content: "";

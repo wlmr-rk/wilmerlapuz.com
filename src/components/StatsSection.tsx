@@ -343,7 +343,11 @@ const StatsSection: React.FC = () => {
     isLoading = false,
     hasError = false,
   }: {
-    icon: React.ComponentType<{ size: number; className?: string }>;
+    icon: React.ComponentType<{
+      size: number;
+      className?: string;
+      color?: string;
+    }>;
     title: string;
     value: string | number;
     subtitle?: string;
@@ -379,7 +383,7 @@ const StatsSection: React.FC = () => {
             ) : hasError ? (
               <AlertTriangle size={20} className="text-red-400" />
             ) : (
-              <Icon size={20} style={{ color: hasError ? "#ef4444" : color }} />
+              <Icon size={20} color={hasError ? "#ef4444" : color} />
             )}
           </div>
           {trend && !hasError && (

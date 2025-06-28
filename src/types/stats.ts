@@ -22,11 +22,6 @@ export interface WakaTimeStats {
     };
     consistency: string;
   };
-  last30Days?: {
-    totalHours: string;
-    dailyAverage: number;
-    activeDays: number;
-  };
 }
 
 export interface StravaStats {
@@ -82,18 +77,13 @@ export interface AnkiStats {
     newCards: number;
     totalCards: number;
   }>;
-  last30Days?: {
-    totalReviews: number;
-    averageDaily: number;
-    activeDays: number;
-  };
 }
 
 export interface AllStats {
-  wakatime: WakaTimeStats;
-  strava: StravaStats;
-  spotify: SpotifyStats;
-  leetcode: LeetCodeStats;
-  anki: AnkiStats;
+  wakatime?: WakaTimeStats;
+  strava?: StravaStats;
+  spotify?: SpotifyStats;
+  leetcode?: LeetCodeStats;
+  anki?: AnkiStats;
   lastUpdated: string;
 }

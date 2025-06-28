@@ -22,20 +22,21 @@ import {
   GitBranch,
   ExternalLink,
   AlertTriangle,
+  Loader2,
+  Calendar,
   Clock,
   Target,
   BarChart3,
-  Calendar,
+  PieChart as PieChartIcon,
+  LineChart as LineChartIcon,
+  TrendingDown,
+  Award,
   Headphones,
   BookOpen,
-  Award,
-  Timer,
-  Gauge,
-  TrendingDown,
-  Music,
-  MapPin,
-  Repeat,
-  Volume2,
+  Dumbbell,
+  Monitor,
+  Terminal,
+  Smartphone,
 } from "lucide-react";
 import {
   LineChart,
@@ -57,15 +58,15 @@ import {
   PolarRadiusAxis,
   Radar,
   ComposedChart,
-  Scatter,
   ScatterChart,
-  ZAxis,
+  Scatter,
   Tooltip,
   Legend,
   ReferenceLine,
+  ReferenceArea,
 } from "recharts";
 
-// Data interfaces for type safety
+// Data interfaces based on actual JSON structure
 interface WakaTimeData {
   lastUpdated: string;
   status: string;
@@ -89,6 +90,15 @@ interface WakaTimeData {
     };
     consistency: string;
   };
+}
+
+interface SpotifyData {
+  isPlaying: boolean;
+  title: string;
+  artist: string;
+  album: string;
+  albumImageUrl: string;
+  songUrl: string;
 }
 
 interface AnkiData {
@@ -115,15 +125,6 @@ interface AnkiData {
   }>;
 }
 
-interface SpotifyData {
-  isPlaying: boolean;
-  title: string;
-  artist: string;
-  album: string;
-  albumImageUrl: string;
-  songUrl: string;
-}
-
 interface LeetCodeData {
   username: string;
   totalSolved: number;
@@ -146,94 +147,74 @@ interface StravaData {
   }>;
 }
 
+interface StatsData {
+  wakatime?: WakaTimeData;
+  spotify?: SpotifyData;
+  anki?: AnkiData;
+  leetcode?: LeetCodeData;
+  strava?: StravaData;
+  loading: boolean;
+  error: string | null;
+}
+
 const StatsSection: React.FC = () => {
   const [activeView, setActiveView] = useState("overview");
   const [expandedCards, setExpandedCards] = useState(new Set<string>());
-  const [data, setData] = useState<{
-    wakatime?: WakaTimeData;
-    anki?: AnkiData;
-    spotify?: SpotifyData;
-    leetcode?: LeetCodeData;
-    strava?: StravaData;
-  }>({});
-  const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [statsData, setStatsData] = useState<StatsData>({
+    loading: true,
+    error: null,
+  });
 
-  // Load data from public JSON files
+  // Fetch data from public JSON files
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      const newErrors: Record<string, string> = {};
-      const newData: typeof data = {};
-
-      // Load WakaTime data
+    const fetchStatsData = async () => {
+      setStatsData(prev => ({ ...prev, loading: true, error: null }));
+      
       try {
-        const wakatimeRes = await fetch("/wakatime-data.json");
-        if (wakatimeRes.ok) {
-          newData.wakatime = await wakatimeRes.json();
-        } else {
-          newErrors.wakatime = "WakaTime data unavailable";
-        }
-      } catch {
-        newErrors.wakatime = "Failed to load WakaTime data";
-      }
+        const [wakatimeRes, spotifyRes, ankiRes, leetcodeRes, stravaRes] = await Promise.allSettled([
+          fetch('/wakatime-data.json'),
+          fetch('/spotify-data.json'),
+          fetch('/anki-data.json'),
+          fetch('/leetcode-data.json'),
+          fetch('/strava-data.json'),
+        ]);
 
-      // Load Anki data
-      try {
-        const ankiRes = await fetch("/anki-data.json");
-        if (ankiRes.ok) {
-          newData.anki = await ankiRes.json();
-        } else {
-          newErrors.anki = "Anki data unavailable";
-        }
-      } catch {
-        newErrors.anki = "Failed to load Anki data";
-      }
+        const newData: Partial<StatsData> = {};
 
-      // Load Spotify data
-      try {
-        const spotifyRes = await fetch("/spotify-data.json");
-        if (spotifyRes.ok) {
-          newData.spotify = await spotifyRes.json();
-        } else {
-          newErrors.spotify = "Spotify data unavailable";
+        if (wakatimeRes.status === 'fulfilled' && wakatimeRes.value.ok) {
+          newData.wakatime = await wakatimeRes.value.json();
         }
-      } catch {
-        newErrors.spotify = "Failed to load Spotify data";
-      }
-
-      // Load LeetCode data
-      try {
-        const leetcodeRes = await fetch("/leetcode-data.json");
-        if (leetcodeRes.ok) {
-          newData.leetcode = await leetcodeRes.json();
-        } else {
-          newErrors.leetcode = "LeetCode data unavailable";
+        if (spotifyRes.status === 'fulfilled' && spotifyRes.value.ok) {
+          newData.spotify = await spotifyRes.value.json();
         }
-      } catch {
-        newErrors.leetcode = "Failed to load LeetCode data";
-      }
-
-      // Load Strava data
-      try {
-        const stravaRes = await fetch("/strava-data.json");
-        if (stravaRes.ok) {
-          newData.strava = await stravaRes.json();
-        } else {
-          newErrors.strava = "Strava data unavailable";
+        if (ankiRes.status === 'fulfilled' && ankiRes.value.ok) {
+          newData.anki = await ankiRes.value.json();
         }
-      } catch {
-        newErrors.strava = "Failed to load Strava data";
-      }
+        if (leetcodeRes.status === 'fulfilled' && leetcodeRes.value.ok) {
+          newData.leetcode = await leetcodeRes.value.json();
+        }
+        if (stravaRes.status === 'fulfilled' && stravaRes.value.ok) {
+          newData.strava = await stravaRes.value.json();
+        }
 
-      setData(newData);
-      setErrors(newErrors);
-      setLoading(false);
+        setStatsData({
+          ...newData,
+          loading: false,
+          error: null,
+        });
+      } catch (error) {
+        setStatsData(prev => ({
+          ...prev,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch stats',
+        }));
+      }
     };
 
-    loadData();
-    // Refresh data every 5 minutes
-    const interval = setInterval(loadData, 5 * 60 * 1000);
+    fetchStatsData();
+    
+    // Auto-refresh every 5 minutes
+    const interval = setInterval(fetchStatsData, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -269,157 +250,110 @@ const StatsSection: React.FC = () => {
     return deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim();
   };
 
-  // Generate synthetic analytics data based on real data
-  const generateAnalytics = () => {
-    const analytics = {
-      wakatime: {
-        weeklyTrend: [] as Array<{ day: string; hours: number; productivity: number }>,
-        languageDistribution: [] as Array<{ name: string; hours: number; percentage: number; color: string }>,
-        dailyPattern: [] as Array<{ hour: number; activity: number }>,
-      },
-      anki: {
-        weeklyReviews: [] as Array<{ day: string; reviews: number; accuracy: number }>,
-        retentionTrend: [] as Array<{ week: string; retention: number }>,
-        deckComparison: [] as Array<{ deck: string; efficiency: number; difficulty: number }>,
-      },
-      leetcode: {
-        progressTrend: [] as Array<{ month: string; easy: number; medium: number; hard: number }>,
-        difficultyRadar: [] as Array<{ subject: string; A: number; fullMark: number }>,
-        solvingVelocity: [] as Array<{ date: string; solved: number; streak: number }>,
-      },
-      strava: {
-        monthlyDistance: [] as Array<{ month: string; distance: number; pace: number }>,
-        weeklyPattern: [] as Array<{ day: string; distance: number; runs: number }>,
-      },
-      productivity: {
-        focusScore: 0,
-        efficiency: 0,
-        consistency: 0,
-        deepWorkHours: 0,
-      },
-    };
-
-    // Generate WakaTime analytics
-    if (data.wakatime) {
-      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      analytics.wakatime.weeklyTrend = days.map((day, i) => ({
-        day,
-        hours: Math.max(2, parseFloat(data.wakatime!.weeklyStats.totalHoursLast7Days) / 7 + (Math.random() - 0.5) * 2),
-        productivity: Math.max(70, 90 + (Math.random() - 0.5) * 20),
-      }));
-
-      // Language distribution with colors
-      const languages = [
-        { name: data.wakatime.today.primaryLanguage, percentage: parseInt(data.wakatime.weeklyStats.languages.primaryPercentage), color: "#3178c6" },
-        { name: data.wakatime.weeklyStats.languages.secondary, percentage: parseInt(data.wakatime.weeklyStats.languages.secondaryPercentage), color: "#3776ab" },
-        { name: "JavaScript", percentage: 15, color: "#f7df1e" },
-        { name: "CSS", percentage: 8, color: "#1572b6" },
-      ];
-      
-      analytics.wakatime.languageDistribution = languages.map(lang => ({
-        ...lang,
-        hours: (parseFloat(data.wakatime!.weeklyStats.totalHoursLast7Days) * lang.percentage) / 100,
-      }));
-
-      // Daily coding pattern (24 hours)
-      analytics.wakatime.dailyPattern = Array.from({ length: 24 }, (_, hour) => ({
-        hour,
-        activity: hour >= 9 && hour <= 18 ? Math.random() * 100 : Math.random() * 30,
-      }));
-    }
-
-    // Generate Anki analytics
-    if (data.anki) {
-      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      analytics.anki.weeklyReviews = days.map(day => ({
-        day,
-        reviews: Math.max(50, data.anki!.overall.reviewsToday + (Math.random() - 0.5) * 40),
-        accuracy: Math.max(80, data.anki!.overall.matureCardRetentionPercent + (Math.random() - 0.5) * 10),
-      }));
-
-      analytics.anki.retentionTrend = ["Week 1", "Week 2", "Week 3", "Week 4"].map((week, i) => ({
-        week,
-        retention: Math.max(85, data.anki!.overall.matureCardRetentionPercent - (3 - i) * 2 + Math.random() * 3),
-      }));
-
-      analytics.anki.deckComparison = data.anki.decks.slice(0, 5).map(deck => ({
-        deck: getDeckDisplayName(deck.deckName),
-        efficiency: Math.max(60, (deck.matureCards / deck.totalCards) * 100 + Math.random() * 20),
-        difficulty: Math.max(30, 100 - (deck.matureCards / deck.totalCards) * 100 + Math.random() * 30),
-      }));
-    }
-
-    // Generate LeetCode analytics
-    if (data.leetcode) {
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-      analytics.leetcode.progressTrend = months.map((month, i) => ({
-        month,
-        easy: Math.floor(data.leetcode!.easySolved * (i + 1) / 6),
-        medium: Math.floor(data.leetcode!.mediumSolved * (i + 1) / 6),
-        hard: Math.floor(data.leetcode!.hardSolved * (i + 1) / 6),
-      }));
-
-      analytics.leetcode.difficultyRadar = [
-        { subject: "Arrays", A: Math.min(100, (data.leetcode.easySolved / data.leetcode.easyAvailable) * 300), fullMark: 100 },
-        { subject: "Trees", A: Math.min(100, (data.leetcode.mediumSolved / data.leetcode.mediumAvailable) * 400), fullMark: 100 },
-        { subject: "DP", A: Math.min(100, (data.leetcode.hardSolved / data.leetcode.hardAvailable) * 500), fullMark: 100 },
-        { subject: "Graphs", A: Math.min(100, (data.leetcode.totalSolved / data.leetcode.totalAvailable) * 200), fullMark: 100 },
-        { subject: "Strings", A: Math.min(100, (data.leetcode.easySolved / data.leetcode.easyAvailable) * 250), fullMark: 100 },
-      ];
-
-      analytics.leetcode.solvingVelocity = Array.from({ length: 30 }, (_, i) => ({
-        date: `Day ${i + 1}`,
-        solved: Math.floor(data.leetcode.totalSolved * (i + 1) / 30),
-        streak: Math.max(0, Math.floor(Math.random() * 10)),
-      }));
-    }
-
-    // Generate Strava analytics
-    if (data.strava) {
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-      analytics.strava.monthlyDistance = months.map((month, i) => ({
-        month,
-        distance: Math.max(20, parseFloat(data.strava!.totalDistanceKm) / 6 + (Math.random() - 0.5) * 20),
-        pace: Math.max(4, 5.5 - i * 0.1 + (Math.random() - 0.5) * 0.5),
-      }));
-
-      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      analytics.strava.weeklyPattern = days.map(day => ({
-        day,
-        distance: Math.max(0, Math.random() * 15),
-        runs: Math.floor(Math.random() * 3),
-      }));
-    }
-
-    // Calculate productivity metrics
-    if (data.wakatime && data.anki) {
-      analytics.productivity = {
-        focusScore: Math.min(100, (data.wakatime.today.codingMinutes / 480) * 100),
-        efficiency: Math.min(100, data.anki.overall.matureCardRetentionPercent),
-        consistency: Math.min(100, (data.wakatime.weeklyStats.activeDaysCount / 7) * 100),
-        deepWorkHours: data.wakatime.today.codingMinutes / 60,
-      };
-    }
-
-    return analytics;
+  // Generate synthetic data for enhanced visualizations
+  const generateCodingTrend = (wakatime?: WakaTimeData) => {
+    if (!wakatime) return [];
+    
+    const baseHours = parseFloat(wakatime.weeklyStats.totalHoursLast7Days) / 7;
+    return Array.from({ length: 30 }, (_, i) => ({
+      date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      hours: Math.max(0, baseHours + (Math.random() - 0.5) * 4),
+      productivity: Math.floor(75 + Math.random() * 25),
+      focus: Math.floor(70 + Math.random() * 30),
+    }));
   };
 
-  const analytics = generateAnalytics();
+  const generateLanguageData = (wakatime?: WakaTimeData) => {
+    if (!wakatime) return [];
+    
+    const { primary, secondary, primaryPercentage, secondaryPercentage } = wakatime.weeklyStats.languages;
+    const remaining = 100 - parseFloat(primaryPercentage) - parseFloat(secondaryPercentage);
+    
+    return [
+      { name: primary, percentage: parseFloat(primaryPercentage), color: "#3178c6" },
+      { name: secondary, percentage: parseFloat(secondaryPercentage), color: "#ff6b35" },
+      { name: "Others", percentage: remaining, color: "#4ecdc4" },
+    ].filter(lang => lang.percentage > 0);
+  };
+
+  const generateAnkiTrend = (anki?: AnkiData) => {
+    if (!anki) return [];
+    
+    const baseReviews = anki.overall.reviewsToday;
+    return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => ({
+      day,
+      reviews: Math.max(0, baseReviews + (Math.random() - 0.5) * 40),
+      accuracy: Math.floor(85 + Math.random() * 15),
+      retention: Math.floor(88 + Math.random() * 12),
+    }));
+  };
+
+  const generatePerformanceRadar = (wakatime?: WakaTimeData, anki?: AnkiData, leetcode?: LeetCodeData) => {
+    const codingScore = wakatime ? Math.min(100, (wakatime.today.codingMinutes / 480) * 100) : 0;
+    const learningScore = anki ? Math.min(100, (anki.overall.reviewsToday / 200) * 100) : 0;
+    const problemSolvingScore = leetcode ? Math.min(100, (leetcode.totalSolved / 500) * 100) : 0;
+    const consistencyScore = wakatime ? (wakatime.weeklyStats.activeDaysCount / 7) * 100 : 0;
+    
+    return [
+      { subject: 'Coding', score: Math.floor(codingScore), fullMark: 100 },
+      { subject: 'Learning', score: Math.floor(learningScore), fullMark: 100 },
+      { subject: 'Problem Solving', score: Math.floor(problemSolvingScore), fullMark: 100 },
+      { subject: 'Consistency', score: Math.floor(consistencyScore), fullMark: 100 },
+      { subject: 'Focus', score: Math.floor(75 + Math.random() * 25), fullMark: 100 },
+      { subject: 'Growth', score: Math.floor(80 + Math.random() * 20), fullMark: 100 },
+    ];
+  };
+
+  // Custom tooltip component
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-black/90 border border-white/20 rounded-xl p-3 backdrop-blur-xl">
+          <p className="text-white/80 text-sm mb-2">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} className="text-sm" style={{ color: entry.color }}>
+              {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
 
   // Error Card Component
-  const ErrorCard = ({ title, error }: { title: string; error: string }) => (
+  const ErrorCard = ({ title, error, icon: Icon }: { title: string; error: string; icon: React.ComponentType<{ size: number; className?: string }> }) => (
     <div className="bento-item ease-snappy relative z-2 border border-red-500/20 bg-linear-to-br/oklch from-red-500/10 via-red-500/5 to-transparent rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
       <div className="flex items-center mb-4">
         <div className="p-3 rounded-xl bg-red-500/20 backdrop-blur-[20px] mr-4">
-          <AlertTriangle size={20} className="text-red-400" />
+          <Icon size={20} className="text-red-400" />
         </div>
         <div>
           <h3 className="text-lg font-bold text-white">{title}</h3>
-          <p className="text-red-400 text-sm">{error}</p>
+          <p className="text-red-400 text-sm">Data unavailable</p>
         </div>
       </div>
-      <div className="text-white/60 text-sm">
-        Data source temporarily unavailable. Please check back later.
+      <div className="flex items-center text-red-400/80 text-sm">
+        <AlertTriangle size={16} className="mr-2" />
+        {error}
+      </div>
+    </div>
+  );
+
+  // Loading Card Component
+  const LoadingCard = ({ title, icon: Icon }: { title: string; icon: React.ComponentType<{ size: number; className?: string }> }) => (
+    <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+      <div className="flex items-center mb-4">
+        <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-4">
+          <Icon size={20} className="text-white/60" />
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-white">{title}</h3>
+          <p className="text-white/60 text-sm">Loading data...</p>
+        </div>
+      </div>
+      <div className="flex items-center justify-center py-8">
+        <Loader2 size={32} className="text-accent-main animate-spin" />
       </div>
     </div>
   );
@@ -433,6 +367,8 @@ const StatsSection: React.FC = () => {
     color,
     trend,
     className = "",
+    loading = false,
+    error = null,
   }: {
     icon: React.ComponentType<{ size: number; className?: string }>;
     title: string;
@@ -441,44 +377,68 @@ const StatsSection: React.FC = () => {
     color: string;
     trend?: number;
     className?: string;
-  }) => (
-    <div
-      className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
-    >
-      {/* Background Gradient */}
-      <div
-        className="absolute inset-0 rounded-2xl lg:rounded-3xl opacity-30"
-        style={{
-          background: `linear-gradient(135deg, ${color}20, ${color}10, transparent)`,
-        }}
-      />
-
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div
-            className="p-3 rounded-xl backdrop-blur-[20px]"
-            style={{ background: `${color}20` }}
-          >
-            <Icon size={20} style={{ color }} />
+    loading?: boolean;
+    error?: string | null;
+  }) => {
+    if (loading) {
+      return (
+        <div className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 ${className}`}>
+          <div className="flex items-center justify-center h-24">
+            <Loader2 size={24} className="text-accent-main animate-spin" />
           </div>
-          {trend && (
-            <div className={`flex items-center text-xs font-semibold ${trend > 0 ? 'text-accent-main' : 'text-red-400'}`}>
-              {trend > 0 ? <TrendingUp size={12} className="mr-1" /> : <TrendingDown size={12} className="mr-1" />}
-              {trend > 0 ? '+' : ''}{trend}%
-            </div>
-          )}
         </div>
+      );
+    }
 
-        <div className="mb-2">
-          <div className="text-2xl font-black text-white mb-1">{value}</div>
-          <div className="text-white/60 text-sm">{title}</div>
-          {subtitle && (
-            <div className="text-white/40 text-xs mt-1">{subtitle}</div>
-          )}
+    if (error) {
+      return (
+        <div className={`bento-item ease-snappy relative z-2 border border-red-500/20 bg-linear-to-br/oklch from-red-500/10 via-red-500/5 to-transparent rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 ${className}`}>
+          <div className="flex items-center mb-2">
+            <Icon size={16} className="text-red-400 mr-2" />
+            <span className="text-red-400 text-sm font-medium">{title}</span>
+          </div>
+          <div className="text-red-400/80 text-xs">Data unavailable</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}>
+        {/* Background Gradient */}
+        <div
+          className="absolute inset-0 rounded-2xl lg:rounded-3xl opacity-30"
+          style={{
+            background: `linear-gradient(135deg, ${color}20, ${color}10, transparent)`,
+          }}
+        />
+
+        <div className="relative z-10">
+          <div className="flex items-start justify-between mb-4">
+            <div
+              className="p-3 rounded-xl backdrop-blur-[20px]"
+              style={{ background: `${color}20` }}
+            >
+              <Icon size={20} style={{ color }} />
+            </div>
+            {trend && (
+              <div className={`flex items-center text-xs font-semibold ${trend > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {trend > 0 ? <TrendingUp size={12} className="mr-1" /> : <TrendingDown size={12} className="mr-1" />}
+                {Math.abs(trend)}%
+              </div>
+            )}
+          </div>
+
+          <div className="mb-2">
+            <div className="text-2xl font-black text-white mb-1">{value}</div>
+            <div className="text-white/60 text-sm">{title}</div>
+            {subtitle && (
+              <div className="text-white/40 text-xs mt-1">{subtitle}</div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Chart Card Component
   const ChartCard = ({
@@ -487,50 +447,48 @@ const StatsSection: React.FC = () => {
     className = "",
     expandable = false,
     cardId,
+    loading = false,
+    error = null,
   }: {
     title: string;
     children: React.ReactNode;
     className?: string;
     expandable?: boolean;
     cardId?: string;
-  }) => (
-    <div
-      className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
-    >
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-white">{title}</h3>
-          {expandable && cardId && (
-            <button
-              onClick={() => toggleCard(cardId)}
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              {expandedCards.has(cardId) ? (
-                <ChevronUp size={16} className="text-white/60" />
-              ) : (
-                <ChevronDown size={16} className="text-white/60" />
-              )}
-            </button>
-          )}
-        </div>
-        {children}
-      </div>
-    </div>
-  );
+    loading?: boolean;
+    error?: string | null;
+  }) => {
+    if (loading) {
+      return <LoadingCard title={title} icon={BarChart3} />;
+    }
 
-  if (loading) {
+    if (error) {
+      return <ErrorCard title={title} error={error} icon={AlertTriangle} />;
+    }
+
     return (
-      <section
-        id="stats"
-        className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8 flex items-center justify-center"
-      >
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-accent-main/20 border-t-accent-main mx-auto mb-4"></div>
-          <p className="text-white/60">Loading analytics dashboard...</p>
+      <div className={`bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-white">{title}</h3>
+            {expandable && cardId && (
+              <button
+                onClick={() => toggleCard(cardId)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
+              >
+                {expandedCards.has(cardId) ? (
+                  <ChevronUp size={16} className="text-white/60" />
+                ) : (
+                  <ChevronDown size={16} className="text-white/60" />
+                )}
+              </button>
+            )}
+          </div>
+          {children}
         </div>
-      </section>
+      </div>
     );
-  }
+  };
 
   return (
     <section
@@ -544,10 +502,10 @@ const StatsSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
-            Analytics Dashboard
+            Live Dashboard
           </h2>
           <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
-            Real-time insights into development, learning, and performance metrics
+            Real-time insights into development, learning, and creative pursuits
           </p>
 
           {/* Status Indicator */}
@@ -558,7 +516,7 @@ const StatsSection: React.FC = () => {
             </span>
             <span className="ml-3 text-xs text-white/50">•</span>
             <span className="ml-3 text-xs text-white/70">
-              Last updated: {new Date().toLocaleTimeString()}
+              Last updated: {statsData.wakatime?.lastUpdated ? new Date(statsData.wakatime.lastUpdated).toLocaleTimeString() : 'Loading...'}
             </span>
           </div>
 
@@ -586,125 +544,99 @@ const StatsSection: React.FC = () => {
           <div className="space-y-8">
             {/* Hero Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {data.wakatime ? (
-                <CompactStatsCard
-                  icon={Code2}
-                  title="Coding Today"
-                  value={formatHours(data.wakatime.today.codingMinutes)}
-                  subtitle={`${data.wakatime.today.primaryLanguage} focus`}
-                  color="#3b82f6"
-                  trend={12}
-                />
-              ) : (
-                <ErrorCard title="Coding Stats" error={errors.wakatime || "No data"} />
-              )}
+              <CompactStatsCard
+                icon={Code2}
+                title="Coding Today"
+                value={statsData.wakatime ? formatHours(statsData.wakatime.today.codingMinutes) : "N/A"}
+                subtitle={statsData.wakatime ? `${statsData.wakatime.today.primaryLanguage} focus` : "No data"}
+                color="#3b82f6"
+                trend={12}
+                loading={statsData.loading}
+                error={!statsData.wakatime ? "WakaTime data unavailable" : null}
+              />
 
-              {data.anki ? (
-                <CompactStatsCard
-                  icon={Brain}
-                  title="Study Cards"
-                  value={data.anki.overall.reviewsToday}
-                  subtitle={`${data.anki.overall.matureCardRetentionPercent}% retention`}
-                  color="#8b5cf6"
-                  trend={8}
-                />
-              ) : (
-                <ErrorCard title="Study Stats" error={errors.anki || "No data"} />
-              )}
+              <CompactStatsCard
+                icon={Brain}
+                title="Study Cards"
+                value={statsData.anki ? statsData.anki.overall.reviewsToday : "N/A"}
+                subtitle={statsData.anki ? `${statsData.anki.overall.matureCardRetentionPercent}% retention` : "No data"}
+                color="#8b5cf6"
+                trend={8}
+                loading={statsData.loading}
+                error={!statsData.anki ? "Anki data unavailable" : null}
+              />
 
-              {data.leetcode ? (
-                <CompactStatsCard
-                  icon={Trophy}
-                  title="Problems Solved"
-                  value={data.leetcode.totalSolved}
-                  subtitle="LeetCode progress"
-                  color="#f59e0b"
-                  trend={15}
-                />
-              ) : (
-                <ErrorCard title="LeetCode Stats" error={errors.leetcode || "No data"} />
-              )}
+              <CompactStatsCard
+                icon={Trophy}
+                title="Problems Solved"
+                value={statsData.leetcode ? statsData.leetcode.totalSolved : "N/A"}
+                subtitle="LeetCode progress"
+                color="#f59e0b"
+                trend={15}
+                loading={statsData.loading}
+                error={!statsData.leetcode ? "LeetCode data unavailable" : null}
+              />
 
-              {data.strava ? (
-                <CompactStatsCard
-                  icon={Activity}
-                  title="Running Distance"
-                  value={`${data.strava.totalDistanceKm}km`}
-                  subtitle="Total distance"
-                  color="#ef4444"
-                  trend={6}
-                />
-              ) : (
-                <ErrorCard title="Fitness Stats" error={errors.strava || "No data"} />
-              )}
+              <CompactStatsCard
+                icon={Activity}
+                title="Running Distance"
+                value={statsData.strava ? `${statsData.strava.totalDistanceKm}km` : "N/A"}
+                subtitle="Total distance"
+                color="#ef4444"
+                trend={6}
+                loading={statsData.loading}
+                error={!statsData.strava ? "Strava data unavailable" : null}
+              />
             </div>
 
             {/* Main Dashboard Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Coding Activity - Large */}
               <div className="lg:col-span-8">
-                {data.wakatime ? (
-                  <ChartCard
-                    title="Development Activity & Productivity"
-                    expandable
-                    cardId="coding"
-                  >
+                <ChartCard
+                  title="Coding Activity & Productivity"
+                  expandable
+                  cardId="coding"
+                  loading={statsData.loading}
+                  error={!statsData.wakatime ? "WakaTime data unavailable" : null}
+                >
+                  {statsData.wakatime && (
                     <div className="space-y-6">
-                      <div className="h-64">
+                      <div className="h-48">
                         <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={analytics.wakatime.weeklyTrend}>
+                          <ComposedChart data={generateCodingTrend(statsData.wakatime)}>
                             <defs>
-                              <linearGradient
-                                id="codingGradient"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1"
-                              >
-                                <stop
-                                  offset="5%"
-                                  stopColor="#3b82f6"
-                                  stopOpacity={0.8}
-                                />
-                                <stop
-                                  offset="95%"
-                                  stopColor="#3b82f6"
-                                  stopOpacity={0.1}
-                                />
+                              <linearGradient id="codingGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
                               </linearGradient>
                             </defs>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="day"
-                              stroke="rgba(255,255,255,0.6)"
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                            <XAxis 
+                              dataKey="date" 
+                              stroke="rgba(255,255,255,0.6)" 
                               fontSize={12}
+                              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                             />
                             <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "rgba(0,0,0,0.8)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                borderRadius: "8px",
-                                color: "white",
-                              }}
-                            />
+                            <Tooltip content={<CustomTooltip />} />
                             <Area
                               type="monotone"
                               dataKey="hours"
                               stroke="#3b82f6"
                               fillOpacity={1}
                               fill="url(#codingGradient)"
+                              name="Hours"
                             />
                             <Line
                               type="monotone"
                               dataKey="productivity"
                               stroke="#10b981"
                               strokeWidth={2}
-                              dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
+                              dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
+                              name="Productivity %"
                             />
+                            <ReferenceLine y={parseFloat(statsData.wakatime.weeklyStats.totalHoursLast7Days) / 7} stroke="#f59e0b" strokeDasharray="5 5" label="Weekly Avg" />
                           </ComposedChart>
                         </ResponsiveContainer>
                       </div>
@@ -712,25 +644,25 @@ const StatsSection: React.FC = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                           <div className="text-lg font-bold text-white">
-                            {data.wakatime.weeklyStats.totalHoursLast7Days}h
+                            {statsData.wakatime.weeklyStats.totalHoursLast7Days}h
                           </div>
                           <div className="text-white/60 text-xs">This Week</div>
                         </div>
                         <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                           <div className="text-lg font-bold text-white">
-                            {data.wakatime.weeklyStats.activeDaysCount}
+                            {statsData.wakatime.weeklyStats.activeDaysCount}
                           </div>
                           <div className="text-white/60 text-xs">Active Days</div>
                         </div>
                         <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                           <div className="text-lg font-bold text-white">
-                            {data.wakatime.today.environment.editor}
+                            {statsData.wakatime.today.environment.editor}
                           </div>
                           <div className="text-white/60 text-xs">Editor</div>
                         </div>
                         <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                           <div className="text-lg font-bold text-white">
-                            {data.wakatime.weeklyStats.consistency}
+                            {statsData.wakatime.weeklyStats.consistency}
                           </div>
                           <div className="text-white/60 text-xs">Consistency</div>
                         </div>
@@ -738,129 +670,72 @@ const StatsSection: React.FC = () => {
 
                       {expandedCards.has("coding") && (
                         <div className="pt-6 border-t border-white/10">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                              <h4 className="text-white font-semibold mb-4">
-                                Language Distribution
-                              </h4>
-                              <div className="space-y-3">
-                                {analytics.wakatime.languageDistribution.map((lang) => (
-                                  <div
-                                    key={lang.name}
-                                    className="flex items-center justify-between"
-                                  >
-                                    <div className="flex items-center">
-                                      <div
-                                        className="w-3 h-3 rounded-full mr-3"
-                                        style={{ backgroundColor: lang.color }}
-                                      />
-                                      <span className="text-white/80">{lang.name}</span>
-                                    </div>
-                                    <div className="flex items-center text-white/60">
-                                      <span className="mr-2">{lang.hours.toFixed(1)}h</span>
-                                      <span className="text-sm">
-                                        ({lang.percentage}%)
-                                      </span>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div>
-                              <h4 className="text-white font-semibold mb-4">
-                                Daily Activity Pattern
-                              </h4>
-                              <div className="h-32">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <AreaChart data={analytics.wakatime.dailyPattern}>
-                                    <defs>
-                                      <linearGradient
-                                        id="activityGradient"
-                                        x1="0"
-                                        y1="0"
-                                        x2="0"
-                                        y2="1"
-                                      >
-                                        <stop
-                                          offset="5%"
-                                          stopColor="#8b5cf6"
-                                          stopOpacity={0.8}
-                                        />
-                                        <stop
-                                          offset="95%"
-                                          stopColor="#8b5cf6"
-                                          stopOpacity={0.1}
-                                        />
-                                      </linearGradient>
-                                    </defs>
-                                    <CartesianGrid
-                                      strokeDasharray="3 3"
-                                      stroke="rgba(255,255,255,0.1)"
-                                    />
-                                    <XAxis
-                                      dataKey="hour"
-                                      stroke="rgba(255,255,255,0.6)"
-                                      fontSize={10}
-                                    />
-                                    <YAxis stroke="rgba(255,255,255,0.6)" fontSize={10} />
-                                    <Area
-                                      type="monotone"
-                                      dataKey="activity"
-                                      stroke="#8b5cf6"
-                                      fillOpacity={1}
-                                      fill="url(#activityGradient)"
-                                    />
-                                  </AreaChart>
-                                </ResponsiveContainer>
-                              </div>
-                            </div>
+                          <h4 className="text-white font-semibold mb-4">Language Distribution</h4>
+                          <div className="h-32">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                <Pie
+                                  data={generateLanguageData(statsData.wakatime)}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={30}
+                                  outerRadius={50}
+                                  paddingAngle={5}
+                                  dataKey="percentage"
+                                >
+                                  {generateLanguageData(statsData.wakatime).map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                  ))}
+                                </Pie>
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend />
+                              </PieChart>
+                            </ResponsiveContainer>
                           </div>
                         </div>
                       )}
                     </div>
-                  </ChartCard>
-                ) : (
-                  <ErrorCard title="Development Activity" error={errors.wakatime || "No data"} />
-                )}
+                  )}
+                </ChartCard>
               </div>
 
               {/* Live Music */}
               <div className="lg:col-span-4">
-                {data.spotify ? (
-                  <ChartCard title="Currently Playing">
+                <ChartCard 
+                  title="Currently Playing"
+                  loading={statsData.loading}
+                  error={!statsData.spotify ? "Spotify data unavailable" : null}
+                >
+                  {statsData.spotify && (
                     <div className="space-y-4">
                       <div className="flex items-center space-x-4">
                         <div className="relative">
                           <img
-                            src={data.spotify.albumImageUrl}
-                            alt={data.spotify.album}
+                            src={statsData.spotify.albumImageUrl}
+                            alt={statsData.spotify.album}
                             className="w-16 h-16 rounded-xl shadow-lg"
                           />
-                          {data.spotify.isPlaying && (
+                          {statsData.spotify.isPlaying && (
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
-                              <Play
-                                size={10}
-                                className="text-white fill-white ml-0.5"
-                              />
+                              <Play size={10} className="text-white fill-white ml-0.5" />
                             </div>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <h4 className="text-white font-bold text-sm leading-tight mb-1 line-clamp-2">
-                            {data.spotify.title}
+                            {statsData.spotify.title}
                           </h4>
                           <p className="text-white/70 text-xs mb-2 line-clamp-1">
-                            {data.spotify.artist}
+                            {statsData.spotify.artist}
                           </p>
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center text-emerald-400 text-xs">
-                              <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse" />
-                              {data.spotify.isPlaying ? "Live" : "Paused"}
+                            <div className={`flex items-center text-xs ${statsData.spotify.isPlaying ? 'text-emerald-400' : 'text-white/60'}`}>
+                              <div className={`w-2 h-2 rounded-full mr-2 ${statsData.spotify.isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-white/60'}`} />
+                              {statsData.spotify.isPlaying ? 'Live' : 'Paused'}
                             </div>
                             <a
-                              href={data.spotify.songUrl}
+                              href={statsData.spotify.songUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center text-emerald-400 hover:text-white transition-colors text-xs"
@@ -873,50 +748,33 @@ const StatsSection: React.FC = () => {
                       </div>
 
                       <div className="pt-4 border-t border-white/10">
-                        <div className="flex items-center justify-between mb-3">
-                          <h5 className="text-white/80 text-sm font-semibold">
-                            Music Activity
-                          </h5>
-                          <div className="flex items-center text-xs text-white/60">
-                            <Music size={12} className="mr-1" />
-                            Active
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
-                            <div className="text-lg font-bold text-white">
-                              {data.spotify.isPlaying ? "ON" : "OFF"}
-                            </div>
-                            <div className="text-emerald-400 text-xs">Status</div>
-                          </div>
-                          <div className="text-center p-3 rounded-lg bg-purple-500/20 border border-purple-500/30">
-                            <div className="text-lg font-bold text-white">
-                              <Volume2 size={16} className="mx-auto" />
-                            </div>
-                            <div className="text-purple-400 text-xs">Playing</div>
-                          </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/70 text-sm">Album</span>
+                          <span className="text-white/50 text-sm line-clamp-1 max-w-[200px]">
+                            {statsData.spotify.album}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </ChartCard>
-                ) : (
-                  <ErrorCard title="Music Activity" error={errors.spotify || "No data"} />
-                )}
+                  )}
+                </ChartCard>
               </div>
 
               {/* Anki Learning Progress */}
               <div className="lg:col-span-6">
-                {data.anki ? (
-                  <ChartCard
-                    title="Japanese Study Progress"
-                    expandable
-                    cardId="anki"
-                  >
+                <ChartCard
+                  title="Japanese Study Progress"
+                  expandable
+                  cardId="anki"
+                  loading={statsData.loading}
+                  error={!statsData.anki ? "Anki data unavailable" : null}
+                >
+                  {statsData.anki && (
                     <div className="space-y-6">
                       <div className="grid grid-cols-3 gap-4">
                         <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
                           <div className="text-xl font-black text-white mb-1">
-                            {data.anki.overall.reviewsToday}
+                            {statsData.anki.overall.reviewsToday}
                           </div>
                           <div className="text-purple-400 text-xs font-semibold">
                             Reviews Today
@@ -924,7 +782,7 @@ const StatsSection: React.FC = () => {
                         </div>
                         <div className="text-center p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30">
                           <div className="text-xl font-black text-white mb-1">
-                            {data.anki.overall.matureCardRetentionPercent}%
+                            {statsData.anki.overall.matureCardRetentionPercent}%
                           </div>
                           <div className="text-emerald-400 text-xs font-semibold">
                             Retention Rate
@@ -932,7 +790,7 @@ const StatsSection: React.FC = () => {
                         </div>
                         <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
                           <div className="text-xl font-black text-white mb-1">
-                            {data.anki.overall.currentStreakDays}
+                            {statsData.anki.overall.currentStreakDays}
                           </div>
                           <div className="text-orange-400 text-xs font-semibold">
                             Day Streak
@@ -940,73 +798,33 @@ const StatsSection: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="h-48">
+                      <div className="h-32">
                         <ResponsiveContainer width="100%" height="100%">
-                          <ComposedChart data={analytics.anki.weeklyReviews}>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="day"
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
+                          <BarChart data={generateAnkiTrend(statsData.anki)}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                            <XAxis dataKey="day" stroke="rgba(255,255,255,0.6)" fontSize={12} />
                             <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "rgba(0,0,0,0.8)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                borderRadius: "8px",
-                                color: "white",
-                              }}
-                            />
-                            <Bar
-                              dataKey="reviews"
-                              fill="#8b5cf6"
-                              radius={[4, 4, 0, 0]}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="accuracy"
-                              stroke="#10b981"
-                              strokeWidth={2}
-                              dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
-                            />
-                          </ComposedChart>
+                            <Tooltip content={<CustomTooltip />} />
+                            <Bar dataKey="reviews" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Reviews" />
+                          </BarChart>
                         </ResponsiveContainer>
                       </div>
 
                       {expandedCards.has("anki") && (
                         <div className="pt-6 border-t border-white/10">
-                          <h4 className="text-white font-semibold mb-4">
-                            Deck Performance
-                          </h4>
+                          <h4 className="text-white font-semibold mb-4">Deck Performance</h4>
                           <div className="space-y-3">
-                            {data.anki.decks.slice(0, 3).map((deck) => (
+                            {statsData.anki.decks.slice(0, 3).map((deck) => (
                               <div
                                 key={deck.deckName}
                                 className="p-3 rounded-lg bg-white/5 border border-white/10"
                               >
-                                <div className="flex justify-between items-center mb-2">
-                                  <div className="text-white font-medium text-sm">
-                                    {getDeckDisplayName(deck.deckName)}
-                                  </div>
-                                  <div className="text-white/60 text-xs">
-                                    {Math.round((deck.matureCards / deck.totalCards) * 100)}%
-                                  </div>
+                                <div className="text-white font-medium text-sm mb-1">
+                                  {getDeckDisplayName(deck.deckName)}
                                 </div>
-                                <div className="flex justify-between text-xs text-white/60 mb-2">
+                                <div className="flex justify-between text-xs text-white/60">
                                   <span>{deck.reviewsToday} reviews</span>
                                   <span>{deck.matureCards} mature</span>
-                                </div>
-                                <div className="w-full bg-white/10 rounded-full h-1">
-                                  <div
-                                    className="h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-                                    style={{
-                                      width: `${(deck.matureCards / deck.totalCards) * 100}%`,
-                                    }}
-                                  />
                                 </div>
                               </div>
                             ))}
@@ -1014,20 +832,20 @@ const StatsSection: React.FC = () => {
                         </div>
                       )}
                     </div>
-                  </ChartCard>
-                ) : (
-                  <ErrorCard title="Study Progress" error={errors.anki || "No data"} />
-                )}
+                  )}
+                </ChartCard>
               </div>
 
               {/* LeetCode & Problem Solving */}
               <div className="lg:col-span-6">
-                {data.leetcode ? (
-                  <ChartCard
-                    title="Problem Solving Journey"
-                    expandable
-                    cardId="leetcode"
-                  >
+                <ChartCard
+                  title="Problem Solving Journey"
+                  expandable
+                  cardId="leetcode"
+                  loading={statsData.loading}
+                  error={!statsData.leetcode ? "LeetCode data unavailable" : null}
+                >
+                  {statsData.leetcode && (
                     <div className="space-y-6">
                       <div className="flex justify-center">
                         <div className="relative w-32 h-32">
@@ -1035,21 +853,9 @@ const StatsSection: React.FC = () => {
                             <PieChart>
                               <Pie
                                 data={[
-                                  {
-                                    name: "Easy",
-                                    value: data.leetcode.easySolved,
-                                    fill: "#10b981",
-                                  },
-                                  {
-                                    name: "Medium",
-                                    value: data.leetcode.mediumSolved,
-                                    fill: "#f59e0b",
-                                  },
-                                  {
-                                    name: "Hard",
-                                    value: data.leetcode.hardSolved,
-                                    fill: "#ef4444",
-                                  },
+                                  { name: "Easy", value: statsData.leetcode.easySolved, fill: "#10b981" },
+                                  { name: "Medium", value: statsData.leetcode.mediumSolved, fill: "#f59e0b" },
+                                  { name: "Hard", value: statsData.leetcode.hardSolved, fill: "#ef4444" },
                                 ]}
                                 cx="50%"
                                 cy="50%"
@@ -1058,41 +864,18 @@ const StatsSection: React.FC = () => {
                                 paddingAngle={5}
                                 dataKey="value"
                               >
-                                {[
-                                  {
-                                    name: "Easy",
-                                    value: data.leetcode.easySolved,
-                                    fill: "#10b981",
-                                  },
-                                  {
-                                    name: "Medium",
-                                    value: data.leetcode.mediumSolved,
-                                    fill: "#f59e0b",
-                                  },
-                                  {
-                                    name: "Hard",
-                                    value: data.leetcode.hardSolved,
-                                    fill: "#ef4444",
-                                  },
-                                ].map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                                ))}
+                                <Cell fill="#10b981" />
+                                <Cell fill="#f59e0b" />
+                                <Cell fill="#ef4444" />
                               </Pie>
-                              <Tooltip
-                                contentStyle={{
-                                  backgroundColor: "rgba(0,0,0,0.8)",
-                                  border: "1px solid rgba(255,255,255,0.1)",
-                                  borderRadius: "8px",
-                                  color: "white",
-                                }}
-                              />
+                              <Tooltip content={<CustomTooltip />} />
                             </PieChart>
                           </ResponsiveContainer>
 
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-center">
                               <div className="text-2xl font-black text-white">
-                                {data.leetcode.totalSolved}
+                                {statsData.leetcode.totalSolved}
                               </div>
                               <div className="text-white/60 text-xs">Solved</div>
                             </div>
@@ -1103,19 +886,19 @@ const StatsSection: React.FC = () => {
                       <div className="grid grid-cols-3 gap-4">
                         <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
                           <div className="text-lg font-bold text-white">
-                            {data.leetcode.easySolved}
+                            {statsData.leetcode.easySolved}
                           </div>
                           <div className="text-emerald-400 text-xs">Easy</div>
                         </div>
                         <div className="text-center p-3 rounded-lg bg-amber-500/20 border border-amber-500/30">
                           <div className="text-lg font-bold text-white">
-                            {data.leetcode.mediumSolved}
+                            {statsData.leetcode.mediumSolved}
                           </div>
                           <div className="text-amber-400 text-xs">Medium</div>
                         </div>
                         <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
                           <div className="text-lg font-bold text-white">
-                            {data.leetcode.hardSolved}
+                            {statsData.leetcode.hardSolved}
                           </div>
                           <div className="text-red-400 text-xs">Hard</div>
                         </div>
@@ -1123,191 +906,91 @@ const StatsSection: React.FC = () => {
 
                       {expandedCards.has("leetcode") && (
                         <div className="pt-6 border-t border-white/10">
-                          <h4 className="text-white font-semibold mb-3">
-                            Progress Trend
-                          </h4>
-                          <div className="h-32">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <LineChart data={analytics.leetcode.progressTrend}>
-                                <CartesianGrid
-                                  strokeDasharray="3 3"
-                                  stroke="rgba(255,255,255,0.1)"
-                                />
-                                <XAxis
-                                  dataKey="month"
-                                  stroke="rgba(255,255,255,0.6)"
-                                  fontSize={10}
-                                />
-                                <YAxis
-                                  stroke="rgba(255,255,255,0.6)"
-                                  fontSize={10}
-                                />
-                                <Tooltip
-                                  contentStyle={{
-                                    backgroundColor: "rgba(0,0,0,0.8)",
-                                    border: "1px solid rgba(255,255,255,0.1)",
-                                    borderRadius: "8px",
-                                    color: "white",
-                                  }}
-                                />
-                                <Line
-                                  type="monotone"
-                                  dataKey="easy"
-                                  stroke="#10b981"
-                                  strokeWidth={2}
-                                  dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
-                                />
-                                <Line
-                                  type="monotone"
-                                  dataKey="medium"
-                                  stroke="#f59e0b"
-                                  strokeWidth={2}
-                                  dot={{ fill: "#f59e0b", strokeWidth: 2, r: 3 }}
-                                />
-                                <Line
-                                  type="monotone"
-                                  dataKey="hard"
-                                  stroke="#ef4444"
-                                  strokeWidth={2}
-                                  dot={{ fill: "#ef4444", strokeWidth: 2, r: 3 }}
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
+                          <h4 className="text-white font-semibold mb-3">Progress Overview</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80 text-sm">Overall Progress</span>
+                              <span className="text-white font-semibold">
+                                {Math.round((statsData.leetcode.totalSolved / statsData.leetcode.totalAvailable) * 100)}%
+                              </span>
+                            </div>
+                            <div className="w-full bg-white/10 rounded-full h-2">
+                              <div
+                                className="h-2 bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full"
+                                style={{
+                                  width: `${(statsData.leetcode.totalSolved / statsData.leetcode.totalAvailable) * 100}%`,
+                                }}
+                              />
+                            </div>
                           </div>
                         </div>
                       )}
                     </div>
-                  </ChartCard>
-                ) : (
-                  <ErrorCard title="Problem Solving" error={errors.leetcode || "No data"} />
-                )}
+                  )}
+                </ChartCard>
               </div>
 
               {/* Strava Running */}
               <div className="lg:col-span-12">
-                {data.strava ? (
-                  <ChartCard title="Fitness Journey" expandable cardId="strava">
+                <ChartCard 
+                  title="Fitness Journey" 
+                  expandable 
+                  cardId="strava"
+                  loading={statsData.loading}
+                  error={!statsData.strava ? "Strava data unavailable" : null}
+                >
+                  {statsData.strava && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                       <div className="lg:col-span-2">
-                        <div className="h-48">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <ComposedChart data={analytics.strava.monthlyDistance}>
-                              <defs>
-                                <linearGradient
-                                  id="stravaGradient"
-                                  x1="0"
-                                  y1="0"
-                                  x2="0"
-                                  y2="1"
-                                >
-                                  <stop
-                                    offset="5%"
-                                    stopColor="#ef4444"
-                                    stopOpacity={0.8}
-                                  />
-                                  <stop
-                                    offset="95%"
-                                    stopColor="#ef4444"
-                                    stopOpacity={0.1}
-                                  />
-                                </linearGradient>
-                              </defs>
-                              <CartesianGrid
-                                strokeDasharray="3 3"
-                                stroke="rgba(255,255,255,0.1)"
-                              />
-                              <XAxis
-                                dataKey="month"
-                                stroke="rgba(255,255,255,0.6)"
-                                fontSize={12}
-                              />
-                              <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                              <Tooltip
-                                contentStyle={{
-                                  backgroundColor: "rgba(0,0,0,0.8)",
-                                  border: "1px solid rgba(255,255,255,0.1)",
-                                  borderRadius: "8px",
-                                  color: "white",
-                                }}
-                              />
-                              <Area
-                                type="monotone"
-                                dataKey="distance"
-                                stroke="#ef4444"
-                                fillOpacity={1}
-                                fill="url(#stravaGradient)"
-                              />
-                              <Line
-                                type="monotone"
-                                dataKey="pace"
-                                stroke="#10b981"
-                                strokeWidth={2}
-                                dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
-                              />
-                            </ComposedChart>
-                          </ResponsiveContainer>
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="text-center p-4 rounded-xl bg-red-500/20 border border-red-500/30">
+                            <div className="text-2xl font-black text-white mb-1">
+                              {statsData.strava.totalRuns}
+                            </div>
+                            <div className="text-red-400 text-xs font-semibold">Total Runs</div>
+                          </div>
+                          <div className="text-center p-4 rounded-xl bg-orange-500/20 border border-orange-500/30">
+                            <div className="text-2xl font-black text-white mb-1">
+                              {statsData.strava.totalDistanceKm}
+                            </div>
+                            <div className="text-orange-400 text-xs font-semibold">Kilometers</div>
+                          </div>
                         </div>
                       </div>
 
                       <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-                            <div className="text-lg font-bold text-white">
-                              {data.strava.totalRuns}
-                            </div>
-                            <div className="text-red-400 text-xs">Total Runs</div>
-                          </div>
-                          <div className="text-center p-3 rounded-lg bg-orange-500/20 border border-orange-500/30">
-                            <div className="text-lg font-bold text-white">
-                              {data.strava.totalDistanceKm}
-                            </div>
-                            <div className="text-orange-400 text-xs">
-                              Kilometers
-                            </div>
-                          </div>
-                        </div>
-
                         {expandedCards.has("strava") && (
                           <div>
-                            <h4 className="text-white font-semibold mb-3 text-sm">
-                              Recent Activities
-                            </h4>
+                            <h4 className="text-white font-semibold mb-3 text-sm">Recent Activities</h4>
                             <div className="space-y-2">
-                              {data.strava.recentRuns
-                                .slice(0, 2)
-                                .map((run, index) => (
-                                  <div
-                                    key={index}
-                                    className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
-                                  >
-                                    <div className="flex items-center">
-                                      <Activity
-                                        size={14}
-                                        className="text-red-400 mr-2"
-                                      />
-                                      <div>
-                                        <div className="text-white text-xs font-medium">
-                                          {run.name}
-                                        </div>
-                                        <div className="text-white/60 text-xs">
-                                          {formatDate(run.date)}
-                                        </div>
+                              {statsData.strava.recentRuns.slice(0, 2).map((run, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
+                                >
+                                  <div className="flex items-center">
+                                    <Activity size={14} className="text-red-400 mr-2" />
+                                    <div>
+                                      <div className="text-white text-xs font-medium">
+                                        {run.name}
+                                      </div>
+                                      <div className="text-white/60 text-xs">
+                                        {formatDate(run.date)}
                                       </div>
                                     </div>
-                                    <div className="text-white font-semibold text-sm">
-                                      {run.distanceKm} km
-                                    </div>
                                   </div>
-                                ))}
+                                  <div className="text-white font-semibold text-sm">
+                                    {run.distanceKm} km
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         )}
                       </div>
                     </div>
-                  </ChartCard>
-                ) : (
-                  <ErrorCard title="Fitness Journey" error={errors.strava || "No data"} />
-                )}
+                  )}
+                </ChartCard>
               </div>
             </div>
           </div>
@@ -1315,323 +998,146 @@ const StatsSection: React.FC = () => {
 
         {activeView === "development" && (
           <div className="space-y-8">
-            {data.wakatime ? (
-              <>
-                <ChartCard title="Development Deep Dive">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="text-white font-semibold mb-4">
-                        Technology Stack
-                      </h4>
-                      <div className="space-y-4">
-                        {analytics.wakatime.languageDistribution.map((lang) => (
-                          <div key={lang.name} className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <div className="flex items-center">
-                                <div
-                                  className="w-3 h-3 rounded-full mr-3"
-                                  style={{ backgroundColor: lang.color }}
-                                />
-                                <span className="text-white text-sm font-medium">
-                                  {lang.name}
-                                </span>
-                              </div>
-                              <span className="text-white/60 text-sm">
-                                {lang.percentage}%
+            <ChartCard 
+              title="Development Deep Dive"
+              loading={statsData.loading}
+              error={!statsData.wakatime ? "WakaTime data unavailable" : null}
+            >
+              {statsData.wakatime && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="text-white font-semibold mb-4">Technology Stack</h4>
+                    <div className="space-y-4">
+                      {generateLanguageData(statsData.wakatime).map((lang) => (
+                        <div key={lang.name} className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center">
+                              <div
+                                className="w-3 h-3 rounded-full mr-3"
+                                style={{ backgroundColor: lang.color }}
+                              />
+                              <span className="text-white text-sm font-medium">
+                                {lang.name}
                               </span>
                             </div>
-                            <div className="w-full bg-white/10 rounded-full h-2">
-                              <div
-                                className="h-2 rounded-full transition-all duration-1000"
-                                style={{
-                                  width: `${lang.percentage}%`,
-                                  backgroundColor: lang.color,
-                                }}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="text-white font-semibold mb-4">
-                        Development Environment
-                      </h4>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                          <div className="flex items-center">
-                            <Code2 size={16} className="text-blue-400 mr-3" />
-                            <span className="text-white text-sm">Editor</span>
-                          </div>
-                          <span className="text-white/80 text-sm font-medium">
-                            {data.wakatime.today.environment.editor}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                          <div className="flex items-center">
-                            <Cpu size={16} className="text-purple-400 mr-3" />
-                            <span className="text-white text-sm">Platform</span>
-                          </div>
-                          <span className="text-white/80 text-sm font-medium">
-                            {data.wakatime.today.environment.os}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                          <div className="flex items-center">
-                            <Database size={16} className="text-emerald-400 mr-3" />
-                            <span className="text-white text-sm">
-                              Primary Language
+                            <span className="text-white/60 text-sm">
+                              {lang.percentage}%
                             </span>
                           </div>
-                          <span className="text-white/80 text-sm font-medium">
-                            {data.wakatime.today.primaryLanguage}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </ChartCard>
-
-                <ChartCard title="Productivity Metrics">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2">
-                      <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={analytics.wakatime.weeklyTrend}>
-                            <defs>
-                              <linearGradient
-                                id="productivityGradient"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1"
-                              >
-                                <stop
-                                  offset="5%"
-                                  stopColor="#8b5cf6"
-                                  stopOpacity={0.8}
-                                />
-                                <stop
-                                  offset="95%"
-                                  stopColor="#8b5cf6"
-                                  stopOpacity={0.1}
-                                />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="day"
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "rgba(0,0,0,0.8)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                borderRadius: "8px",
-                                color: "white",
+                          <div className="w-full bg-white/10 rounded-full h-2">
+                            <div
+                              className="h-2 rounded-full transition-all duration-1000"
+                              style={{
+                                width: `${lang.percentage}%`,
+                                backgroundColor: lang.color,
                               }}
                             />
-                            <Area
-                              type="monotone"
-                              dataKey="productivity"
-                              stroke="#8b5cf6"
-                              fillOpacity={1}
-                              fill="url(#productivityGradient)"
-                            />
-                            <ReferenceLine y={90} stroke="#10b981" strokeDasharray="5 5" />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+                  </div>
 
+                  <div>
+                    <h4 className="text-white font-semibold mb-4">Development Environment</h4>
                     <div className="space-y-4">
-                      <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/30">
-                        <div className="text-2xl font-black text-white mb-1">
-                          {analytics.productivity.focusScore.toFixed(0)}%
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center">
+                          <Code2 size={16} className="text-blue-400 mr-3" />
+                          <span className="text-white text-sm">Editor</span>
                         </div>
-                        <div className="text-blue-400 text-xs font-semibold">
-                          Focus Score
-                        </div>
+                        <span className="text-white/80 text-sm font-medium">
+                          {statsData.wakatime.today.environment.editor}
+                        </span>
                       </div>
-                      <div className="text-center p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30">
-                        <div className="text-2xl font-black text-white mb-1">
-                          {analytics.productivity.efficiency.toFixed(0)}%
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center">
+                          <Cpu size={16} className="text-purple-400 mr-3" />
+                          <span className="text-white text-sm">Platform</span>
                         </div>
-                        <div className="text-emerald-400 text-xs font-semibold">
-                          Efficiency
-                        </div>
+                        <span className="text-white/80 text-sm font-medium">
+                          {statsData.wakatime.today.environment.os}
+                        </span>
                       </div>
-                      <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
-                        <div className="text-2xl font-black text-white mb-1">
-                          {analytics.productivity.deepWorkHours.toFixed(1)}h
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center">
+                          <Database size={16} className="text-emerald-400 mr-3" />
+                          <span className="text-white text-sm">Primary Language</span>
                         </div>
-                        <div className="text-orange-400 text-xs font-semibold">
-                          Deep Work
-                        </div>
+                        <span className="text-white/80 text-sm font-medium">
+                          {statsData.wakatime.today.primaryLanguage}
+                        </span>
                       </div>
                     </div>
                   </div>
-                </ChartCard>
-              </>
-            ) : (
-              <ErrorCard title="Development Analytics" error={errors.wakatime || "No data"} />
-            )}
+                </div>
+              )}
+            </ChartCard>
           </div>
         )}
 
         {activeView === "learning" && (
           <div className="space-y-8">
-            {data.anki ? (
-              <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <ChartCard title="Japanese Mastery Progress">
-                    <div className="space-y-6">
-                      <div className="text-center">
-                        <div className="text-4xl font-black text-white mb-2">
-                          {data.anki.overall.currentStreakDays}
-                        </div>
-                        <div className="text-accent-main text-lg font-semibold">
-                          Consecutive Days
-                        </div>
-                        <div className="text-white/60 text-sm">
-                          Current study streak
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ChartCard 
+                title="Japanese Mastery Progress"
+                loading={statsData.loading}
+                error={!statsData.anki ? "Anki data unavailable" : null}
+              >
+                {statsData.anki && (
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <div className="text-4xl font-black text-white mb-2">
+                        {statsData.anki.overall.currentStreakDays}
                       </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="text-center p-4 rounded-xl bg-purple-500/20 border border-purple-500/30">
-                          <div className="text-xl font-bold text-white">
-                            {data.anki.overall.cardCounts.mature}
-                          </div>
-                          <div className="text-purple-400 text-sm">Mature Cards</div>
-                        </div>
-                        <div className="text-center p-4 rounded-xl bg-blue-500/20 border border-blue-500/30">
-                          <div className="text-xl font-bold text-white">
-                            {data.anki.overall.matureCardRetentionPercent}%
-                          </div>
-                          <div className="text-blue-400 text-sm">Retention Rate</div>
-                        </div>
+                      <div className="text-accent-main text-lg font-semibold">
+                        Consecutive Days
+                      </div>
+                      <div className="text-white/60 text-sm">
+                        Current study streak
                       </div>
                     </div>
-                  </ChartCard>
 
-                  <ChartCard title="Weekly Study Pattern">
-                    <div className="space-y-6">
-                      <div className="h-48">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={analytics.anki.weeklyReviews}>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="day"
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "rgba(0,0,0,0.8)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                borderRadius: "8px",
-                                color: "white",
-                              }}
-                            />
-                            <Bar
-                              dataKey="reviews"
-                              fill="#8b5cf6"
-                              radius={[4, 4, 0, 0]}
-                            />
-                          </BarChart>
-                        </ResponsiveContainer>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center p-4 rounded-xl bg-purple-500/20 border border-purple-500/30">
+                        <div className="text-xl font-bold text-white">
+                          {statsData.anki.overall.cardCounts.mature}
+                        </div>
+                        <div className="text-purple-400 text-sm">Mature Cards</div>
+                      </div>
+                      <div className="text-center p-4 rounded-xl bg-blue-500/20 border border-blue-500/30">
+                        <div className="text-xl font-bold text-white">
+                          {statsData.anki.overall.matureCardRetentionPercent}%
+                        </div>
+                        <div className="text-blue-400 text-sm">Retention Rate</div>
                       </div>
                     </div>
-                  </ChartCard>
-                </div>
-
-                <ChartCard title="Deck Performance Analysis">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {data.anki.decks.map((deck, index) => (
-                      <div
-                        key={deck.deckName}
-                        className="group relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-purple-500/30 transition-all duration-500"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                        <div className="relative z-10">
-                          <div className="flex items-center justify-between mb-4">
-                            <Brain size={20} className="text-purple-400" />
-                            <div className="text-white/40 text-xs">
-                              #{index + 1}
-                            </div>
-                          </div>
-
-                          <h3 className="text-white font-bold text-lg mb-4 group-hover:text-purple-400 transition-colors">
-                            {getDeckDisplayName(deck.deckName)}
-                          </h3>
-
-                          <div className="space-y-3">
-                            <div className="flex justify-between">
-                              <span className="text-white/60 text-sm">
-                                Reviews Today
-                              </span>
-                              <span className="text-white font-semibold">
-                                {deck.reviewsToday}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-white/60 text-sm">
-                                Mature Cards
-                              </span>
-                              <span className="text-purple-400 font-semibold">
-                                {deck.matureCards}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-white/60 text-sm">
-                                New Cards
-                              </span>
-                              <span className="text-emerald-400 font-semibold">
-                                {deck.newCards}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="mt-4 pt-4 border-t border-white/10">
-                            <div className="flex justify-between text-sm mb-2">
-                              <span className="text-white/60">Progress</span>
-                              <span className="text-white">
-                                {Math.round(
-                                  (deck.matureCards / deck.totalCards) * 100,
-                                )}
-                                %
-                              </span>
-                            </div>
-                            <div className="w-full bg-white/10 rounded-full h-2">
-                              <div
-                                className="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
-                                style={{
-                                  width: `${(deck.matureCards / deck.totalCards) * 100}%`,
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
                   </div>
-                </ChartCard>
-              </>
-            ) : (
-              <ErrorCard title="Learning Analytics" error={errors.anki || "No data"} />
-            )}
+                )}
+              </ChartCard>
+
+              <ChartCard 
+                title="Weekly Study Pattern"
+                loading={statsData.loading}
+                error={!statsData.anki ? "Anki data unavailable" : null}
+              >
+                {statsData.anki && (
+                  <div className="space-y-6">
+                    <div className="h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={generateAnkiTrend(statsData.anki)}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                          <XAxis dataKey="day" stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                          <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Bar dataKey="reviews" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Reviews" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                )}
+              </ChartCard>
+            </div>
           </div>
         )}
 
@@ -1642,36 +1148,19 @@ const StatsSection: React.FC = () => {
                 <div className="space-y-6">
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart
-                        data={data.leetcode ? analytics.leetcode.difficultyRadar : [
-                          { subject: "Coding", A: 0, fullMark: 100 },
-                          { subject: "Learning", A: 0, fullMark: 100 },
-                          { subject: "Problem Solving", A: 0, fullMark: 100 },
-                          { subject: "Consistency", A: 0, fullMark: 100 },
-                          { subject: "Growth", A: 0, fullMark: 100 },
-                          { subject: "Focus", A: 0, fullMark: 100 },
-                        ]}
-                      >
+                      <RadarChart data={generatePerformanceRadar(statsData.wakatime, statsData.anki, statsData.leetcode)}>
                         <PolarGrid />
-                        <PolarAngleAxis
-                          dataKey="subject"
-                          className="text-white/60"
-                          fontSize={12}
-                        />
-                        <PolarRadiusAxis
-                          angle={90}
-                          domain={[0, 100]}
-                          className="text-white/40"
-                          fontSize={10}
-                        />
+                        <PolarAngleAxis dataKey="subject" className="text-white/60" fontSize={12} />
+                        <PolarRadiusAxis angle={90} domain={[0, 100]} className="text-white/40" fontSize={10} />
                         <Radar
                           name="Performance"
-                          dataKey="A"
+                          dataKey="score"
                           stroke="#3b82f6"
                           fill="#3b82f6"
                           fillOpacity={0.3}
                           strokeWidth={2}
                         />
+                        <Tooltip content={<CustomTooltip />} />
                       </RadarChart>
                     </ResponsiveContainer>
                   </div>
@@ -1679,95 +1168,59 @@ const StatsSection: React.FC = () => {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="text-center p-3 rounded-lg bg-blue-500/20 border border-blue-500/30">
                       <div className="text-lg font-bold text-white">
-                        {analytics.productivity.focusScore.toFixed(1)}
+                        {Math.round(generatePerformanceRadar(statsData.wakatime, statsData.anki, statsData.leetcode).reduce((sum, item) => sum + item.score, 0) / 6)}
                       </div>
                       <div className="text-blue-400 text-xs">Overall Score</div>
                     </div>
                     <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
                       <div className="text-lg font-bold text-white">+8.3</div>
-                      <div className="text-emerald-400 text-xs">
-                        Monthly Gain
-                      </div>
+                      <div className="text-emerald-400 text-xs">Monthly Gain</div>
                     </div>
                     <div className="text-center p-3 rounded-lg bg-purple-500/20 border border-purple-500/30">
                       <div className="text-lg font-bold text-white">A+</div>
-                      <div className="text-purple-400 text-xs">
-                        Performance Grade
-                      </div>
+                      <div className="text-purple-400 text-xs">Performance Grade</div>
                     </div>
                   </div>
                 </div>
               </ChartCard>
 
-              <ChartCard title="Productivity & Focus Analysis">
+              <ChartCard title="Activity Correlation Analysis">
                 <div className="space-y-6">
-                  <div className="relative w-48 h-48 mx-auto">
+                  <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
+                      <ScatterChart>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                        <XAxis 
+                          type="number" 
+                          dataKey="coding" 
+                          name="Coding Hours" 
+                          stroke="rgba(255,255,255,0.6)" 
+                          fontSize={12}
+                        />
+                        <YAxis 
+                          type="number" 
+                          dataKey="learning" 
+                          name="Learning Score" 
+                          stroke="rgba(255,255,255,0.6)" 
+                          fontSize={12}
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Scatter 
+                          name="Activity Correlation" 
                           data={[
-                            {
-                              name: "Focus",
-                              value: analytics.productivity.focusScore,
-                              fill: "#10b981",
-                            },
-                            {
-                              name: "Background",
-                              value: 100 - analytics.productivity.focusScore,
-                              fill: "rgba(255,255,255,0.1)",
-                            },
-                          ]}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={70}
-                          outerRadius={85}
-                          startAngle={90}
-                          endAngle={-270}
-                          dataKey="value"
-                          cornerRadius={20}
-                        >
-                          <Cell key="cell-0" fill="#10b981" />
-                          <Cell
-                            key="cell-1"
-                            fill="rgba(255,255,255,0.1)"
-                            stroke="none"
-                          />
-                        </Pie>
-                      </PieChart>
+                            { coding: statsData.wakatime ? statsData.wakatime.today.codingMinutes / 60 : 0, learning: statsData.anki ? statsData.anki.overall.reviewsToday : 0 },
+                            { coding: statsData.wakatime ? parseFloat(statsData.wakatime.weeklyStats.totalHoursLast7Days) / 7 : 0, learning: statsData.anki ? statsData.anki.overall.matureCardRetentionPercent : 0 },
+                          ]} 
+                          fill="#8b5cf6" 
+                        />
+                      </ScatterChart>
                     </ResponsiveContainer>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <Flame size={24} className="text-emerald-400 mb-2" />
-                      <div className="text-4xl font-black text-white">
-                        {analytics.productivity.focusScore.toFixed(0)}%
-                      </div>
-                      <div className="text-white/60 text-sm">Focus Score</div>
-                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-white/10">
-                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Coffee
-                        size={20}
-                        className="mx-auto mb-2 text-orange-400"
-                      />
-                      <div className="text-lg font-bold text-white">
-                        {analytics.productivity.deepWorkHours.toFixed(1)}h
-                      </div>
-                      <div className="text-white/60 text-xs">Deep Work</div>
-                    </div>
-                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Zap size={20} className="mx-auto mb-2 text-blue-400" />
-                      <div className="text-lg font-bold text-white">
-                        {analytics.productivity.efficiency.toFixed(0)}%
-                      </div>
-                      <div className="text-white/60 text-xs">Efficiency</div>
-                    </div>
-                    <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Target size={20} className="mx-auto mb-2 text-purple-400" />
-                      <div className="text-lg font-bold text-white">
-                        {analytics.productivity.consistency.toFixed(0)}%
-                      </div>
-                      <div className="text-white/60 text-xs">Consistency</div>
+                  <div className="text-center">
+                    <div className="text-white/80 text-sm mb-2">Cross-Platform Efficiency</div>
+                    <div className="text-2xl font-bold text-accent-main">
+                      {Math.round(((statsData.wakatime?.weeklyStats.activeDaysCount || 0) / 7 + (statsData.anki?.overall.matureCardRetentionPercent || 0) / 100) * 50)}%
                     </div>
                   </div>
                 </div>

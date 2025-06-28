@@ -274,7 +274,7 @@ const StatsSection: React.FC = () => {
     const ankiData = [];
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const baseReviews = anki ? anki.overall.reviewsToday : 50;
-    days.forEach((day, _index) => {
+    days.forEach((day) => {
       const variation = (Math.random() - 0.5) * 40;
       ankiData.push({
         day,
@@ -1667,4 +1667,3 @@ const StatsSection: React.FC = () => {
 };
 
 export default StatsSection;
-

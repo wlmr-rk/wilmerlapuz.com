@@ -271,7 +271,7 @@ const StatsSection: React.FC = () => {
     }
 
     // Generate Anki review data
-    const ankiData = [];
+    const ankiData: { day: string; reviews: number; accuracy: number }[] = [];
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const baseReviews = anki ? anki.overall.reviewsToday : 50;
     days.forEach((day) => {

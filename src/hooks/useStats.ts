@@ -28,6 +28,11 @@ const defaultWakatime = {
     },
     consistency: "0%",
   },
+  last30Days: {
+    totalHours: "0 hrs",
+    dailyAverage: 0,
+    activeDays: 0,
+  },
 };
 
 const defaultStrava = {
@@ -73,6 +78,11 @@ const defaultAnki = {
     },
   },
   decks: [],
+  last30Days: {
+    totalReviews: 0,
+    averageDaily: 0,
+    activeDays: 0,
+  },
 };
 
 export const useStats = () => {

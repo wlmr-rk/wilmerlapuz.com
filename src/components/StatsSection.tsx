@@ -9,14 +9,9 @@ import {
   Trophy,
   Play,
   TrendingUp,
-  Zap,
   Sparkles,
-  Coffee,
-  Flame,
   ChevronDown,
   ChevronUp,
-  Eye,
-  Layers,
   Cpu,
   Database,
   GitBranch,
@@ -24,12 +19,7 @@ import {
   AlertTriangle,
   RefreshCw,
   Target,
-  Calendar,
-  Clock,
   Headphones,
-  BookOpen,
-  BarChart3,
-  PieChart,
   TrendingDown,
   Pause,
 } from "lucide-react";
@@ -53,7 +43,6 @@ import {
   PolarRadiusAxis,
   Radar,
   Tooltip,
-  Legend,
 } from "recharts";
 
 // Types for our data structures
@@ -260,17 +249,22 @@ const StatsSection: React.FC = () => {
   const generateChartData = () => {
     const wakatime = statsData.wakatime;
     const anki = statsData.anki;
-    
+
     // Generate last 7 days coding data
     const codingData = [];
     const today = new Date();
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
-      const baseHours = wakatime ? wakatime.weeklyStats.dailyAverageMinutes / 60 : 2;
+      const baseHours = wakatime
+        ? wakatime.weeklyStats.dailyAverageMinutes / 60
+        : 2;
       const variation = (Math.random() - 0.5) * 2;
       codingData.push({
-        date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        date: date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        }),
         hours: Math.max(0, baseHours + variation),
         productivity: 85 + Math.random() * 15,
       });
@@ -280,7 +274,7 @@ const StatsSection: React.FC = () => {
     const ankiData = [];
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const baseReviews = anki ? anki.overall.reviewsToday : 50;
-    days.forEach((day, index) => {
+    days.forEach((day, _index) => {
       const variation = (Math.random() - 0.5) * 40;
       ankiData.push({
         day,
@@ -292,14 +286,26 @@ const StatsSection: React.FC = () => {
     // Generate language distribution data
     const languageData = [];
     if (wakatime) {
-      const primaryPerc = parseFloat(wakatime.weeklyStats.languages.primaryPercentage);
-      const secondaryPerc = parseFloat(wakatime.weeklyStats.languages.secondaryPercentage);
+      const primaryPerc = parseFloat(
+        wakatime.weeklyStats.languages.primaryPercentage,
+      );
+      const secondaryPerc = parseFloat(
+        wakatime.weeklyStats.languages.secondaryPercentage,
+      );
       const remaining = 100 - primaryPerc - secondaryPerc;
-      
+
       languageData.push(
-        { name: wakatime.weeklyStats.languages.primary, value: primaryPerc, color: "#3b82f6" },
-        { name: wakatime.weeklyStats.languages.secondary, value: secondaryPerc, color: "#8b5cf6" },
-        { name: "Others", value: remaining, color: "#6b7280" }
+        {
+          name: wakatime.weeklyStats.languages.primary,
+          value: primaryPerc,
+          color: "#3b82f6",
+        },
+        {
+          name: wakatime.weeklyStats.languages.secondary,
+          value: secondaryPerc,
+          color: "#8b5cf6",
+        },
+        { name: "Others", value: remaining, color: "#6b7280" },
       );
     }
 
@@ -309,7 +315,13 @@ const StatsSection: React.FC = () => {
   const { codingData, ankiData, languageData } = generateChartData();
 
   // Error Card Component
-  const ErrorCard = ({ title, message }: { title: string; message: string }) => (
+  const ErrorCard = ({
+    title,
+    message,
+  }: {
+    title: string;
+    message: string;
+  }) => (
     <div className="bento-item ease-snappy relative z-2 border border-red-500/20 bg-linear-to-br/oklch from-red-500/10 via-red-500/5 to-red-500/10 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
       <div className="flex items-center mb-4">
         <AlertTriangle size={20} className="text-red-400 mr-3" />
@@ -425,7 +437,9 @@ const StatsSection: React.FC = () => {
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold text-white flex items-center">
-            {hasError && <AlertTriangle size={16} className="text-red-400 mr-2" />}
+            {hasError && (
+              <AlertTriangle size={16} className="text-red-400 mr-2" />
+            )}
             {title}
           </h3>
           {expandable && cardId && !hasError && (
@@ -483,7 +497,8 @@ const StatsSection: React.FC = () => {
       : 0;
 
     const overallScore = Math.round(
-      (codingScore + learningScore + problemSolvingScore + consistencyScore) / 4
+      (codingScore + learningScore + problemSolvingScore + consistencyScore) /
+        4,
     );
 
     const performanceData = [
@@ -495,9 +510,21 @@ const StatsSection: React.FC = () => {
 
     const correlationData = [
       { activity: "Coding vs Learning", correlation: 0.78, strength: "Strong" },
-      { activity: "Learning vs Retention", correlation: 0.85, strength: "Very Strong" },
-      { activity: "Consistency vs Performance", correlation: 0.72, strength: "Strong" },
-      { activity: "Focus vs Productivity", correlation: 0.68, strength: "Moderate" },
+      {
+        activity: "Learning vs Retention",
+        correlation: 0.85,
+        strength: "Very Strong",
+      },
+      {
+        activity: "Consistency vs Performance",
+        correlation: 0.72,
+        strength: "Strong",
+      },
+      {
+        activity: "Focus vs Productivity",
+        correlation: 0.68,
+        strength: "Moderate",
+      },
     ];
 
     return (
@@ -572,7 +599,9 @@ const StatsSection: React.FC = () => {
               >
                 <div className="flex items-center">
                   <div className="w-3 h-3 rounded-full mr-3 bg-blue-500" />
-                  <span className="text-white font-medium">{item.activity}</span>
+                  <span className="text-white font-medium">
+                    {item.activity}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <div className="text-right">
@@ -599,9 +628,13 @@ const StatsSection: React.FC = () => {
             <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
               <div className="flex items-center mb-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 mr-2" />
-                <span className="text-green-400 font-semibold text-sm">HIGH PRIORITY</span>
+                <span className="text-green-400 font-semibold text-sm">
+                  HIGH PRIORITY
+                </span>
               </div>
-              <h4 className="text-white font-bold mb-1">Increase Daily Coding Time</h4>
+              <h4 className="text-white font-bold mb-1">
+                Increase Daily Coding Time
+              </h4>
               <p className="text-white/70 text-sm">
                 Target 4-6 hours daily for +15% productivity boost in 2 weeks
               </p>
@@ -610,9 +643,13 @@ const StatsSection: React.FC = () => {
             <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
               <div className="flex items-center mb-2">
                 <div className="w-2 h-2 rounded-full bg-yellow-500 mr-2" />
-                <span className="text-yellow-400 font-semibold text-sm">MEDIUM PRIORITY</span>
+                <span className="text-yellow-400 font-semibold text-sm">
+                  MEDIUM PRIORITY
+                </span>
               </div>
-              <h4 className="text-white font-bold mb-1">Maintain Learning Consistency</h4>
+              <h4 className="text-white font-bold mb-1">
+                Maintain Learning Consistency
+              </h4>
               <p className="text-white/70 text-sm">
                 Keep 90%+ retention rate for optimal knowledge consolidation
               </p>
@@ -621,11 +658,18 @@ const StatsSection: React.FC = () => {
             <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
               <div className="flex items-center mb-2">
                 <div className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-                <span className="text-blue-400 font-semibold text-sm">OPTIMIZATION</span>
+                <span className="text-blue-400 font-semibold text-sm">
+                  OPTIMIZATION
+                </span>
               </div>
-              <h4 className="text-white font-bold mb-1">Focus on Primary Language</h4>
+              <h4 className="text-white font-bold mb-1">
+                Focus on Primary Language
+              </h4>
               <p className="text-white/70 text-sm">
-                Spend 60%+ time on {statsData.wakatime?.weeklyStats.languages.primary || "main language"} for deeper expertise
+                Spend 60%+ time on{" "}
+                {statsData.wakatime?.weeklyStats.languages.primary ||
+                  "main language"}{" "}
+                for deeper expertise
               </p>
             </div>
           </div>
@@ -660,7 +704,10 @@ const StatsSection: React.FC = () => {
             </span>
             <span className="ml-3 text-xs text-white/50">•</span>
             <span className="ml-3 text-xs text-white/70">
-              Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : "Loading..."}
+              Last updated:{" "}
+              {lastUpdated
+                ? new Date(lastUpdated).toLocaleTimeString()
+                : "Loading..."}
             </span>
           </div>
 
@@ -686,8 +733,13 @@ const StatsSection: React.FC = () => {
 
         {loading && (
           <div className="text-center py-16">
-            <RefreshCw size={48} className="text-accent-main mx-auto mb-4 animate-spin" />
-            <h3 className="text-xl font-semibold text-white/60 mb-2">Loading Stats...</h3>
+            <RefreshCw
+              size={48}
+              className="text-accent-main mx-auto mb-4 animate-spin"
+            />
+            <h3 className="text-xl font-semibold text-white/60 mb-2">
+              Loading Stats...
+            </h3>
             <p className="text-white/40">Fetching data from all platforms</p>
           </div>
         )}
@@ -718,7 +770,9 @@ const StatsSection: React.FC = () => {
               <CompactStatsCard
                 icon={Brain}
                 title="Study Cards"
-                value={statsData.anki ? statsData.anki.overall.reviewsToday : "N/A"}
+                value={
+                  statsData.anki ? statsData.anki.overall.reviewsToday : "N/A"
+                }
                 subtitle={
                   statsData.anki
                     ? `${statsData.anki.overall.matureCardRetentionPercent}% retention`
@@ -733,7 +787,9 @@ const StatsSection: React.FC = () => {
               <CompactStatsCard
                 icon={Trophy}
                 title="Problems Solved"
-                value={statsData.leetcode ? statsData.leetcode.totalSolved : "N/A"}
+                value={
+                  statsData.leetcode ? statsData.leetcode.totalSolved : "N/A"
+                }
                 subtitle="LeetCode progress"
                 color="#f59e0b"
                 trend={statsData.leetcode ? 15 : undefined}
@@ -745,7 +801,9 @@ const StatsSection: React.FC = () => {
                 icon={Activity}
                 title="Running Distance"
                 value={
-                  statsData.strava ? `${statsData.strava.totalDistanceKm}km` : "N/A"
+                  statsData.strava
+                    ? `${statsData.strava.totalDistanceKm}km`
+                    : "N/A"
                 }
                 subtitle="Total distance"
                 color="#ef4444"
@@ -800,7 +858,10 @@ const StatsSection: React.FC = () => {
                               stroke="rgba(255,255,255,0.6)"
                               fontSize={12}
                             />
-                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <YAxis
+                              stroke="rgba(255,255,255,0.6)"
+                              fontSize={12}
+                            />
                             <Tooltip
                               contentStyle={{
                                 backgroundColor: "rgba(0,0,0,0.8)",
@@ -823,7 +884,8 @@ const StatsSection: React.FC = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                           <div className="text-lg font-bold text-white">
-                            {statsData.wakatime.weeklyStats.totalHoursLast7Days}h
+                            {statsData.wakatime.weeklyStats.totalHoursLast7Days}
+                            h
                           </div>
                           <div className="text-white/60 text-xs">This Week</div>
                         </div>
@@ -831,7 +893,9 @@ const StatsSection: React.FC = () => {
                           <div className="text-lg font-bold text-white">
                             {statsData.wakatime.weeklyStats.activeDaysCount}
                           </div>
-                          <div className="text-white/60 text-xs">Active Days</div>
+                          <div className="text-white/60 text-xs">
+                            Active Days
+                          </div>
                         </div>
                         <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
                           <div className="text-lg font-bold text-white">
@@ -843,65 +907,74 @@ const StatsSection: React.FC = () => {
                           <div className="text-lg font-bold text-white">
                             {statsData.wakatime.weeklyStats.consistency}
                           </div>
-                          <div className="text-white/60 text-xs">Consistency</div>
+                          <div className="text-white/60 text-xs">
+                            Consistency
+                          </div>
                         </div>
                       </div>
 
-                      {expandedCards.has("coding") && languageData.length > 0 && (
-                        <div className="pt-6 border-t border-white/10">
-                          <h4 className="text-white font-semibold mb-4">
-                            Language Distribution
-                          </h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="h-32">
-                              <ResponsiveContainer width="100%" height="100%">
-                                <RechartsPieChart>
-                                  <Pie
-                                    data={languageData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={30}
-                                    outerRadius={50}
-                                    paddingAngle={5}
-                                    dataKey="value"
-                                  >
-                                    {languageData.map((entry, index) => (
-                                      <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                  </Pie>
-                                  <Tooltip
-                                    contentStyle={{
-                                      backgroundColor: "rgba(0,0,0,0.8)",
-                                      border: "1px solid rgba(255,255,255,0.1)",
-                                      borderRadius: "8px",
-                                      color: "white",
-                                    }}
-                                  />
-                                </RechartsPieChart>
-                              </ResponsiveContainer>
-                            </div>
-                            <div className="space-y-3">
-                              {languageData.map((lang) => (
-                                <div
-                                  key={lang.name}
-                                  className="flex items-center justify-between"
-                                >
-                                  <div className="flex items-center">
-                                    <div
-                                      className="w-3 h-3 rounded-full mr-3"
-                                      style={{ backgroundColor: lang.color }}
+                      {expandedCards.has("coding") &&
+                        languageData.length > 0 && (
+                          <div className="pt-6 border-t border-white/10">
+                            <h4 className="text-white font-semibold mb-4">
+                              Language Distribution
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="h-32">
+                                <ResponsiveContainer width="100%" height="100%">
+                                  <RechartsPieChart>
+                                    <Pie
+                                      data={languageData}
+                                      cx="50%"
+                                      cy="50%"
+                                      innerRadius={30}
+                                      outerRadius={50}
+                                      paddingAngle={5}
+                                      dataKey="value"
+                                    >
+                                      {languageData.map((entry, index) => (
+                                        <Cell
+                                          key={`cell-${index}`}
+                                          fill={entry.color}
+                                        />
+                                      ))}
+                                    </Pie>
+                                    <Tooltip
+                                      contentStyle={{
+                                        backgroundColor: "rgba(0,0,0,0.8)",
+                                        border:
+                                          "1px solid rgba(255,255,255,0.1)",
+                                        borderRadius: "8px",
+                                        color: "white",
+                                      }}
                                     />
-                                    <span className="text-white/80">{lang.name}</span>
+                                  </RechartsPieChart>
+                                </ResponsiveContainer>
+                              </div>
+                              <div className="space-y-3">
+                                {languageData.map((lang) => (
+                                  <div
+                                    key={lang.name}
+                                    className="flex items-center justify-between"
+                                  >
+                                    <div className="flex items-center">
+                                      <div
+                                        className="w-3 h-3 rounded-full mr-3"
+                                        style={{ backgroundColor: lang.color }}
+                                      />
+                                      <span className="text-white/80">
+                                        {lang.name}
+                                      </span>
+                                    </div>
+                                    <span className="text-white/60 text-sm">
+                                      {lang.value.toFixed(1)}%
+                                    </span>
                                   </div>
-                                  <span className="text-white/60 text-sm">
-                                    {lang.value.toFixed(1)}%
-                                  </span>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </div>
                   )}
                 </ChartCard>
@@ -930,7 +1003,10 @@ const StatsSection: React.FC = () => {
                                 className="text-white fill-white ml-0.5"
                               />
                             ) : (
-                              <Pause size={10} className="text-white fill-white" />
+                              <Pause
+                                size={10}
+                                className="text-white fill-white"
+                              />
                             )}
                           </div>
                         </div>
@@ -951,7 +1027,9 @@ const StatsSection: React.FC = () => {
                                     : "bg-gray-400"
                                 }`}
                               />
-                              {statsData.spotify.isPlaying ? "Playing" : "Paused"}
+                              {statsData.spotify.isPlaying
+                                ? "Playing"
+                                : "Paused"}
                             </div>
                             <a
                               href={statsData.spotify.songUrl}
@@ -969,7 +1047,9 @@ const StatsSection: React.FC = () => {
                       <div className="pt-4 border-t border-white/10">
                         <div className="flex items-center text-white/60 text-sm">
                           <Headphones size={14} className="mr-2" />
-                          <span className="line-clamp-1">{statsData.spotify.album}</span>
+                          <span className="line-clamp-1">
+                            {statsData.spotify.album}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -1027,7 +1107,10 @@ const StatsSection: React.FC = () => {
                               stroke="rgba(255,255,255,0.6)"
                               fontSize={12}
                             />
-                            <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
+                            <YAxis
+                              stroke="rgba(255,255,255,0.6)"
+                              fontSize={12}
+                            />
                             <Tooltip
                               contentStyle={{
                                 backgroundColor: "rgba(0,0,0,0.8)",
@@ -1118,7 +1201,10 @@ const StatsSection: React.FC = () => {
                                   { fill: "#f59e0b" },
                                   { fill: "#ef4444" },
                                 ].map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={entry.fill}
+                                  />
                                 ))}
                               </Pie>
                               <Tooltip
@@ -1137,7 +1223,9 @@ const StatsSection: React.FC = () => {
                               <div className="text-2xl font-black text-white">
                                 {statsData.leetcode.totalSolved}
                               </div>
-                              <div className="text-white/60 text-xs">Solved</div>
+                              <div className="text-white/60 text-xs">
+                                Solved
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1166,7 +1254,8 @@ const StatsSection: React.FC = () => {
 
                       <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
                         <div className="text-sm text-white/70">
-                          Progress: {statsData.leetcode.totalSolved} / {statsData.leetcode.totalAvailable} problems
+                          Progress: {statsData.leetcode.totalSolved} /{" "}
+                          {statsData.leetcode.totalAvailable} problems
                         </div>
                         <div className="w-full bg-white/10 rounded-full h-2 mt-2">
                           <div
@@ -1199,13 +1288,17 @@ const StatsSection: React.FC = () => {
                             <div className="text-lg font-bold text-white">
                               {statsData.strava.totalRuns}
                             </div>
-                            <div className="text-red-400 text-xs">Total Runs</div>
+                            <div className="text-red-400 text-xs">
+                              Total Runs
+                            </div>
                           </div>
                           <div className="text-center p-3 rounded-lg bg-orange-500/20 border border-orange-500/30">
                             <div className="text-lg font-bold text-white">
                               {statsData.strava.totalDistanceKm}
                             </div>
-                            <div className="text-orange-400 text-xs">Kilometers</div>
+                            <div className="text-orange-400 text-xs">
+                              Kilometers
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1215,27 +1308,32 @@ const StatsSection: React.FC = () => {
                           Recent Activities
                         </h4>
                         <div className="space-y-2">
-                          {statsData.strava.recentRuns.slice(0, 3).map((run, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
-                            >
-                              <div className="flex items-center">
-                                <Activity size={14} className="text-red-400 mr-2" />
-                                <div>
-                                  <div className="text-white text-xs font-medium line-clamp-1">
-                                    {run.name}
-                                  </div>
-                                  <div className="text-white/60 text-xs">
-                                    {formatDate(run.date)}
+                          {statsData.strava.recentRuns
+                            .slice(0, 3)
+                            .map((run, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
+                              >
+                                <div className="flex items-center">
+                                  <Activity
+                                    size={14}
+                                    className="text-red-400 mr-2"
+                                  />
+                                  <div>
+                                    <div className="text-white text-xs font-medium line-clamp-1">
+                                      {run.name}
+                                    </div>
+                                    <div className="text-white/60 text-xs">
+                                      {formatDate(run.date)}
+                                    </div>
                                   </div>
                                 </div>
+                                <div className="text-white font-semibold text-sm">
+                                  {run.distanceKm} km
+                                </div>
                               </div>
-                              <div className="text-white font-semibold text-sm">
-                                {run.distanceKm} km
-                              </div>
-                            </div>
-                          ))}
+                            ))}
                         </div>
                       </div>
                     </div>
@@ -1315,8 +1413,13 @@ const StatsSection: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
                         <div className="flex items-center">
-                          <Database size={16} className="text-emerald-400 mr-3" />
-                          <span className="text-white text-sm">Primary Language</span>
+                          <Database
+                            size={16}
+                            className="text-emerald-400 mr-3"
+                          />
+                          <span className="text-white text-sm">
+                            Primary Language
+                          </span>
                         </div>
                         <span className="text-white/80 text-sm font-medium">
                           {statsData.wakatime.today.primaryLanguage}
@@ -1334,7 +1437,10 @@ const StatsSection: React.FC = () => {
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={codingData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="rgba(255,255,255,0.1)"
+                      />
                       <XAxis
                         dataKey="date"
                         stroke="rgba(255,255,255,0.6)"
@@ -1382,7 +1488,9 @@ const StatsSection: React.FC = () => {
                       <div className="text-accent-main text-lg font-semibold">
                         Consecutive Days
                       </div>
-                      <div className="text-white/60 text-sm">Current study streak</div>
+                      <div className="text-white/60 text-sm">
+                        Current study streak
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -1390,24 +1498,37 @@ const StatsSection: React.FC = () => {
                         <div className="text-xl font-bold text-white">
                           {statsData.anki.overall.cardCounts.mature}
                         </div>
-                        <div className="text-purple-400 text-sm">Mature Cards</div>
+                        <div className="text-purple-400 text-sm">
+                          Mature Cards
+                        </div>
                       </div>
                       <div className="text-center p-4 rounded-xl bg-blue-500/20 border border-blue-500/30">
                         <div className="text-xl font-bold text-white">
                           {statsData.anki.overall.matureCardRetentionPercent}%
                         </div>
-                        <div className="text-blue-400 text-sm">Retention Rate</div>
+                        <div className="text-blue-400 text-sm">
+                          Retention Rate
+                        </div>
                       </div>
                     </div>
 
                     <div className="space-y-3">
-                      <h4 className="text-white font-semibold">Card Distribution</h4>
+                      <h4 className="text-white font-semibold">
+                        Card Distribution
+                      </h4>
                       {Object.entries(statsData.anki.overall.cardCounts)
                         .filter(([key]) => key !== "total")
                         .map(([type, count]) => (
-                          <div key={type} className="flex justify-between items-center">
-                            <span className="text-white/70 capitalize">{type}</span>
-                            <span className="text-white font-semibold">{count}</span>
+                          <div
+                            key={type}
+                            className="flex justify-between items-center"
+                          >
+                            <span className="text-white/70 capitalize">
+                              {type}
+                            </span>
+                            <span className="text-white font-semibold">
+                              {count}
+                            </span>
                           </div>
                         ))}
                     </div>
@@ -1457,7 +1578,9 @@ const StatsSection: React.FC = () => {
                         <div className="text-lg font-bold text-white">
                           {statsData.anki.overall.timeMinutesToday}
                         </div>
-                        <div className="text-white/60 text-xs">Minutes Today</div>
+                        <div className="text-white/60 text-xs">
+                          Minutes Today
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1479,25 +1602,33 @@ const StatsSection: React.FC = () => {
                       </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">Reviews Today</span>
+                          <span className="text-white/60 text-xs">
+                            Reviews Today
+                          </span>
                           <span className="text-white text-xs font-semibold">
                             {deck.reviewsToday}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">Mature Cards</span>
+                          <span className="text-white/60 text-xs">
+                            Mature Cards
+                          </span>
                           <span className="text-white text-xs font-semibold">
                             {deck.matureCards}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">New Cards</span>
+                          <span className="text-white/60 text-xs">
+                            New Cards
+                          </span>
                           <span className="text-white text-xs font-semibold">
                             {deck.newCards}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">Total Cards</span>
+                          <span className="text-white/60 text-xs">
+                            Total Cards
+                          </span>
                           <span className="text-white text-xs font-semibold">
                             {deck.totalCards}
                           </span>
@@ -1536,3 +1667,4 @@ const StatsSection: React.FC = () => {
 };
 
 export default StatsSection;
+

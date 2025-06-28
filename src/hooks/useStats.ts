@@ -4,6 +4,77 @@
 import { useState, useEffect } from "react";
 import type { AllStats } from "../types/stats";
 
+// Default empty objects to prevent undefined errors
+const defaultWakatime = {
+  lastUpdated: "",
+  status: "unavailable",
+  today: {
+    codingMinutes: 0,
+    primaryLanguage: "N/A",
+    environment: {
+      editor: "N/A",
+      os: "N/A",
+    },
+  },
+  weeklyStats: {
+    totalHoursLast7Days: "0 hrs",
+    activeDaysCount: 0,
+    dailyAverageMinutes: 0,
+    languages: {
+      primary: "N/A",
+      secondary: "N/A",
+      primaryPercentage: "0%",
+      secondaryPercentage: "0%",
+    },
+    consistency: "0%",
+  },
+};
+
+const defaultStrava = {
+  totalRuns: 0,
+  totalDistanceKm: "0.0",
+  recentRuns: [],
+};
+
+const defaultSpotify = {
+  isPlaying: false,
+  title: "Not playing",
+  artist: "N/A",
+  album: "N/A",
+  albumImageUrl: "",
+  songUrl: "",
+};
+
+const defaultLeetcode = {
+  username: "N/A",
+  totalSolved: 0,
+  totalAvailable: 0,
+  easySolved: 0,
+  easyAvailable: 0,
+  mediumSolved: 0,
+  mediumAvailable: 0,
+  hardSolved: 0,
+  hardAvailable: 0,
+};
+
+const defaultAnki = {
+  lastUpdated: "",
+  overall: {
+    reviewsToday: 0,
+    timeMinutesToday: 0,
+    matureCardRetentionPercent: 0,
+    currentStreakDays: 0,
+    cardCounts: {
+      new: 0,
+      learning: 0,
+      young: 0,
+      mature: 0,
+      total: 0,
+    },
+  },
+  decks: [],
+};
+
 export const useStats = () => {
   const [stats, setStats] = useState<AllStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,30 +95,50 @@ export const useStats = () => {
             fetch("/anki-data.json").catch(() => null),
           ]);
 
-        const statsData: Partial<AllStats> = {
+        // Initialize with default values to prevent undefined errors
+        const statsData: AllStats = {
+          wakatime: defaultWakatime,
+          strava: defaultStrava,
+          spotify: defaultSpotify,
+          leetcode: defaultLeetcode,
+          anki: defaultAnki,
           lastUpdated: new Date().toISOString(),
         };
 
-        // Parse successful responses
+        // Parse successful responses and merge with defaults
         if (wakatimeRes?.ok) {
-          statsData.wakatime = await wakatimeRes.json();
+          const wakatimeData = await wakatimeRes.json();
+          statsData.wakatime = { ...defaultWakatime, ...wakatimeData };
         }
         if (stravaRes?.ok) {
-          statsData.strava = await stravaRes.json();
+          const stravaData = await stravaRes.json();
+          statsData.strava = { ...defaultStrava, ...stravaData };
         }
         if (spotifyRes?.ok) {
-          statsData.spotify = await spotifyRes.json();
+          const spotifyData = await spotifyRes.json();
+          statsData.spotify = { ...defaultSpotify, ...spotifyData };
         }
         if (leetcodeRes?.ok) {
-          statsData.leetcode = await leetcodeRes.json();
+          const leetcodeData = await leetcodeRes.json();
+          statsData.leetcode = { ...defaultLeetcode, ...leetcodeData };
         }
         if (ankiRes?.ok) {
-          statsData.anki = await ankiRes.json();
+          const ankiData = await ankiRes.json();
+          statsData.anki = { ...defaultAnki, ...ankiData };
         }
 
-        setStats(statsData as AllStats);
+        setStats(statsData);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch stats");
+        // Even on error, provide default stats to prevent undefined errors
+        setStats({
+          wakatime: defaultWakatime,
+          strava: defaultStrava,
+          spotify: defaultSpotify,
+          leetcode: defaultLeetcode,
+          anki: defaultAnki,
+          lastUpdated: new Date().toISOString(),
+        });
       } finally {
         setLoading(false);
       }

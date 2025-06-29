@@ -3,681 +3,905 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  Activity,
-  Brain,
-  Code2,
-  Trophy,
-  Play,
-  TrendingUp,
-  Sparkles,
-  ChevronDown,
-  ChevronUp,
-  Cpu,
-  Database,
-  GitBranch,
-  ExternalLink,
-  AlertTriangle,
-  RefreshCw,
-  Target,
-  Headphones,
-  TrendingDown,
-  Pause,
-} from "lucide-react";
-import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart as RechartsPieChart,
+  PieChart,
   Pie,
   Cell,
+  LineChart,
+  Line,
+  Area,
+  AreaChart,
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
-  Tooltip,
 } from "recharts";
-
-// Types for our data structures
-interface WakaTimeData {
-  lastUpdated: string;
-  status: string;
-  today: {
-    codingMinutes: number;
-    primaryLanguage: string;
-    environment: {
-      editor: string;
-      os: string;
-    };
-  };
-  weeklyStats: {
-    totalHoursLast7Days: string;
-    activeDaysCount: number;
-    dailyAverageMinutes: number;
-    languages: {
-      primary: string;
-      secondary: string;
-      primaryPercentage: string;
-      secondaryPercentage: string;
-    };
-    consistency: string;
-  };
-}
-
-interface AnkiData {
-  lastUpdated: string;
-  overall: {
-    reviewsToday: number;
-    timeMinutesToday: number;
-    matureCardRetentionPercent: number;
-    currentStreakDays: number;
-    cardCounts: {
-      new: number;
-      learning: number;
-      young: number;
-      mature: number;
-      total: number;
-    };
-  };
-  decks: Array<{
-    deckName: string;
-    reviewsToday: number;
-    matureCards: number;
-    newCards: number;
-    totalCards: number;
-  }>;
-}
-
-interface SpotifyData {
-  isPlaying: boolean;
-  title: string;
-  artist: string;
-  album: string;
-  albumImageUrl: string;
-  songUrl: string;
-}
-
-interface LeetCodeData {
-  username: string;
-  totalSolved: number;
-  totalAvailable: number;
-  easySolved: number;
-  easyAvailable: number;
-  mediumSolved: number;
-  mediumAvailable: number;
-  hardSolved: number;
-  hardAvailable: number;
-}
-
-interface StravaData {
-  totalRuns: number;
-  totalDistanceKm: string;
-  recentRuns: Array<{
-    name: string;
-    distanceKm: string;
-    date: string;
-  }>;
-}
-
-interface StatsData {
-  wakatime?: WakaTimeData;
-  anki?: AnkiData;
-  spotify?: SpotifyData;
-  leetcode?: LeetCodeData;
-  strava?: StravaData;
-}
+import {
+  Code2,
+  Activity,
+  BookOpen,
+  Music,
+  Play,
+  Pause,
+  Calendar,
+  Clock,
+  Target,
+  TrendingUp,
+  Brain,
+  Zap,
+  Award,
+  BarChart3,
+  PieChart as PieChartIcon,
+  AlertCircle,
+  Loader2,
+  CheckCircle,
+  Flame,
+  Timer,
+  BookMarked,
+  GraduationCap,
+  Trophy,
+  Star,
+  Users,
+  RotateCcw,
+  Eye,
+  Layers,
+} from "lucide-react";
+import { useStats } from "../hooks/useStats";
+import StatCard from "./ui/StatCard";
+import type { AllStats } from "../types/stats";
 
 const StatsSection: React.FC = () => {
-  const [activeView, setActiveView] = useState("overview");
-  const [expandedCards, setExpandedCards] = useState(new Set<string>());
-  const [statsData, setStatsData] = useState<StatsData>({});
-  const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<string>("");
+  const { stats, loading, error } = useStats();
+  const [activeTab, setActiveTab] = useState("overview");
 
-  // Load data from JSON files
-  useEffect(() => {
-    const loadStats = async () => {
-      setLoading(true);
-      const data: StatsData = {};
+  const tabs = [
+    { id: "overview", label: "Overview", icon: BarChart3 },
+    { id: "coding", label: "Coding", icon: Code2 },
+    { id: "learning", label: "Learning", icon: BookOpen },
+  ];
 
-      try {
-        // Load WakaTime data
-        try {
-          const wakatimeRes = await fetch("/wakatime-data.json");
-          if (wakatimeRes.ok) {
-            data.wakatime = await wakatimeRes.json();
-          }
-        } catch (error) {
-          console.warn("Failed to load WakaTime data:", error);
-        }
-
-        // Load Anki data
-        try {
-          const ankiRes = await fetch("/anki-data.json");
-          if (ankiRes.ok) {
-            data.anki = await ankiRes.json();
-          }
-        } catch (error) {
-          console.warn("Failed to load Anki data:", error);
-        }
-
-        // Load Spotify data
-        try {
-          const spotifyRes = await fetch("/spotify-data.json");
-          if (spotifyRes.ok) {
-            data.spotify = await spotifyRes.json();
-          }
-        } catch (error) {
-          console.warn("Failed to load Spotify data:", error);
-        }
-
-        // Load LeetCode data
-        try {
-          const leetcodeRes = await fetch("/leetcode-data.json");
-          if (leetcodeRes.ok) {
-            data.leetcode = await leetcodeRes.json();
-          }
-        } catch (error) {
-          console.warn("Failed to load LeetCode data:", error);
-        }
-
-        // Load Strava data
-        try {
-          const stravaRes = await fetch("/strava-data.json");
-          if (stravaRes.ok) {
-            data.strava = await stravaRes.json();
-          }
-        } catch (error) {
-          console.warn("Failed to load Strava data:", error);
-        }
-
-        setStatsData(data);
-        setLastUpdated(new Date().toISOString());
-      } catch (error) {
-        console.error("Error loading stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadStats();
-    // Refresh every 5 minutes
-    const interval = setInterval(loadStats, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const toggleCard = (cardId: string) => {
-    const newExpanded = new Set(expandedCards);
-    if (newExpanded.has(cardId)) {
-      newExpanded.delete(cardId);
-    } else {
-      newExpanded.add(cardId);
-    }
-    setExpandedCards(newExpanded);
-  };
-
-  const formatHours = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const getDeckDisplayName = (deckName: string) => {
-    if (deckName.includes("Core")) return "Core 2k/6k Vocabulary";
-    if (deckName.includes("決まり文句")) return "Set Phrases";
-    if (deckName.includes("開始")) return "Kaishi 1.5k";
-    if (deckName.includes("都道府県")) return "Prefectures";
-    if (deckName.includes("Radicals")) return "Radicals";
-    return deckName.replace(/[⭐💬🔰🗾🧩]/g, "").trim();
-  };
-
-  // Generate synthetic data for charts based on real data
-  const generateChartData = () => {
-    const wakatime = statsData.wakatime;
-    const anki = statsData.anki;
-
-    // Generate last 7 days coding data
-    const codingData = [];
-    const today = new Date();
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const baseHours = wakatime
-        ? wakatime.weeklyStats.dailyAverageMinutes / 60
-        : 2;
-      const variation = (Math.random() - 0.5) * 2;
-      codingData.push({
-        date: date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        }),
-        hours: Math.max(0, baseHours + variation),
-        productivity: 85 + Math.random() * 15,
-      });
-    }
-
-    // Generate Anki review data
-    const ankiData: { day: string; reviews: number; accuracy: number }[] = [];
+  // Generate synthetic weekly data based on real patterns
+  const generateWeeklyData = (baseValue: number, variance: number = 0.3) => {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const baseReviews = anki ? anki.overall.reviewsToday : 50;
-    days.forEach((day) => {
-      const variation = (Math.random() - 0.5) * 40;
-      ankiData.push({
-        day,
-        reviews: Math.max(0, baseReviews + variation),
-        accuracy: 88 + Math.random() * 8,
-      });
-    });
-
-    // Generate language distribution data
-    const languageData = [];
-    if (wakatime) {
-      const primaryPerc = parseFloat(
-        wakatime.weeklyStats.languages.primaryPercentage,
-      );
-      const secondaryPerc = parseFloat(
-        wakatime.weeklyStats.languages.secondaryPercentage,
-      );
-      const remaining = 100 - primaryPerc - secondaryPerc;
-
-      languageData.push(
-        {
-          name: wakatime.weeklyStats.languages.primary,
-          value: primaryPerc,
-          color: "#3b82f6",
-        },
-        {
-          name: wakatime.weeklyStats.languages.secondary,
-          value: secondaryPerc,
-          color: "#8b5cf6",
-        },
-        { name: "Others", value: remaining, color: "#6b7280" },
-      );
-    }
-
-    return { codingData, ankiData, languageData };
+    return days.map((day, index) => ({
+      day,
+      value: Math.max(
+        0,
+        Math.round(
+          baseValue * (1 + (Math.random() - 0.5) * variance) * 
+          (index < 5 ? 1.2 : 0.8) // Weekdays higher than weekends
+        )
+      ),
+    }));
   };
 
-  const { codingData, ankiData, languageData } = generateChartData();
+  // Generate monthly trend data
+  const generateMonthlyTrend = (currentValue: number, months: number = 6) => {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    return monthNames.slice(-months).map((month, index) => ({
+      month,
+      value: Math.max(
+        0,
+        Math.round(currentValue * (0.7 + (index * 0.05) + Math.random() * 0.2))
+      ),
+    }));
+  };
 
-  // Error Card Component
-  const ErrorCard = ({
+  if (loading) {
+    return (
+      <section
+        id="stats"
+        className="relative min-h-screen bg-black p-4 sm:p-6 lg:p-8 flex items-center justify-center"
+      >
+        <div className="flex items-center space-x-3 text-white">
+          <Loader2 size={24} className="animate-spin text-accent-main" />
+          <span className="text-lg">Loading live stats...</span>
+        </div>
+      </section>
+    );
+  }
+
+  const ErrorCard: React.FC<{ title: string; message: string }> = ({
     title,
     message,
-  }: {
-    title: string;
-    message: string;
   }) => (
-    <div className="bento-item ease-snappy relative z-2 border border-red-500/20 bg-linear-to-br/oklch from-red-500/10 via-red-500/5 to-red-500/10 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
-      <div className="flex items-center mb-4">
-        <AlertTriangle size={20} className="text-red-400 mr-3" />
+    <div className="bento-item ease-snappy relative z-2 border border-red-500/20 bg-linear-to-br/oklch from-red-500/10 via-white/1 to-red-500/5 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+      <div className="flex items-center mb-3">
+        <AlertCircle size={20} className="text-red-400 mr-3" />
         <h3 className="text-lg font-bold text-white">{title}</h3>
       </div>
-      <p className="text-red-300 text-sm">{message}</p>
+      <p className="text-red-300/80 text-sm">{message}</p>
     </div>
   );
 
-  // Compact Stats Card Component
-  const CompactStatsCard = ({
-    icon: Icon,
-    title,
-    value,
-    subtitle,
-    color,
-    trend,
-    className = "",
-    isLoading = false,
-    hasError = false,
-  }: {
-    icon: React.ComponentType<{
-      size: number;
-      className?: string;
-      color?: string;
-    }>;
-    title: string;
-    value: string | number;
-    subtitle?: string;
-    color: string;
-    trend?: number;
-    className?: string;
-    isLoading?: boolean;
-    hasError?: boolean;
-  }) => (
-    <div
-      className={`bento-item ease-snappy relative z-2 border ${
-        hasError ? "border-red-500/20" : "border-white/8"
-      } bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
-    >
-      {/* Background Gradient */}
-      <div
-        className={`absolute inset-0 rounded-2xl lg:rounded-3xl opacity-30`}
-        style={{
-          background: hasError
-            ? "linear-gradient(135deg, #ef444420, #ef444410, transparent)"
-            : `linear-gradient(135deg, ${color}20, ${color}10, transparent)`,
-        }}
-      />
+  const renderOverviewTab = () => {
+    const codingData = stats?.wakatime
+      ? generateWeeklyData(stats.wakatime.today.codingMinutes || 60)
+      : [];
 
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div
-            className="p-3 rounded-xl backdrop-blur-[20px]"
-            style={{ background: hasError ? "#ef444420" : `${color}20` }}
-          >
-            {isLoading ? (
-              <RefreshCw size={20} className="animate-spin text-white/60" />
-            ) : hasError ? (
-              <AlertTriangle size={20} className="text-red-400" />
-            ) : (
-              <Icon size={20} color={hasError ? "#ef4444" : color} />
-            )}
-          </div>
-          {trend && !hasError && (
-            <div className="flex items-center text-accent-main text-xs font-semibold">
-              {trend > 0 ? (
-                <TrendingUp size={12} className="mr-1" />
-              ) : (
-                <TrendingDown size={12} className="mr-1" />
-              )}
-              {trend > 0 ? "+" : ""}
-              {trend}%
+    const languageData = stats?.wakatime
+      ? [
+          {
+            name: stats.wakatime.weeklyStats.languages.primary,
+            value: parseFloat(stats.wakatime.weeklyStats.languages.primaryPercentage),
+            color: "#00ff88",
+          },
+          {
+            name: stats.wakatime.weeklyStats.languages.secondary,
+            value: parseFloat(stats.wakatime.weeklyStats.languages.secondaryPercentage),
+            color: "#0088ff",
+          },
+          {
+            name: "Others",
+            value: 100 - parseFloat(stats.wakatime.weeklyStats.languages.primaryPercentage) - parseFloat(stats.wakatime.weeklyStats.languages.secondaryPercentage),
+            color: "#888888",
+          },
+        ]
+      : [];
+
+    const ankiWeeklyData = stats?.anki?.decks?.[2]?.weeklyActivity
+      ? stats.anki.decks[2].weeklyActivity.map((day) => ({
+          day: day.dayName.slice(0, 3),
+          reviews: day.reviewCount,
+          studied: day.studiedToday ? 1 : 0,
+        }))
+      : [];
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Coding Activity */}
+        <div className="lg:col-span-2">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 h-full">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                  <Activity size={20} className="text-accent-main" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Weekly Coding Activity</h3>
+              </div>
+              <div className="text-sm text-white/60">
+                {stats?.wakatime?.weeklyStats.totalHoursLast7Days || "0"}h total
+              </div>
             </div>
-          )}
-        </div>
 
-        <div className="mb-2">
-          <div className="text-2xl font-black text-white mb-1">
-            {isLoading ? "..." : hasError ? "N/A" : value}
-          </div>
-          <div className="text-white/60 text-sm">{title}</div>
-          {subtitle && !hasError && (
-            <div className="text-white/40 text-xs mt-1">{subtitle}</div>
-          )}
-          {hasError && (
-            <div className="text-red-400 text-xs mt-1">Data unavailable</div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
-  // Chart Card Component
-  const ChartCard = ({
-    title,
-    children,
-    className = "",
-    expandable = false,
-    cardId,
-    hasError = false,
-    errorMessage,
-  }: {
-    title: string;
-    children: React.ReactNode;
-    className?: string;
-    expandable?: boolean;
-    cardId?: string;
-    hasError?: boolean;
-    errorMessage?: string;
-  }) => (
-    <div
-      className={`bento-item ease-snappy relative z-2 border ${
-        hasError ? "border-red-500/20" : "border-white/8"
-      } bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 transition-all duration-400 hover:-translate-y-1 hover:border-white/14 ${className}`}
-    >
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-white flex items-center">
-            {hasError && (
-              <AlertTriangle size={16} className="text-red-400 mr-2" />
+            {codingData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={200}>
+                <AreaChart data={codingData}>
+                  <defs>
+                    <linearGradient id="codingGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#00ff88" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#00ff88" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                  <XAxis dataKey="day" stroke="#ffffff60" fontSize={12} />
+                  <YAxis stroke="#ffffff60" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1a1a1a",
+                      border: "1px solid #ffffff20",
+                      borderRadius: "8px",
+                      color: "#ffffff",
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#00ff88"
+                    fillOpacity={1}
+                    fill="url(#codingGradient)"
+                    strokeWidth={2}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-48 flex items-center justify-center text-white/40">
+                <AlertCircle size={24} className="mr-2" />
+                No coding data available
+              </div>
             )}
-            {title}
-          </h3>
-          {expandable && cardId && !hasError && (
-            <button
-              onClick={() => toggleCard(cardId)}
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              {expandedCards.has(cardId) ? (
-                <ChevronUp size={16} className="text-white/60" />
-              ) : (
-                <ChevronDown size={16} className="text-white/60" />
-              )}
-            </button>
-          )}
-        </div>
-        {hasError ? (
-          <div className="text-center py-8">
-            <AlertTriangle size={48} className="text-red-400 mx-auto mb-4" />
-            <p className="text-red-300 text-sm">{errorMessage}</p>
           </div>
-        ) : (
-          children
+        </div>
+
+        {/* Language Distribution */}
+        <div className="lg:col-span-2">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 h-full">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                <PieChartIcon size={20} className="text-accent-mid" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Language Distribution</h3>
+            </div>
+
+            {languageData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={200}>
+                <PieChart>
+                  <Pie
+                    data={languageData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {languageData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1a1a1a",
+                      border: "1px solid #ffffff20",
+                      borderRadius: "8px",
+                      color: "#ffffff",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-48 flex items-center justify-center text-white/40">
+                <AlertCircle size={24} className="mr-2" />
+                No language data available
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Stats Cards */}
+        <StatCard
+          title="Today's Code"
+          value={stats?.wakatime?.today.codingMinutes?.toString() || "0"}
+          unit="min"
+          icon={Code2}
+          gradient="from-green-500/20 to-emerald-500/20"
+          description={`Using ${stats?.wakatime?.today.environment.editor || "Unknown"} on ${stats?.wakatime?.today.environment.os || "Unknown"}`}
+        />
+
+        <StatCard
+          title="Study Streak"
+          value={stats?.anki?.overall.currentStreakDays?.toString() || "0"}
+          unit="days"
+          icon={Flame}
+          gradient="from-orange-500/20 to-red-500/20"
+          description="Current Anki study streak"
+        />
+
+        <StatCard
+          title="Problems Solved"
+          value={stats?.leetcode?.totalSolved?.toString() || "0"}
+          unit={`/${stats?.leetcode?.totalAvailable || "0"}`}
+          icon={Target}
+          gradient="from-blue-500/20 to-purple-500/20"
+          description="LeetCode progress"
+        />
+
+        <StatCard
+          title="Total Distance"
+          value={stats?.strava?.totalDistanceKm || "0"}
+          unit="km"
+          icon={Activity}
+          gradient="from-pink-500/20 to-rose-500/20"
+          description={`${stats?.strava?.totalRuns || 0} total runs`}
+        />
+
+        {/* Anki Weekly Activity */}
+        {ankiWeeklyData.length > 0 && (
+          <div className="lg:col-span-4">
+            <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+              <div className="flex items-center mb-4">
+                <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                  <BookOpen size={20} className="text-accent-light" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Weekly Study Activity</h3>
+              </div>
+
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={ankiWeeklyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                  <XAxis dataKey="day" stroke="#ffffff60" fontSize={12} />
+                  <YAxis stroke="#ffffff60" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1a1a1a",
+                      border: "1px solid #ffffff20",
+                      borderRadius: "8px",
+                      color: "#ffffff",
+                    }}
+                  />
+                  <Bar dataKey="reviews" fill="#00ff88" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Currently Playing */}
+        {stats?.spotify && (
+          <div className="lg:col-span-4">
+            <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                    <Music size={20} className="text-green-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">
+                      {stats.spotify.isPlaying ? "Now Playing" : "Last Played"}
+                    </h3>
+                    <p className="text-white/60 text-sm">
+                      {stats.spotify.title} • {stats.spotify.artist}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  {stats.spotify.isPlaying ? (
+                    <Play size={16} className="text-green-400 mr-2" />
+                  ) : (
+                    <Pause size={16} className="text-white/60 mr-2" />
+                  )}
+                  <img
+                    src={stats.spotify.albumImageUrl}
+                    alt={stats.spotify.album}
+                    className="w-12 h-12 rounded-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
-    </div>
-  );
+    );
+  };
 
-  // Performance Analytics Component
-  const PerformanceAnalytics = () => {
-    const wakatime = statsData.wakatime;
-    const anki = statsData.anki;
-    const leetcode = statsData.leetcode;
+  const renderCodingTab = () => {
+    const weeklyTrend = stats?.wakatime
+      ? generateMonthlyTrend(parseFloat(stats.wakatime.weeklyStats.totalHoursLast7Days))
+      : [];
 
-    if (!wakatime && !anki && !leetcode) {
+    const techStack = [
+      { name: "JavaScript", hours: 45, color: "#f7df1e" },
+      { name: "TypeScript", hours: 38, color: "#3178c6" },
+      { name: "React", hours: 32, color: "#61dafb" },
+      { name: "Python", hours: 28, color: "#3776ab" },
+      { name: "CSS", hours: 22, color: "#1572b6" },
+    ];
+
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Weekly Coding Trend */}
+        <div className="lg:col-span-2">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150 h-full">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                <TrendingUp size={20} className="text-accent-main" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Coding Trend (6 Months)</h3>
+            </div>
+
+            {weeklyTrend.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={weeklyTrend}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                  <XAxis dataKey="month" stroke="#ffffff60" fontSize={12} />
+                  <YAxis stroke="#ffffff60" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1a1a1a",
+                      border: "1px solid #ffffff20",
+                      borderRadius: "8px",
+                      color: "#ffffff",
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#00ff88"
+                    strokeWidth={3}
+                    dot={{ fill: "#00ff88", strokeWidth: 2, r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-72 flex items-center justify-center text-white/40">
+                <AlertCircle size={24} className="mr-2" />
+                No trend data available
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Current Stats */}
+        <div className="space-y-6">
+          <StatCard
+            title="This Week"
+            value={stats?.wakatime?.weeklyStats.totalHoursLast7Days || "0"}
+            unit="hours"
+            icon={Clock}
+            gradient="from-blue-500/20 to-cyan-500/20"
+            description={`${stats?.wakatime?.weeklyStats.activeDaysCount || 0} active days`}
+          />
+
+          <StatCard
+            title="Daily Average"
+            value={Math.round((stats?.wakatime?.weeklyStats.dailyAverageMinutes || 0) / 60).toString()}
+            unit="hours"
+            icon={Target}
+            gradient="from-purple-500/20 to-pink-500/20"
+            description="Average coding time per day"
+          />
+
+          <StatCard
+            title="Primary Language"
+            value={stats?.wakatime?.weeklyStats.languages.primary || "N/A"}
+            unit={`${stats?.wakatime?.weeklyStats.languages.primaryPercentage || "0"}%`}
+            icon={Code2}
+            gradient="from-green-500/20 to-emerald-500/20"
+            description="Most used language this week"
+            layout="wide"
+          />
+        </div>
+
+        {/* Technology Breakdown */}
+        <div className="lg:col-span-3">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center mb-6">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                <Zap size={20} className="text-yellow-400" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Technology Stack</h3>
+            </div>
+
+            <div className="space-y-4">
+              {techStack.map((tech, index) => (
+                <div key={tech.name} className="flex items-center">
+                  <div className="w-20 text-sm text-white/80 font-medium">
+                    {tech.name}
+                  </div>
+                  <div className="flex-1 mx-4">
+                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{
+                          backgroundColor: tech.color,
+                          width: `${(tech.hours / 50) * 100}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-12 text-sm text-white/60 text-right">
+                    {tech.hours}h
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Environment Details */}
+        <div className="lg:col-span-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <StatCard
+              title="Editor"
+              value={stats?.wakatime?.today.environment.editor || "Unknown"}
+              icon={Code2}
+              gradient="from-indigo-500/20 to-blue-500/20"
+              description="Primary development environment"
+              layout="wide"
+            />
+
+            <StatCard
+              title="Operating System"
+              value={stats?.wakatime?.today.environment.os || "Unknown"}
+              icon={Activity}
+              gradient="from-gray-500/20 to-slate-500/20"
+              description="Development platform"
+              layout="wide"
+            />
+
+            <StatCard
+              title="Consistency"
+              value={stats?.wakatime?.weeklyStats.consistency || "Unknown"}
+              icon={Award}
+              gradient="from-yellow-500/20 to-orange-500/20"
+              description="Coding consistency rating"
+              layout="wide"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderLearningTab = () => {
+    if (!stats?.anki) {
       return (
-        <ErrorCard
-          title="Performance Analytics"
-          message="Insufficient data for performance analysis. Need WakaTime, Anki, or LeetCode data."
-        />
+        <div className="flex items-center justify-center h-64">
+          <ErrorCard
+            title="Anki Data Unavailable"
+            message="Unable to load Anki learning statistics. Please check your data source."
+          />
+        </div>
       );
     }
 
-    // Calculate effectiveness scores
-    const codingScore = wakatime
-      ? Math.min(100, (wakatime.today.codingMinutes / 300) * 100)
-      : 0;
-    const learningScore = anki
-      ? Math.min(100, (anki.overall.reviewsToday / 100) * 100)
-      : 0;
-    const problemSolvingScore = leetcode
-      ? Math.min(100, (leetcode.totalSolved / 500) * 100)
-      : 0;
-    const consistencyScore = wakatime
-      ? (wakatime.weeklyStats.activeDaysCount / 7) * 100
-      : 0;
+    const ankiData = stats.anki;
 
-    const overallScore = Math.round(
-      (codingScore + learningScore + problemSolvingScore + consistencyScore) /
-        4,
-    );
+    // Deck performance data
+    const deckPerformanceData = ankiData.decks.map((deck) => ({
+      name: deck.deckName.replace(/[🔰⭐💬🗾🧩]/g, '').trim(),
+      reviews: deck.reviewsToday,
+      retention: deck.retention30Days || 0,
+      totalCards: deck.cardTypes.total,
+      newCards: deck.cardTypes.new.count,
+      matureCards: deck.cardTypes.mature.count,
+      youngCards: deck.cardTypes.young.count,
+      learningCards: deck.cardTypes.learning.count,
+    }));
 
-    const performanceData = [
-      { subject: "Coding", A: codingScore, fullMark: 100 },
-      { subject: "Learning", A: learningScore, fullMark: 100 },
-      { subject: "Problem Solving", A: problemSolvingScore, fullMark: 100 },
-      { subject: "Consistency", A: consistencyScore, fullMark: 100 },
-    ];
+    // Weekly activity data from the most active deck
+    const mostActiveDeck = ankiData.decks.find(deck => deck.reviewsToday > 0) || ankiData.decks[2];
+    const weeklyActivityData = mostActiveDeck?.weeklyActivity.map((day) => ({
+      day: day.dayName.slice(0, 3),
+      reviews: day.reviewCount,
+      studied: day.studiedToday ? 1 : 0,
+    })) || [];
 
-    const correlationData = [
-      { activity: "Coding vs Learning", correlation: 0.78, strength: "Strong" },
+    // Card distribution data
+    const cardDistributionData = [
       {
-        activity: "Learning vs Retention",
-        correlation: 0.85,
-        strength: "Very Strong",
+        name: 'New',
+        value: ankiData.cardDistribution.new.count,
+        percentage: ankiData.cardDistribution.new.percentage,
+        color: '#3b82f6',
       },
       {
-        activity: "Consistency vs Performance",
-        correlation: 0.72,
-        strength: "Strong",
+        name: 'Learning',
+        value: ankiData.cardDistribution.learning.count,
+        percentage: ankiData.cardDistribution.learning.percentage,
+        color: '#f59e0b',
       },
       {
-        activity: "Focus vs Productivity",
-        correlation: 0.68,
-        strength: "Moderate",
+        name: 'Young',
+        value: ankiData.cardDistribution.young.count,
+        percentage: ankiData.cardDistribution.young.percentage,
+        color: '#10b981',
+      },
+      {
+        name: 'Mature',
+        value: ankiData.cardDistribution.mature.count,
+        percentage: ankiData.cardDistribution.mature.percentage,
+        color: '#8b5cf6',
+      },
+      {
+        name: 'Relearning',
+        value: ankiData.cardDistribution.relearning.count,
+        percentage: ankiData.cardDistribution.relearning.percentage,
+        color: '#ef4444',
+      },
+    ].filter(item => item.value > 0);
+
+    // Retention performance radar data
+    const retentionData = [
+      {
+        subject: 'Recent 30 Days',
+        value: ankiData.retention.recent30Days,
+        fullMark: 100,
+      },
+      {
+        subject: 'Mature Cards',
+        value: ankiData.retention.matureCards,
+        fullMark: 100,
+      },
+      {
+        subject: 'Young Cards',
+        value: ankiData.retention.youngCards,
+        fullMark: 100,
+      },
+      {
+        subject: 'Efficiency',
+        value: Math.min(100, (60 / (ankiData.efficiency.avgSecondsPerCard || 60)) * 100),
+        fullMark: 100,
+      },
+      {
+        subject: 'Consistency',
+        value: (ankiData.averages.last30Days.activeDays / 30) * 100,
+        fullMark: 100,
       },
     ];
 
     return (
       <div className="space-y-8">
-        {/* Overall Performance Score */}
+        {/* Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-2">
-            <ChartCard title="Performance Radar">
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart data={performanceData}>
-                    <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                    <PolarAngleAxis
-                      dataKey="subject"
-                      tick={{ fill: "rgba(255,255,255,0.8)", fontSize: 12 }}
-                    />
-                    <PolarRadiusAxis
-                      angle={90}
-                      domain={[0, 100]}
-                      tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 10 }}
-                    />
-                    <Radar
-                      name="Performance"
-                      dataKey="A"
-                      stroke="#3b82f6"
-                      fill="#3b82f6"
-                      fillOpacity={0.3}
-                      strokeWidth={2}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
+          <StatCard
+            title="Today's Reviews"
+            value={ankiData.today.reviewsCompleted.toString()}
+            unit="cards"
+            icon={BookOpen}
+            gradient="from-blue-500/20 to-cyan-500/20"
+            description={`${ankiData.today.studyTimeMinutes} minutes studied`}
+          />
+
+          <StatCard
+            title="Current Streak"
+            value={ankiData.streaks.current.toString()}
+            unit="days"
+            icon={Flame}
+            gradient="from-orange-500/20 to-red-500/20"
+            description={`Longest: ${ankiData.streaks.longest} days`}
+          />
+
+          <StatCard
+            title="Cards Due"
+            value={ankiData.today.cardsDue.toString()}
+            unit="cards"
+            icon={Timer}
+            gradient="from-yellow-500/20 to-orange-500/20"
+            description={`~${Math.round(ankiData.today.estimatedTimeRemaining)} min remaining`}
+          />
+
+          <StatCard
+            title="Total Cards"
+            value={ankiData.cardDistribution.total.toString()}
+            unit="cards"
+            icon={Layers}
+            gradient="from-purple-500/20 to-pink-500/20"
+            description="Across all decks"
+          />
+        </div>
+
+        {/* Weekly Activity Chart */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                  <Calendar size={20} className="text-accent-main" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Weekly Study Pattern</h3>
               </div>
-            </ChartCard>
+              <div className="text-sm text-white/60">
+                {mostActiveDeck?.deckName.replace(/[🔰⭐💬🗾🧩]/g, '').trim()}
+              </div>
+            </div>
+
+            {weeklyActivityData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={weeklyActivityData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                  <XAxis dataKey="day" stroke="#ffffff60" fontSize={12} />
+                  <YAxis stroke="#ffffff60" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1a1a1a",
+                      border: "1px solid #ffffff20",
+                      borderRadius: "8px",
+                      color: "#ffffff",
+                    }}
+                  />
+                  <Bar dataKey="reviews" fill="#00ff88" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-64 flex items-center justify-center text-white/40">
+                <AlertCircle size={24} className="mr-2" />
+                No weekly activity data
+              </div>
+            )}
           </div>
 
-          <div className="lg:col-span-2 space-y-6">
-            <CompactStatsCard
-              icon={Target}
-              title="Overall Effectiveness"
-              value={`${overallScore}%`}
-              subtitle="Multi-dimensional performance score"
-              color="#3b82f6"
-              trend={overallScore > 75 ? 8 : overallScore > 50 ? 3 : -2}
-            />
+          {/* Card Distribution */}
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                <PieChartIcon size={20} className="text-accent-mid" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Card Distribution</h3>
+            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <CompactStatsCard
-                icon={Code2}
-                title="Coding Focus"
-                value={`${Math.round(codingScore)}%`}
-                color="#8b5cf6"
-                className="text-center"
-              />
-              <CompactStatsCard
-                icon={Brain}
-                title="Learning Rate"
-                value={`${Math.round(learningScore)}%`}
-                color="#10b981"
-                className="text-center"
-              />
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={cardDistributionData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={80}
+                  paddingAngle={2}
+                  dataKey="value"
+                >
+                  {cardDistributionData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1a1a1a",
+                    border: "1px solid #ffffff20",
+                    borderRadius: "8px",
+                    color: "#ffffff",
+                  }}
+                  formatter={(value, name) => [
+                    `${value} cards (${cardDistributionData.find(d => d.name === name)?.percentage.toFixed(1)}%)`,
+                    name
+                  ]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+
+            <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+              {cardDistributionData.map((item) => (
+                <div key={item.name} className="flex items-center">
+                  <div
+                    className="w-3 h-3 rounded-full mr-2"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="text-white/70">
+                    {item.name}: {item.percentage.toFixed(1)}%
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Correlation Analysis */}
-        <ChartCard title="Activity Correlation Analysis">
+        {/* Retention Performance Radar */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+                <Target size={20} className="text-accent-light" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Performance Radar</h3>
+            </div>
+
+            <ResponsiveContainer width="100%" height={250}>
+              <RadarChart data={retentionData}>
+                <PolarGrid stroke="#ffffff20" />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: '#ffffff80', fontSize: 11 }} />
+                <PolarRadiusAxis
+                  angle={90}
+                  domain={[0, 100]}
+                  tick={{ fill: '#ffffff60', fontSize: 10 }}
+                />
+                <Radar
+                  name="Performance"
+                  dataKey="value"
+                  stroke="#00ff88"
+                  fill="#00ff88"
+                  fillOpacity={0.2}
+                  strokeWidth={2}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1a1a1a",
+                    border: "1px solid #ffffff20",
+                    borderRadius: "8px",
+                    color: "#ffffff",
+                  }}
+                  formatter={(value) => [`${value.toFixed(1)}%`, 'Score']}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Detailed Metrics */}
           <div className="space-y-4">
-            {correlationData.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10"
-              >
+            <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-green-500/10 via-white/1 to-green-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full mr-3 bg-blue-500" />
-                  <span className="text-white font-medium">
-                    {item.activity}
-                  </span>
+                  <CheckCircle size={16} className="text-green-400 mr-2" />
+                  <span className="text-sm font-medium text-white">Retention Rate</span>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <div className="text-white font-bold">
-                      {(item.correlation * 100).toFixed(0)}%
-                    </div>
-                    <div className="text-white/60 text-xs">{item.strength}</div>
-                  </div>
-                  <div className="w-24 bg-white/10 rounded-full h-2">
-                    <div
-                      className="h-2 rounded-full bg-blue-500"
-                      style={{ width: `${item.correlation * 100}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </ChartCard>
-
-        {/* Recommendations */}
-        <ChartCard title="AI-Powered Recommendations">
-          <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
-              <div className="flex items-center mb-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 mr-2" />
-                <span className="text-green-400 font-semibold text-sm">
-                  HIGH PRIORITY
+                <span className="text-lg font-bold text-green-400">
+                  {ankiData.retention.recent30Days.toFixed(1)}%
                 </span>
               </div>
-              <h4 className="text-white font-bold mb-1">
-                Increase Daily Coding Time
-              </h4>
-              <p className="text-white/70 text-sm">
-                Target 4-6 hours daily for +15% productivity boost in 2 weeks
-              </p>
+              <div className="text-xs text-white/60 mt-1">
+                Last 30 days • {ankiData.retention.totalReviews.recent30Days} reviews
+              </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-              <div className="flex items-center mb-2">
-                <div className="w-2 h-2 rounded-full bg-yellow-500 mr-2" />
-                <span className="text-yellow-400 font-semibold text-sm">
-                  MEDIUM PRIORITY
+            <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-blue-500/10 via-white/1 to-blue-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Clock size={16} className="text-blue-400 mr-2" />
+                  <span className="text-sm font-medium text-white">Avg. Time/Card</span>
+                </div>
+                <span className="text-lg font-bold text-blue-400">
+                  {ankiData.efficiency.avgSecondsPerCard.toFixed(1)}s
                 </span>
               </div>
-              <h4 className="text-white font-bold mb-1">
-                Maintain Learning Consistency
-              </h4>
-              <p className="text-white/70 text-sm">
-                Keep 90%+ retention rate for optimal knowledge consolidation
-              </p>
+              <div className="text-xs text-white/60 mt-1">
+                Based on {ankiData.efficiency.totalRecentReviews} recent reviews
+              </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
-              <div className="flex items-center mb-2">
-                <div className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-                <span className="text-blue-400 font-semibold text-sm">
-                  OPTIMIZATION
+            <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-purple-500/10 via-white/1 to-purple-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <TrendingUp size={16} className="text-purple-400 mr-2" />
+                  <span className="text-sm font-medium text-white">Daily Average</span>
+                </div>
+                <span className="text-lg font-bold text-purple-400">
+                  {ankiData.averages.last30Days.cardsPerDay.toFixed(0)}
                 </span>
               </div>
-              <h4 className="text-white font-bold mb-1">
-                Focus on Primary Language
-              </h4>
-              <p className="text-white/70 text-sm">
-                Spend 60%+ time on{" "}
-                {statsData.wakatime?.weeklyStats.languages.primary ||
-                  "main language"}{" "}
-                for deeper expertise
-              </p>
+              <div className="text-xs text-white/60 mt-1">
+                Cards per day • {ankiData.averages.last30Days.minutesPerDay.toFixed(0)} min/day
+              </div>
+            </div>
+
+            <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-orange-500/10 via-white/1 to-orange-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Users size={16} className="text-orange-400 mr-2" />
+                  <span className="text-sm font-medium text-white">Active Days</span>
+                </div>
+                <span className="text-lg font-bold text-orange-400">
+                  {ankiData.averages.last30Days.activeDays}/30
+                </span>
+              </div>
+              <div className="text-xs text-white/60 mt-1">
+                {((ankiData.averages.last30Days.activeDays / 30) * 100).toFixed(0)}% consistency
+              </div>
             </div>
           </div>
-        </ChartCard>
+        </div>
+
+        {/* Deck Performance Breakdown */}
+        <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl lg:rounded-3xl p-6 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="flex items-center mb-6">
+            <div className="p-2 rounded-lg bg-white/10 backdrop-blur-[20px] mr-3">
+              <BookMarked size={20} className="text-accent-main" />
+            </div>
+            <h3 className="text-lg font-bold text-white">Deck Performance</h3>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-3 px-2 text-white/80 font-medium">Deck</th>
+                  <th className="text-right py-3 px-2 text-white/80 font-medium">Today</th>
+                  <th className="text-right py-3 px-2 text-white/80 font-medium">Total</th>
+                  <th className="text-right py-3 px-2 text-white/80 font-medium">New</th>
+                  <th className="text-right py-3 px-2 text-white/80 font-medium">Mature</th>
+                  <th className="text-right py-3 px-2 text-white/80 font-medium">Retention</th>
+                </tr>
+              </thead>
+              <tbody>
+                {deckPerformanceData.map((deck, index) => (
+                  <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td className="py-3 px-2">
+                      <div className="flex items-center">
+                        <div className="w-2 h-2 rounded-full bg-accent-main mr-3" />
+                        <span className="text-white font-medium">{deck.name}</span>
+                      </div>
+                    </td>
+                    <td className="text-right py-3 px-2 text-white/80">{deck.reviews}</td>
+                    <td className="text-right py-3 px-2 text-white/80">{deck.totalCards.toLocaleString()}</td>
+                    <td className="text-right py-3 px-2 text-blue-400">{deck.newCards.toLocaleString()}</td>
+                    <td className="text-right py-3 px-2 text-purple-400">{deck.matureCards.toLocaleString()}</td>
+                    <td className="text-right py-3 px-2">
+                      <span className={`font-medium ${deck.retention > 80 ? 'text-green-400' : deck.retention > 60 ? 'text-yellow-400' : 'text-red-400'}`}>
+                        {deck.retention > 0 ? `${deck.retention.toFixed(1)}%` : 'N/A'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   };
@@ -694,977 +918,60 @@ const StatsSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
-            Live Dashboard
+            Live Stats
           </h2>
-          <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
-            Real-time insights into development, learning, and creative pursuits
+          <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-8">
+            Real-time insights into my coding, learning, and productivity
           </p>
 
-          {/* Status Indicator */}
-          <div className="inline-flex items-center px-6 py-3 rounded-full border border-accent-main/20 bg-accent-main/5 backdrop-blur-[40px] mb-8">
-            <Sparkles size={16} className="text-accent-main mr-2" />
-            <span className="text-sm font-semibold text-accent-main">
-              Live Analytics Dashboard
-            </span>
-            <span className="ml-3 text-xs text-white/50">•</span>
-            <span className="ml-3 text-xs text-white/70">
-              Last updated:{" "}
-              {lastUpdated
-                ? new Date(lastUpdated).toLocaleTimeString()
-                : "Loading..."}
+          {/* Last Updated */}
+          <div className="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-[40px]">
+            <Clock size={14} className="mr-2 text-accent-main" />
+            <span className="text-sm text-white/70">
+              Last updated: {stats?.wakatime?.lastUpdated ? new Date(stats.wakatime.lastUpdated).toLocaleString() : 'Unknown'}
             </span>
           </div>
+        </div>
 
-          {/* Navigation */}
-          <div className="flex justify-center mb-12">
-            <div className="flex rounded-2xl p-2 bg-white/5 border border-white/10 backdrop-blur-xl">
-              {["overview", "coding", "learning", "performance"].map((view) => (
+        {/* Tab Navigation */}
+        <div className="flex justify-center mb-8">
+          <div className="flex space-x-1 p-1 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-[40px]">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
                 <button
-                  key={view}
-                  onClick={() => setActiveView(view)}
-                  className={`px-6 py-3 rounded-xl font-semibold capitalize transition-all duration-300 ${
-                    activeView === view
-                      ? "bg-accent-main text-black"
-                      : "text-white/60 hover:text-white hover:bg-white/10"
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`ease-snappy flex items-center px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-400 ${
+                    activeTab === tab.id
+                      ? "bg-white/15 text-white inset-shadow-[0_1px_1px_rgba(255,255,255,0.15)] shadow-[0_4px_12px_rgba(0,255,136,0.15)]"
+                      : "text-white/70 hover:text-white hover:bg-white/8"
                   }`}
                 >
-                  {view}
+                  <Icon size={16} className="mr-2" />
+                  {tab.label}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
 
-        {loading && (
-          <div className="text-center py-16">
-            <RefreshCw
-              size={48}
-              className="text-accent-main mx-auto mb-4 animate-spin"
+        {/* Tab Content */}
+        <div className="min-h-[600px]">
+          {activeTab === "overview" && renderOverviewTab()}
+          {activeTab === "coding" && renderCodingTab()}
+          {activeTab === "learning" && renderLearningTab()}
+        </div>
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-8">
+            <ErrorCard
+              title="Failed to Load Stats"
+              message={error}
             />
-            <h3 className="text-xl font-semibold text-white/60 mb-2">
-              Loading Stats...
-            </h3>
-            <p className="text-white/40">Fetching data from all platforms</p>
           </div>
         )}
-
-        {!loading && activeView === "overview" && (
-          <div className="space-y-8">
-            {/* Hero Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <CompactStatsCard
-                icon={Code2}
-                title="Coding Today"
-                value={
-                  statsData.wakatime
-                    ? formatHours(statsData.wakatime.today.codingMinutes)
-                    : "N/A"
-                }
-                subtitle={
-                  statsData.wakatime
-                    ? `${statsData.wakatime.today.primaryLanguage} focus`
-                    : undefined
-                }
-                color="#3b82f6"
-                trend={statsData.wakatime ? 12 : undefined}
-                isLoading={loading}
-                hasError={!statsData.wakatime}
-              />
-
-              <CompactStatsCard
-                icon={Brain}
-                title="Study Cards"
-                value={
-                  statsData.anki ? statsData.anki.overall.reviewsToday : "N/A"
-                }
-                subtitle={
-                  statsData.anki
-                    ? `${statsData.anki.overall.matureCardRetentionPercent}% retention`
-                    : undefined
-                }
-                color="#8b5cf6"
-                trend={statsData.anki ? 8 : undefined}
-                isLoading={loading}
-                hasError={!statsData.anki}
-              />
-
-              <CompactStatsCard
-                icon={Trophy}
-                title="Problems Solved"
-                value={
-                  statsData.leetcode ? statsData.leetcode.totalSolved : "N/A"
-                }
-                subtitle="LeetCode progress"
-                color="#f59e0b"
-                trend={statsData.leetcode ? 15 : undefined}
-                isLoading={loading}
-                hasError={!statsData.leetcode}
-              />
-
-              <CompactStatsCard
-                icon={Activity}
-                title="Running Distance"
-                value={
-                  statsData.strava
-                    ? `${statsData.strava.totalDistanceKm}km`
-                    : "N/A"
-                }
-                subtitle="Total distance"
-                color="#ef4444"
-                trend={statsData.strava ? 6 : undefined}
-                isLoading={loading}
-                hasError={!statsData.strava}
-              />
-            </div>
-
-            {/* Main Dashboard Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Coding Activity - Large */}
-              <div className="lg:col-span-8">
-                <ChartCard
-                  title="Coding Activity & Productivity"
-                  expandable
-                  cardId="coding"
-                  hasError={!statsData.wakatime}
-                  errorMessage="WakaTime data not available. Please check your API connection."
-                >
-                  {statsData.wakatime && (
-                    <div className="space-y-6">
-                      <div className="h-48">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={codingData}>
-                            <defs>
-                              <linearGradient
-                                id="codingGradient"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1"
-                              >
-                                <stop
-                                  offset="5%"
-                                  stopColor="#3b82f6"
-                                  stopOpacity={0.8}
-                                />
-                                <stop
-                                  offset="95%"
-                                  stopColor="#3b82f6"
-                                  stopOpacity={0.1}
-                                />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="date"
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <YAxis
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "rgba(0,0,0,0.8)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                borderRadius: "8px",
-                                color: "white",
-                              }}
-                            />
-                            <Area
-                              type="monotone"
-                              dataKey="hours"
-                              stroke="#3b82f6"
-                              fillOpacity={1}
-                              fill="url(#codingGradient)"
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
-
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.wakatime.weeklyStats.totalHoursLast7Days}
-                            h
-                          </div>
-                          <div className="text-white/60 text-xs">This Week</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.wakatime.weeklyStats.activeDaysCount}
-                          </div>
-                          <div className="text-white/60 text-xs">
-                            Active Days
-                          </div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.wakatime.today.environment.editor}
-                          </div>
-                          <div className="text-white/60 text-xs">Editor</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg border border-white/10 bg-white/5">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.wakatime.weeklyStats.consistency}
-                          </div>
-                          <div className="text-white/60 text-xs">
-                            Consistency
-                          </div>
-                        </div>
-                      </div>
-
-                      {expandedCards.has("coding") &&
-                        languageData.length > 0 && (
-                          <div className="pt-6 border-t border-white/10">
-                            <h4 className="text-white font-semibold mb-4">
-                              Language Distribution
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="h-32">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <RechartsPieChart>
-                                    <Pie
-                                      data={languageData}
-                                      cx="50%"
-                                      cy="50%"
-                                      innerRadius={30}
-                                      outerRadius={50}
-                                      paddingAngle={5}
-                                      dataKey="value"
-                                    >
-                                      {languageData.map((entry, index) => (
-                                        <Cell
-                                          key={`cell-${index}`}
-                                          fill={entry.color}
-                                        />
-                                      ))}
-                                    </Pie>
-                                    <Tooltip
-                                      contentStyle={{
-                                        backgroundColor: "rgba(0,0,0,0.8)",
-                                        border:
-                                          "1px solid rgba(255,255,255,0.1)",
-                                        borderRadius: "8px",
-                                        color: "white",
-                                      }}
-                                    />
-                                  </RechartsPieChart>
-                                </ResponsiveContainer>
-                              </div>
-                              <div className="space-y-3">
-                                {languageData.map((lang) => (
-                                  <div
-                                    key={lang.name}
-                                    className="flex items-center justify-between"
-                                  >
-                                    <div className="flex items-center">
-                                      <div
-                                        className="w-3 h-3 rounded-full mr-3"
-                                        style={{ backgroundColor: lang.color }}
-                                      />
-                                      <span className="text-white/80">
-                                        {lang.name}
-                                      </span>
-                                    </div>
-                                    <span className="text-white/60 text-sm">
-                                      {lang.value.toFixed(1)}%
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  )}
-                </ChartCard>
-              </div>
-
-              {/* Live Music */}
-              <div className="lg:col-span-4">
-                <ChartCard
-                  title="Currently Playing"
-                  hasError={!statsData.spotify}
-                  errorMessage="Spotify data not available."
-                >
-                  {statsData.spotify && (
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="relative">
-                          <img
-                            src={statsData.spotify.albumImageUrl}
-                            alt={statsData.spotify.album}
-                            className="w-16 h-16 rounded-xl shadow-lg"
-                          />
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-gray-500 rounded-full flex items-center justify-center">
-                            {statsData.spotify.isPlaying ? (
-                              <Play
-                                size={10}
-                                className="text-white fill-white ml-0.5"
-                              />
-                            ) : (
-                              <Pause
-                                size={10}
-                                className="text-white fill-white"
-                              />
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-bold text-sm leading-tight mb-1 line-clamp-2">
-                            {statsData.spotify.title}
-                          </h4>
-                          <p className="text-white/70 text-xs mb-2 line-clamp-1">
-                            {statsData.spotify.artist}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center text-gray-400 text-xs">
-                              <div
-                                className={`w-2 h-2 rounded-full mr-2 ${
-                                  statsData.spotify.isPlaying
-                                    ? "bg-emerald-400 animate-pulse"
-                                    : "bg-gray-400"
-                                }`}
-                              />
-                              {statsData.spotify.isPlaying
-                                ? "Playing"
-                                : "Paused"}
-                            </div>
-                            <a
-                              href={statsData.spotify.songUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center text-emerald-400 hover:text-white transition-colors text-xs"
-                            >
-                              <ExternalLink size={10} className="mr-1" />
-                              Spotify
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="pt-4 border-t border-white/10">
-                        <div className="flex items-center text-white/60 text-sm">
-                          <Headphones size={14} className="mr-2" />
-                          <span className="line-clamp-1">
-                            {statsData.spotify.album}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </ChartCard>
-              </div>
-
-              {/* Anki Learning Progress */}
-              <div className="lg:col-span-6">
-                <ChartCard
-                  title="Japanese Study Progress"
-                  expandable
-                  cardId="anki"
-                  hasError={!statsData.anki}
-                  errorMessage="Anki data not available. Please check your API connection."
-                >
-                  {statsData.anki && (
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                          <div className="text-xl font-black text-white mb-1">
-                            {statsData.anki.overall.reviewsToday}
-                          </div>
-                          <div className="text-purple-400 text-xs font-semibold">
-                            Reviews Today
-                          </div>
-                        </div>
-                        <div className="text-center p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30">
-                          <div className="text-xl font-black text-white mb-1">
-                            {statsData.anki.overall.matureCardRetentionPercent}%
-                          </div>
-                          <div className="text-emerald-400 text-xs font-semibold">
-                            Retention Rate
-                          </div>
-                        </div>
-                        <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
-                          <div className="text-xl font-black text-white mb-1">
-                            {statsData.anki.overall.currentStreakDays}
-                          </div>
-                          <div className="text-orange-400 text-xs font-semibold">
-                            Day Streak
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="h-32">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={ankiData}>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="rgba(255,255,255,0.1)"
-                            />
-                            <XAxis
-                              dataKey="day"
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <YAxis
-                              stroke="rgba(255,255,255,0.6)"
-                              fontSize={12}
-                            />
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "rgba(0,0,0,0.8)",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                borderRadius: "8px",
-                                color: "white",
-                              }}
-                            />
-                            <Bar
-                              dataKey="reviews"
-                              fill="#8b5cf6"
-                              radius={[4, 4, 0, 0]}
-                            />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-
-                      {expandedCards.has("anki") && (
-                        <div className="pt-6 border-t border-white/10">
-                          <h4 className="text-white font-semibold mb-4">
-                            Deck Performance
-                          </h4>
-                          <div className="space-y-3">
-                            {statsData.anki.decks.slice(0, 3).map((deck) => (
-                              <div
-                                key={deck.deckName}
-                                className="p-3 rounded-lg bg-white/5 border border-white/10"
-                              >
-                                <div className="text-white font-medium text-sm mb-1">
-                                  {getDeckDisplayName(deck.deckName)}
-                                </div>
-                                <div className="flex justify-between text-xs text-white/60">
-                                  <span>{deck.reviewsToday} reviews</span>
-                                  <span>{deck.matureCards} mature</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </ChartCard>
-              </div>
-
-              {/* LeetCode & Problem Solving */}
-              <div className="lg:col-span-6">
-                <ChartCard
-                  title="Problem Solving Journey"
-                  expandable
-                  cardId="leetcode"
-                  hasError={!statsData.leetcode}
-                  errorMessage="LeetCode data not available."
-                >
-                  {statsData.leetcode && (
-                    <div className="space-y-6">
-                      <div className="flex justify-center">
-                        <div className="relative w-32 h-32">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <RechartsPieChart>
-                              <Pie
-                                data={[
-                                  {
-                                    name: "Easy",
-                                    value: statsData.leetcode.easySolved,
-                                    fill: "#10b981",
-                                  },
-                                  {
-                                    name: "Medium",
-                                    value: statsData.leetcode.mediumSolved,
-                                    fill: "#f59e0b",
-                                  },
-                                  {
-                                    name: "Hard",
-                                    value: statsData.leetcode.hardSolved,
-                                    fill: "#ef4444",
-                                  },
-                                ]}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={40}
-                                outerRadius={60}
-                                paddingAngle={5}
-                                dataKey="value"
-                              >
-                                {[
-                                  { fill: "#10b981" },
-                                  { fill: "#f59e0b" },
-                                  { fill: "#ef4444" },
-                                ].map((entry, index) => (
-                                  <Cell
-                                    key={`cell-${index}`}
-                                    fill={entry.fill}
-                                  />
-                                ))}
-                              </Pie>
-                              <Tooltip
-                                contentStyle={{
-                                  backgroundColor: "rgba(0,0,0,0.8)",
-                                  border: "1px solid rgba(255,255,255,0.1)",
-                                  borderRadius: "8px",
-                                  color: "white",
-                                }}
-                              />
-                            </RechartsPieChart>
-                          </ResponsiveContainer>
-
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-2xl font-black text-white">
-                                {statsData.leetcode.totalSolved}
-                              </div>
-                              <div className="text-white/60 text-xs">
-                                Solved
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.leetcode.easySolved}
-                          </div>
-                          <div className="text-emerald-400 text-xs">Easy</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-amber-500/20 border border-amber-500/30">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.leetcode.mediumSolved}
-                          </div>
-                          <div className="text-amber-400 text-xs">Medium</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-                          <div className="text-lg font-bold text-white">
-                            {statsData.leetcode.hardSolved}
-                          </div>
-                          <div className="text-red-400 text-xs">Hard</div>
-                        </div>
-                      </div>
-
-                      <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                        <div className="text-sm text-white/70">
-                          Progress: {statsData.leetcode.totalSolved} /{" "}
-                          {statsData.leetcode.totalAvailable} problems
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2 mt-2">
-                          <div
-                            className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-blue-500"
-                            style={{
-                              width: `${(statsData.leetcode.totalSolved / statsData.leetcode.totalAvailable) * 100}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </ChartCard>
-              </div>
-
-              {/* Strava Running */}
-              <div className="lg:col-span-12">
-                <ChartCard
-                  title="Fitness Journey"
-                  expandable
-                  cardId="strava"
-                  hasError={!statsData.strava}
-                  errorMessage="Strava data not available."
-                >
-                  {statsData.strava && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                      <div className="lg:col-span-2">
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                          <div className="text-center p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-                            <div className="text-lg font-bold text-white">
-                              {statsData.strava.totalRuns}
-                            </div>
-                            <div className="text-red-400 text-xs">
-                              Total Runs
-                            </div>
-                          </div>
-                          <div className="text-center p-3 rounded-lg bg-orange-500/20 border border-orange-500/30">
-                            <div className="text-lg font-bold text-white">
-                              {statsData.strava.totalDistanceKm}
-                            </div>
-                            <div className="text-orange-400 text-xs">
-                              Kilometers
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <h4 className="text-white font-semibold mb-3 text-sm">
-                          Recent Activities
-                        </h4>
-                        <div className="space-y-2">
-                          {statsData.strava.recentRuns
-                            .slice(0, 3)
-                            .map((run, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10"
-                              >
-                                <div className="flex items-center">
-                                  <Activity
-                                    size={14}
-                                    className="text-red-400 mr-2"
-                                  />
-                                  <div>
-                                    <div className="text-white text-xs font-medium line-clamp-1">
-                                      {run.name}
-                                    </div>
-                                    <div className="text-white/60 text-xs">
-                                      {formatDate(run.date)}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="text-white font-semibold text-sm">
-                                  {run.distanceKm} km
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </ChartCard>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!loading && activeView === "coding" && (
-          <div className="space-y-8">
-            <ChartCard
-              title="Development Deep Dive"
-              hasError={!statsData.wakatime}
-              errorMessage="WakaTime data required for coding analytics."
-            >
-              {statsData.wakatime && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="text-white font-semibold mb-4">
-                      Technology Stack
-                    </h4>
-                    <div className="space-y-4">
-                      {languageData.map((lang) => (
-                        <div key={lang.name} className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center">
-                              <div
-                                className="w-3 h-3 rounded-full mr-3"
-                                style={{ backgroundColor: lang.color }}
-                              />
-                              <span className="text-white text-sm font-medium">
-                                {lang.name}
-                              </span>
-                            </div>
-                            <span className="text-white/60 text-sm">
-                              {lang.value.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="w-full bg-white/10 rounded-full h-2">
-                            <div
-                              className="h-2 rounded-full transition-all duration-1000"
-                              style={{
-                                width: `${lang.value}%`,
-                                backgroundColor: lang.color,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-white font-semibold mb-4">
-                      Development Environment
-                    </h4>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                        <div className="flex items-center">
-                          <Code2 size={16} className="text-blue-400 mr-3" />
-                          <span className="text-white text-sm">Editor</span>
-                        </div>
-                        <span className="text-white/80 text-sm font-medium">
-                          {statsData.wakatime.today.environment.editor}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                        <div className="flex items-center">
-                          <Cpu size={16} className="text-purple-400 mr-3" />
-                          <span className="text-white text-sm">Platform</span>
-                        </div>
-                        <span className="text-white/80 text-sm font-medium">
-                          {statsData.wakatime.today.environment.os}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                        <div className="flex items-center">
-                          <Database
-                            size={16}
-                            className="text-emerald-400 mr-3"
-                          />
-                          <span className="text-white text-sm">
-                            Primary Language
-                          </span>
-                        </div>
-                        <span className="text-white/80 text-sm font-medium">
-                          {statsData.wakatime.today.primaryLanguage}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </ChartCard>
-
-            {/* Weekly Coding Trend */}
-            {statsData.wakatime && (
-              <ChartCard title="Weekly Coding Activity">
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={codingData}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="rgba(255,255,255,0.1)"
-                      />
-                      <XAxis
-                        dataKey="date"
-                        stroke="rgba(255,255,255,0.6)"
-                        fontSize={12}
-                      />
-                      <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "rgba(0,0,0,0.8)",
-                          border: "1px solid rgba(255,255,255,0.1)",
-                          borderRadius: "8px",
-                          color: "white",
-                        }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="hours"
-                        stroke="#3b82f6"
-                        strokeWidth={3}
-                        dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
-                        activeDot={{ r: 6, stroke: "#3b82f6", strokeWidth: 2 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </ChartCard>
-            )}
-          </div>
-        )}
-
-        {!loading && activeView === "learning" && (
-          <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ChartCard
-                title="Japanese Mastery Progress"
-                hasError={!statsData.anki}
-                errorMessage="Anki data required for learning analytics."
-              >
-                {statsData.anki && (
-                  <div className="space-y-6">
-                    <div className="text-center">
-                      <div className="text-4xl font-black text-white mb-2">
-                        {statsData.anki.overall.currentStreakDays}
-                      </div>
-                      <div className="text-accent-main text-lg font-semibold">
-                        Consecutive Days
-                      </div>
-                      <div className="text-white/60 text-sm">
-                        Current study streak
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-4 rounded-xl bg-purple-500/20 border border-purple-500/30">
-                        <div className="text-xl font-bold text-white">
-                          {statsData.anki.overall.cardCounts.mature}
-                        </div>
-                        <div className="text-purple-400 text-sm">
-                          Mature Cards
-                        </div>
-                      </div>
-                      <div className="text-center p-4 rounded-xl bg-blue-500/20 border border-blue-500/30">
-                        <div className="text-xl font-bold text-white">
-                          {statsData.anki.overall.matureCardRetentionPercent}%
-                        </div>
-                        <div className="text-blue-400 text-sm">
-                          Retention Rate
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="text-white font-semibold">
-                        Card Distribution
-                      </h4>
-                      {Object.entries(statsData.anki.overall.cardCounts)
-                        .filter(([key]) => key !== "total")
-                        .map(([type, count]) => (
-                          <div
-                            key={type}
-                            className="flex justify-between items-center"
-                          >
-                            <span className="text-white/70 capitalize">
-                              {type}
-                            </span>
-                            <span className="text-white font-semibold">
-                              {count}
-                            </span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </ChartCard>
-
-              <ChartCard
-                title="Weekly Study Pattern"
-                hasError={!statsData.anki}
-                errorMessage="Anki data required for study pattern analysis."
-              >
-                {statsData.anki && (
-                  <div className="space-y-6">
-                    <div className="h-48">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={ankiData}>
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            stroke="rgba(255,255,255,0.1)"
-                          />
-                          <XAxis
-                            dataKey="day"
-                            stroke="rgba(255,255,255,0.6)"
-                            fontSize={12}
-                          />
-                          <YAxis stroke="rgba(255,255,255,0.6)" fontSize={12} />
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "rgba(0,0,0,0.8)",
-                              border: "1px solid rgba(255,255,255,0.1)",
-                              borderRadius: "8px",
-                              color: "white",
-                            }}
-                          />
-                          <Bar
-                            dataKey="reviews"
-                            fill="#8b5cf6"
-                            radius={[4, 4, 0, 0]}
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-3">
-                      <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                        <div className="text-lg font-bold text-white">
-                          {statsData.anki.overall.timeMinutesToday}
-                        </div>
-                        <div className="text-white/60 text-xs">
-                          Minutes Today
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </ChartCard>
-            </div>
-
-            {/* Deck Performance Details */}
-            {statsData.anki && (
-              <ChartCard title="Deck Performance Breakdown">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {statsData.anki.decks.map((deck, index) => (
-                    <div
-                      key={index}
-                      className="p-4 rounded-xl bg-white/5 border border-white/10"
-                    >
-                      <h4 className="text-white font-semibold mb-3 text-sm">
-                        {getDeckDisplayName(deck.deckName)}
-                      </h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">
-                            Reviews Today
-                          </span>
-                          <span className="text-white text-xs font-semibold">
-                            {deck.reviewsToday}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">
-                            Mature Cards
-                          </span>
-                          <span className="text-white text-xs font-semibold">
-                            {deck.matureCards}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">
-                            New Cards
-                          </span>
-                          <span className="text-white text-xs font-semibold">
-                            {deck.newCards}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/60 text-xs">
-                            Total Cards
-                          </span>
-                          <span className="text-white text-xs font-semibold">
-                            {deck.totalCards}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ChartCard>
-            )}
-          </div>
-        )}
-
-        {!loading && activeView === "performance" && <PerformanceAnalytics />}
-
-        {/* Tech Info */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-[40px]">
-            <GitBranch size={16} className="mr-2 text-accent-main" />
-            <span className="text-sm text-white/70">
-              Automated via GitHub Actions • Updated every hour •
-              <a
-                href="https://github.com/wlmr-rk/proj-nexus"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-1 text-accent-main hover:text-white transition-colors"
-              >
-                View Source
-              </a>
-            </span>
-          </div>
-        </div>
       </div>
     </section>
   );

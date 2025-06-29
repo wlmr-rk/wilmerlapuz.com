@@ -1,16 +1,16 @@
 {
-  "lastUpdated": "2025-06-27T18:19:48.142793",
+  "lastUpdated": "2025-06-29T09:25:14.398625",
   "overall": {
-    "reviewsToday": 59,
-    "timeMinutesToday": 46,
-    "matureCardRetentionPercent": 87.91,
-    "currentStreakDays": 3,
+    "reviewsToday": 0,
+    "timeMinutesToday": 0,
+    "matureCardRetentionPercent": 87.94,
+    "currentStreakDays": 0,
     "cardCounts": {
       "new": 12168,
-      "learning": 78,
-      "young": 1206,
-      "mature": 561,
-      "total": 14013
+      "learning": 79,
+      "young": 1184,
+      "mature": 583,
+      "total": 14014
     }
   },
   "decks": [
@@ -30,8 +30,8 @@
     },
     {
       "deckName": "🔰 開始 1.5k",
-      "reviewsToday": 59,
-      "matureCards": 228,
+      "reviewsToday": 0,
+      "matureCards": 250,
       "newCards": 331,
       "totalCards": 1502
     },

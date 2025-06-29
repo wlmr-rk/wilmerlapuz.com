@@ -1,53 +1,224 @@
 {
-  "lastUpdated": "2025-06-29T09:25:14.398625",
-  "overall": {
-    "reviewsToday": 0,
-    "timeMinutesToday": 0,
-    "matureCardRetentionPercent": 87.94,
-    "currentStreakDays": 0,
-    "cardCounts": {
-      "new": 12168,
-      "learning": 79,
-      "young": 1184,
-      "mature": 583,
-      "total": 14014
+  "lastUpdated": "2025-06-29T09:35:40.862234",
+  "today": {
+    "reviewsCompleted": 16,
+    "studyTimeMinutes": 7,
+    "cardsDue": 1451,
+    "estimatedTimeRemaining": 402.3
+  },
+  "streaks": {
+    "current": 1,
+    "longest": 55
+  },
+  "averages": {
+    "last30Days": {
+      "cardsPerDay": 109.5,
+      "minutesPerDay": 30.4,
+      "sessionsPerDay": 3.5,
+      "activeDays": 6
+    },
+    "last90Days": {
+      "cardsPerDay": 182.9,
+      "minutesPerDay": 22.4,
+      "sessionsPerDay": 2.8,
+      "activeDays": 14
     }
+  },
+  "cardDistribution": {
+    "new": {
+      "count": 12168,
+      "percentage": 86.5
+    },
+    "learning": {
+      "count": 78,
+      "percentage": 0.6
+    },
+    "relearning": {
+      "count": 60,
+      "percentage": 0.4
+    },
+    "young": {
+      "count": 1184,
+      "percentage": 8.4
+    },
+    "mature": {
+      "count": 583,
+      "percentage": 4.1
+    },
+    "total": 14073
+  },
+  "retention": {
+    "recent30Days": 81.2,
+    "matureCards": 87.9,
+    "youngCards": 78.8,
+    "totalReviews": {
+      "recent30Days": 446,
+      "mature": 340,
+      "young": 13523
+    }
+  },
+  "efficiency": {
+    "avgSecondsPerCard": 16.6,
+    "totalRecentReviews": 657
   },
   "decks": [
     {
       "deckName": "⭐ Core 2k/6k Optimized",
       "reviewsToday": 0,
-      "matureCards": 260,
-      "newCards": 11606,
-      "totalCards": 11997
+      "cardTypes": {
+        "new": {
+          "count": 11606,
+          "percentage": 96.6
+        },
+        "learning": {
+          "count": 11,
+          "percentage": 0.1
+        },
+        "relearning": {
+          "count": 8,
+          "percentage": 0.1
+        },
+        "young": {
+          "count": 127,
+          "percentage": 1.1
+        },
+        "mature": {
+          "count": 260,
+          "percentage": 2.2
+        },
+        "total": 12012
+      },
+      "retention30Days": 0.0,
+      "totalReviews30Days": 1
     },
     {
       "deckName": "💬 決まり文句",
       "reviewsToday": 0,
-      "matureCards": 73,
-      "newCards": 0,
-      "totalCards": 101
+      "cardTypes": {
+        "new": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "learning": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "relearning": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "young": {
+          "count": 28,
+          "percentage": 27.7
+        },
+        "mature": {
+          "count": 73,
+          "percentage": 72.3
+        },
+        "total": 101
+      },
+      "retention30Days": 0,
+      "totalReviews30Days": 0
     },
     {
       "deckName": "🔰 開始 1.5k",
-      "reviewsToday": 0,
-      "matureCards": 250,
-      "newCards": 331,
-      "totalCards": 1502
+      "reviewsToday": 16,
+      "cardTypes": {
+        "new": {
+          "count": 331,
+          "percentage": 21.8
+        },
+        "learning": {
+          "count": 9,
+          "percentage": 0.6
+        },
+        "relearning": {
+          "count": 9,
+          "percentage": 0.6
+        },
+        "young": {
+          "count": 921,
+          "percentage": 60.6
+        },
+        "mature": {
+          "count": 250,
+          "percentage": 16.4
+        },
+        "total": 1520
+      },
+      "retention30Days": 81.2,
+      "totalReviews30Days": 442
     },
     {
       "deckName": "🗾 都道府県",
       "reviewsToday": 0,
-      "matureCards": 0,
-      "newCards": 0,
-      "totalCards": 101
+      "cardTypes": {
+        "new": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "learning": {
+          "count": 35,
+          "percentage": 23.8
+        },
+        "relearning": {
+          "count": 20,
+          "percentage": 13.6
+        },
+        "young": {
+          "count": 92,
+          "percentage": 62.6
+        },
+        "mature": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "total": 147
+      },
+      "retention30Days": 0,
+      "totalReviews30Days": 0
     },
     {
       "deckName": "🧩 Radicals",
       "reviewsToday": 0,
-      "matureCards": 0,
-      "newCards": 231,
-      "totalCards": 269
+      "cardTypes": {
+        "new": {
+          "count": 231,
+          "percentage": 78.8
+        },
+        "learning": {
+          "count": 23,
+          "percentage": 7.8
+        },
+        "relearning": {
+          "count": 23,
+          "percentage": 7.8
+        },
+        "young": {
+          "count": 16,
+          "percentage": 5.5
+        },
+        "mature": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "total": 293
+      },
+      "retention30Days": 0,
+      "totalReviews30Days": 0
     }
-  ]
+  ],
+  "overall": {
+    "reviewsToday": 16,
+    "timeMinutesToday": 7,
+    "matureCardRetentionPercent": 87.9,
+    "currentStreakDays": 1,
+    "cardCounts": {
+      "new": 12168,
+      "learning": 78,
+      "young": 1184,
+      "mature": 583,
+      "total": 14073
+    }
+  }
 }

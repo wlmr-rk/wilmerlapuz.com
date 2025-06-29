@@ -272,7 +272,7 @@ const StatsSection: React.FC = () => {
                         style={{ backgroundColor: item.color }}
                       />
                       <span className="text-white/80 truncate">{item.name}</span>
-                      <span className="text-white/60 ml-auto">{item.value.toFixed(1)}</span>
+                      <span className="text-white/60 ml-auto">{item.value.toFixed}</span>
                     </div>
                   ))}
                 </div>

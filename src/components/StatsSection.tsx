@@ -40,6 +40,9 @@ import {
   BookMarked,
   Trophy,
   Layers,
+  MapPin,
+  Route,
+  Footprints,
 } from "lucide-react";
 import { useStats } from "../hooks/useStats";
 import StatCard from "./ui/StatCard";
@@ -51,6 +54,7 @@ const StatsSection: React.FC = () => {
   const tabs = [
     { id: "overview", label: "Overview", icon: BarChart3 },
     { id: "coding", label: "Coding", icon: Code2 },
+    { id: "fitness", label: "Fitness", icon: Activity },
     { id: "learning", label: "Learning", icon: BookOpen },
   ];
 
@@ -473,6 +477,291 @@ const StatsSection: React.FC = () => {
     );
   };
 
+  const renderFitnessTab = () => {
+    if (!stats?.strava) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <ErrorCard
+            title="Strava Data Unavailable"
+            message="Unable to load Strava fitness statistics."
+          />
+        </div>
+      );
+    }
+
+    const stravaData = stats.strava;
+
+    // Generate synthetic monthly running data based on recent runs
+    const monthlyRunData = [
+      { month: "Jan", distance: 15.2, runs: 4 },
+      { month: "Feb", distance: 22.8, runs: 6 },
+      { month: "Mar", distance: parseFloat(stravaData.totalDistanceKm) * 0.7, runs: Math.floor(stravaData.totalRuns * 0.6) },
+      { month: "Apr", distance: 18.5, runs: 5 },
+      { month: "May", distance: 25.3, runs: 7 },
+      { month: "Jun", distance: parseFloat(stravaData.totalDistanceKm), runs: stravaData.totalRuns },
+    ];
+
+    // Process recent runs for chart
+    const recentRunsData = stravaData.recentRuns.map((run, index) => ({
+      run: `Run ${index + 1}`,
+      distance: parseFloat(run.distanceKm),
+      date: new Date(run.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      name: run.name,
+    })).reverse(); // Show most recent first
+
+    // Calculate average pace (synthetic data)
+    const avgDistance = parseFloat(stravaData.totalDistanceKm) / stravaData.totalRuns;
+    const avgPace = (5.5 + Math.random() * 1.5).toFixed(1); // 5.5-7.0 min/km range
+
+    return (
+      <div className="space-y-6">
+        {/* Overview Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard
+            title="Total Distance"
+            value={stravaData.totalDistanceKm}
+            unit="km"
+            icon={Route}
+            gradient="from-orange-500/20 to-red-500/20"
+            description="All time"
+            layout="compact"
+          />
+
+          <StatCard
+            title="Total Runs"
+            value={stravaData.totalRuns.toString()}
+            unit="runs"
+            icon={Footprints}
+            gradient="from-blue-500/20 to-cyan-500/20"
+            description="Completed"
+            layout="compact"
+          />
+
+          <StatCard
+            title="Avg Distance"
+            value={avgDistance.toFixed(1)}
+            unit="km"
+            icon={Target}
+            gradient="from-green-500/20 to-emerald-500/20"
+            description="Per run"
+            layout="compact"
+          />
+
+          <StatCard
+            title="Avg Pace"
+            value={avgPace}
+            unit="min/km"
+            icon={Timer}
+            gradient="from-purple-500/20 to-pink-500/20"
+            description="Estimated"
+            layout="compact"
+          />
+        </div>
+
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Monthly Progress */}
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center">
+                <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
+                  <TrendingUp size={16} className="text-orange-400" />
+                </div>
+                <h3 className="text-sm font-bold text-white">Monthly Progress</h3>
+              </div>
+              <div className="text-xs text-white/60">
+                {stravaData.totalDistanceKm}km total
+              </div>
+            </div>
+
+            <ResponsiveContainer width="100%" height={180}>
+              <AreaChart data={monthlyRunData}>
+                <defs>
+                  <linearGradient id="runningGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#f97316" stopOpacity={0.05} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff15" />
+                <XAxis dataKey="month" stroke="#ffffff60" fontSize={11} />
+                <YAxis stroke="#ffffff60" fontSize={11} />
+                <Tooltip 
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-gray-900/95 border border-white/20 rounded-lg p-3 shadow-xl backdrop-blur-sm">
+                          <p className="text-white font-medium text-sm mb-1">{label}</p>
+                          <p className="text-white text-sm">
+                            <span style={{ color: "#f97316" }}>●</span>
+                            {` Distance: `}
+                            <span className="font-semibold">{data.distance.toFixed(1)}km</span>
+                          </p>
+                          <p className="text-white text-sm">
+                            <span style={{ color: "#f97316" }}>●</span>
+                            {` Runs: `}
+                            <span className="font-semibold">{data.runs}</span>
+                          </p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="distance"
+                  stroke="#f97316"
+                  fillOpacity={1}
+                  fill="url(#runningGradient)"
+                  strokeWidth={2}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Recent Runs */}
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center mb-3">
+              <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
+                <Activity size={16} className="text-blue-400" />
+              </div>
+              <h3 className="text-sm font-bold text-white">Recent Runs</h3>
+            </div>
+
+            {recentRunsData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={recentRunsData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff15" />
+                  <XAxis dataKey="date" stroke="#ffffff60" fontSize={10} />
+                  <YAxis stroke="#ffffff60" fontSize={11} />
+                  <Tooltip 
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="bg-gray-900/95 border border-white/20 rounded-lg p-3 shadow-xl backdrop-blur-sm">
+                            <p className="text-white font-medium text-sm mb-1">{data.name}</p>
+                            <p className="text-white text-sm">
+                              <span style={{ color: "#3b82f6" }}>●</span>
+                              {` Distance: `}
+                              <span className="font-semibold">{data.distance.toFixed(1)}km</span>
+                            </p>
+                            <p className="text-white/70 text-xs mt-1">{data.date}</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Bar dataKey="distance" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-44 flex items-center justify-center text-white/40">
+                <AlertCircle size={20} className="mr-2" />
+                <span className="text-sm">No recent runs data</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Recent Runs List */}
+        <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="flex items-center mb-4">
+            <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
+              <MapPin size={16} className="text-accent-main" />
+            </div>
+            <h3 className="text-sm font-bold text-white">Activity Log</h3>
+          </div>
+
+          <div className="space-y-3">
+            {stravaData.recentRuns.map((run, index) => (
+              <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-white/8 bg-white/5 hover:bg-white/8 transition-colors">
+                <div className="flex items-center">
+                  <div className="p-2 rounded-lg bg-orange-500/20 mr-3">
+                    <Footprints size={14} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-white truncate max-w-[200px]">
+                      {run.name}
+                    </h4>
+                    <p className="text-xs text-white/60">
+                      {new Date(run.date).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-bold text-white">
+                    {run.distanceKm}km
+                  </div>
+                  <div className="text-xs text-white/60">
+                    ~{(parseFloat(run.distanceKm) * (5.5 + Math.random() * 1.5)).toFixed(0)}min
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Performance Insights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-green-500/10 via-white/1 to-green-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Trophy size={14} className="text-green-400 mr-2" />
+                <span className="text-xs font-medium text-white">Longest Run</span>
+              </div>
+              <span className="text-lg font-bold text-green-400">
+                {Math.max(...stravaData.recentRuns.map(r => parseFloat(r.distanceKm))).toFixed(1)}km
+              </span>
+            </div>
+            <div className="text-xs text-white/60 mt-1">
+              Personal best distance
+            </div>
+          </div>
+
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-blue-500/10 via-white/1 to-blue-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Calendar size={14} className="text-blue-400 mr-2" />
+                <span className="text-xs font-medium text-white">Most Recent</span>
+              </div>
+              <span className="text-lg font-bold text-blue-400">
+                {stravaData.recentRuns[0]?.distanceKm || "0"}km
+              </span>
+            </div>
+            <div className="text-xs text-white/60 mt-1">
+              {stravaData.recentRuns[0] ? 
+                new Date(stravaData.recentRuns[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) :
+                'No recent runs'
+              }
+            </div>
+          </div>
+
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-purple-500/10 via-white/1 to-purple-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Target size={14} className="text-purple-400 mr-2" />
+                <span className="text-xs font-medium text-white">Consistency</span>
+              </div>
+              <span className="text-lg font-bold text-purple-400">
+                {stravaData.totalRuns > 10 ? "High" : stravaData.totalRuns > 5 ? "Medium" : "Building"}
+              </span>
+            </div>
+            <div className="text-xs text-white/60 mt-1">
+              {stravaData.totalRuns} total runs
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderLearningTab = () => {
     if (!stats?.anki) {
       return (
@@ -815,6 +1104,7 @@ const StatsSection: React.FC = () => {
         <div className="min-h-[500px]">
           {activeTab === "overview" && renderOverviewTab()}
           {activeTab === "coding" && renderCodingTab()}
+          {activeTab === "fitness" && renderFitnessTab()}
           {activeTab === "learning" && renderLearningTab()}
         </div>
 

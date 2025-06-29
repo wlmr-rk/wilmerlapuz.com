@@ -124,27 +124,15 @@ const StatsSection: React.FC = () => {
 
   const renderOverviewTab = () => {
     const codingData = stats?.wakatime
-      ? generateWeeklyData(stats.wakatime.today.codingMinutes || 60)
+      ? generateWeeklyData(stats.wakatime.today.timeTodayMinutes || 60)
       : [];
 
-    const languageData = stats?.wakatime
-      ? [
-          {
-            name: stats.wakatime.weeklyStats.languages.primary,
-            value: parseFloat(stats.wakatime.weeklyStats.languages.primaryPercentage),
-            color: "#00ff88",
-          },
-          {
-            name: stats.wakatime.weeklyStats.languages.secondary,
-            value: parseFloat(stats.wakatime.weeklyStats.languages.secondaryPercentage),
-            color: "#0088ff",
-          },
-          {
-            name: "Others",
-            value: 100 - parseFloat(stats.wakatime.weeklyStats.languages.primaryPercentage) - parseFloat(stats.wakatime.weeklyStats.languages.secondaryPercentage),
-            color: "#6b7280",
-          },
-        ].filter(item => item.value > 0)
+    const languageData = stats?.wakatime?.languages
+      ? stats.wakatime.languages.slice(0, 3).map((lang, index) => ({
+          name: lang.name,
+          value: lang.percent,
+          color: index === 0 ? "#00ff88" : index === 1 ? "#0088ff" : "#6b7280",
+        }))
       : [];
 
     const ankiWeeklyData = stats?.anki?.decks?.[2]?.weeklyActivity
@@ -160,11 +148,11 @@ const StatsSection: React.FC = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Today's Code"
-            value={stats?.wakatime?.today.codingMinutes?.toString() || "0"}
+            value={stats?.wakatime?.today.timeTodayMinutes?.toString() || "0"}
             unit="min"
             icon={Code2}
             gradient="from-green-500/20 to-emerald-500/20"
-            description={`${stats?.wakatime?.today.environment.editor || "Unknown"}`}
+            description={`${stats?.wakatime?.today.topEditor || "Unknown"}`}
             layout="compact"
           />
 
@@ -211,7 +199,7 @@ const StatsSection: React.FC = () => {
                 <h3 className="text-sm font-bold text-white">Weekly Coding</h3>
               </div>
               <div className="text-xs text-white/60">
-                {stats?.wakatime?.weeklyStats.totalHoursLast7Days || "0"}h
+                {stats?.wakatime?.weekly.totalHours || "0"}h
               </div>
             </div>
 
@@ -363,7 +351,7 @@ const StatsSection: React.FC = () => {
       { month: "Mar", hours: 45 },
       { month: "Apr", hours: 52 },
       { month: "May", hours: 48 },
-      { month: "Jun", hours: parseFloat(stats?.wakatime?.weeklyStats.totalHoursLast7Days || "0") },
+      { month: "Jun", hours: parseFloat(stats?.wakatime?.weekly.totalHours || "0") },
     ];
 
     const techStack = [
@@ -380,7 +368,7 @@ const StatsSection: React.FC = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="This Week"
-            value={stats?.wakatime?.weeklyStats.totalHoursLast7Days || "0"}
+            value={stats?.wakatime?.weekly.totalHours || "0"}
             unit="h"
             icon={Clock}
             gradient="from-blue-500/20 to-cyan-500/20"
@@ -389,7 +377,7 @@ const StatsSection: React.FC = () => {
 
           <StatCard
             title="Daily Avg"
-            value={Math.round((stats?.wakatime?.weeklyStats.dailyAverageMinutes || 0) / 60).toString()}
+            value={Math.round((stats?.wakatime?.weekly.dailyAverageMinutes || 0) / 60).toString()}
             unit="h"
             icon={Target}
             gradient="from-purple-500/20 to-pink-500/20"
@@ -398,7 +386,7 @@ const StatsSection: React.FC = () => {
 
           <StatCard
             title="Editor"
-            value={stats?.wakatime?.today.environment.editor || "Unknown"}
+            value={stats?.wakatime?.today.topEditor || "Unknown"}
             icon={Code2}
             gradient="from-indigo-500/20 to-blue-500/20"
             layout="compact"
@@ -406,7 +394,7 @@ const StatsSection: React.FC = () => {
 
           <StatCard
             title="Consistency"
-            value={stats?.wakatime?.weeklyStats.consistency || "Unknown"}
+            value={stats?.wakatime?.weekly.consistency || "Unknown"}
             icon={Trophy}
             gradient="from-yellow-500/20 to-orange-500/20"
             layout="compact"

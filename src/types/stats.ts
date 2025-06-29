@@ -2,26 +2,30 @@
 export interface WakaTimeStats {
   lastUpdated: string;
   status: string;
+  timeTodayMinutes: number;
   today: {
-    codingMinutes: number;
-    primaryLanguage: string;
-    environment: {
-      editor: string;
-      os: string;
-    };
+    timeTodayMinutes: number;
+    topLanguage: string;
+    topEditor: string;
+    topOS: string;
   };
-  weeklyStats: {
-    totalHoursLast7Days: string;
-    activeDaysCount: number;
+  weekly: {
+    totalHours: string;
+    activeDays: number;
     dailyAverageMinutes: number;
-    languages: {
-      primary: string;
-      secondary: string;
-      primaryPercentage: string;
-      secondaryPercentage: string;
-    };
     consistency: string;
   };
+  monthly: {
+    totalHours: string;
+    activeDays: number;
+    dailyAverageMinutes: number;
+  };
+  languages: Array<{
+    name: string;
+    percent: number;
+    hours: number;
+    minutes: number;
+  }>;
 }
 
 export interface StravaStats {

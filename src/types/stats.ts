@@ -74,6 +74,32 @@ export interface AnkiStats {
       total: number;
     };
   };
+  cardDistribution: {
+    new: {
+      count: number;
+      percentage: number;
+    };
+    learning: {
+      count: number;
+      percentage: number;
+    };
+    relearning: {
+      count: number;
+      percentage: number;
+    };
+    young: {
+      count: number;
+      percentage: number;
+    };
+    mature: {
+      count: number;
+      percentage: number;
+    };
+    total: {
+      count: number;
+      percentage: number;
+    };
+  };
   decks: Array<{
     deckName: string;
     reviewsToday: number;

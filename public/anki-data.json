@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-06-29T09:35:40.862234",
+  "lastUpdated": "2025-06-29T10:20:50.513289",
   "today": {
     "reviewsCompleted": 16,
-    "studyTimeMinutes": 7,
-    "cardsDue": 1451,
-    "estimatedTimeRemaining": 402.3
+    "studyTimeMinutes": 10,
+    "cardsDue": 1448,
+    "estimatedTimeRemaining": 403.2
   },
   "streaks": {
     "current": 1,
@@ -12,15 +12,15 @@
   },
   "averages": {
     "last30Days": {
-      "cardsPerDay": 109.5,
-      "minutesPerDay": 30.4,
-      "sessionsPerDay": 3.5,
+      "cardsPerDay": 110.5,
+      "minutesPerDay": 30.8,
+      "sessionsPerDay": 3.7,
       "activeDays": 6
     },
     "last90Days": {
-      "cardsPerDay": 182.9,
-      "minutesPerDay": 22.4,
-      "sessionsPerDay": 2.8,
+      "cardsPerDay": 183.4,
+      "minutesPerDay": 22.5,
+      "sessionsPerDay": 2.9,
       "activeDays": 14
     }
   },
@@ -30,11 +30,11 @@
       "percentage": 86.5
     },
     "learning": {
-      "count": 78,
-      "percentage": 0.6
+      "count": 75,
+      "percentage": 0.5
     },
     "relearning": {
-      "count": 60,
+      "count": 57,
       "percentage": 0.4
     },
     "young": {
@@ -45,26 +45,72 @@
       "count": 583,
       "percentage": 4.1
     },
-    "total": 14073
+    "total": 14067
   },
   "retention": {
-    "recent30Days": 81.2,
+    "recent30Days": 81.4,
     "matureCards": 87.9,
     "youngCards": 78.8,
     "totalReviews": {
-      "recent30Days": 446,
+      "recent30Days": 452,
       "mature": 340,
       "young": 13523
     }
   },
   "efficiency": {
-    "avgSecondsPerCard": 16.6,
-    "totalRecentReviews": 657
+    "avgSecondsPerCard": 16.7,
+    "totalRecentReviews": 663
   },
   "decks": [
     {
       "deckName": "⭐ Core 2k/6k Optimized",
       "reviewsToday": 0,
+      "reviewsPastWeek": 0,
+      "currentStreak": 0,
+      "weeklyActivity": [
+        {
+          "date": "2025-06-29",
+          "dayName": "Sunday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-28",
+          "dayName": "Saturday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-27",
+          "dayName": "Friday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-26",
+          "dayName": "Thursday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-25",
+          "dayName": "Wednesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-24",
+          "dayName": "Tuesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-23",
+          "dayName": "Monday",
+          "reviewCount": 0,
+          "studiedToday": false
+        }
+      ],
       "cardTypes": {
         "new": {
           "count": 11606,
@@ -94,6 +140,52 @@
     {
       "deckName": "💬 決まり文句",
       "reviewsToday": 0,
+      "reviewsPastWeek": 0,
+      "currentStreak": 0,
+      "weeklyActivity": [
+        {
+          "date": "2025-06-29",
+          "dayName": "Sunday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-28",
+          "dayName": "Saturday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-27",
+          "dayName": "Friday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-26",
+          "dayName": "Thursday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-25",
+          "dayName": "Wednesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-24",
+          "dayName": "Tuesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-23",
+          "dayName": "Monday",
+          "reviewCount": 0,
+          "studiedToday": false
+        }
+      ],
       "cardTypes": {
         "new": {
           "count": 0,
@@ -123,35 +215,127 @@
     {
       "deckName": "🔰 開始 1.5k",
       "reviewsToday": 16,
+      "reviewsPastWeek": 655,
+      "currentStreak": 1,
+      "weeklyActivity": [
+        {
+          "date": "2025-06-29",
+          "dayName": "Sunday",
+          "reviewCount": 26,
+          "studiedToday": true
+        },
+        {
+          "date": "2025-06-28",
+          "dayName": "Saturday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-27",
+          "dayName": "Friday",
+          "reviewCount": 357,
+          "studiedToday": true
+        },
+        {
+          "date": "2025-06-26",
+          "dayName": "Thursday",
+          "reviewCount": 156,
+          "studiedToday": true
+        },
+        {
+          "date": "2025-06-25",
+          "dayName": "Wednesday",
+          "reviewCount": 116,
+          "studiedToday": true
+        },
+        {
+          "date": "2025-06-24",
+          "dayName": "Tuesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-23",
+          "dayName": "Monday",
+          "reviewCount": 0,
+          "studiedToday": false
+        }
+      ],
       "cardTypes": {
         "new": {
           "count": 331,
-          "percentage": 21.8
+          "percentage": 21.9
         },
         "learning": {
-          "count": 9,
-          "percentage": 0.6
+          "count": 6,
+          "percentage": 0.4
         },
         "relearning": {
-          "count": 9,
-          "percentage": 0.6
+          "count": 6,
+          "percentage": 0.4
         },
         "young": {
           "count": 921,
-          "percentage": 60.6
+          "percentage": 60.8
         },
         "mature": {
           "count": 250,
-          "percentage": 16.4
+          "percentage": 16.5
         },
-        "total": 1520
+        "total": 1514
       },
-      "retention30Days": 81.2,
-      "totalReviews30Days": 442
+      "retention30Days": 81.5,
+      "totalReviews30Days": 448
     },
     {
       "deckName": "🗾 都道府県",
       "reviewsToday": 0,
+      "reviewsPastWeek": 0,
+      "currentStreak": 0,
+      "weeklyActivity": [
+        {
+          "date": "2025-06-29",
+          "dayName": "Sunday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-28",
+          "dayName": "Saturday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-27",
+          "dayName": "Friday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-26",
+          "dayName": "Thursday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-25",
+          "dayName": "Wednesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-24",
+          "dayName": "Tuesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-23",
+          "dayName": "Monday",
+          "reviewCount": 0,
+          "studiedToday": false
+        }
+      ],
       "cardTypes": {
         "new": {
           "count": 0,
@@ -181,6 +365,52 @@
     {
       "deckName": "🧩 Radicals",
       "reviewsToday": 0,
+      "reviewsPastWeek": 0,
+      "currentStreak": 0,
+      "weeklyActivity": [
+        {
+          "date": "2025-06-29",
+          "dayName": "Sunday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-28",
+          "dayName": "Saturday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-27",
+          "dayName": "Friday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-26",
+          "dayName": "Thursday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-25",
+          "dayName": "Wednesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-24",
+          "dayName": "Tuesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-06-23",
+          "dayName": "Monday",
+          "reviewCount": 0,
+          "studiedToday": false
+        }
+      ],
       "cardTypes": {
         "new": {
           "count": 231,
@@ -210,15 +440,15 @@
   ],
   "overall": {
     "reviewsToday": 16,
-    "timeMinutesToday": 7,
+    "timeMinutesToday": 10,
     "matureCardRetentionPercent": 87.9,
     "currentStreakDays": 1,
     "cardCounts": {
       "new": 12168,
-      "learning": 78,
+      "learning": 75,
       "young": 1184,
       "mature": 583,
-      "total": 14073
+      "total": 14067
     }
   }
 }

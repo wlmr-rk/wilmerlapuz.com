@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2025-07-03T09:19:28.651Z",
+  "lastUpdated": "2025-07-03T10:19:16.818Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 5,
+    "codingMinutes": 7,
     "primaryLanguage": "Nix",
     "environment": {
       "editor": "Neovim",
@@ -16,8 +16,8 @@
     "languages": {
       "primary": "Svelte",
       "secondary": "TypeScript",
-      "primaryPercentage": "40.7",
-      "secondaryPercentage": "24.8"
+      "primaryPercentage": "40.5",
+      "secondaryPercentage": "25.1"
     },
     "consistency": "Good"
   }

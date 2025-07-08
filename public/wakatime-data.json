@@ -1,12 +1,12 @@
 {
-  "lastUpdated": "2025-07-07T23:16:43.388Z",
+  "lastUpdated": "2025-07-08T01:25:00.772Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 21,
-    "primaryLanguage": "Nix",
+    "codingMinutes": 0,
+    "primaryLanguage": "Various",
     "environment": {
-      "editor": "Neovim",
-      "os": "Linux"
+      "editor": "Unknown",
+      "os": "Unknown"
     }
   },
   "weeklyStats": {

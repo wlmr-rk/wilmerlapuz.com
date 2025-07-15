@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-07-15T14:04:03.715723",
+  "lastUpdated": "2025-07-15T14:30:18.017333",
   "today": {
-    "reviewsCompleted": 4,
-    "studyTimeMinutes": 0,
-    "cardsDue": 1571,
-    "estimatedTimeRemaining": 416.4
+    "reviewsCompleted": 0,
+    "studyTimeMinutes": 1,
+    "cardsDue": 1567,
+    "estimatedTimeRemaining": 412.8
   },
   "streaks": {
     "current": 1,
@@ -12,29 +12,29 @@
   },
   "averages": {
     "last30Days": {
-      "cardsPerDay": 125.5,
+      "cardsPerDay": 126.5,
       "minutesPerDay": 33.3,
       "sessionsPerDay": 3.2,
       "activeDays": 8
     },
     "last90Days": {
-      "cardsPerDay": 193.8,
-      "minutesPerDay": 24.2,
+      "cardsPerDay": 194.5,
+      "minutesPerDay": 24.3,
       "sessionsPerDay": 2.8,
       "activeDays": 11
     }
   },
   "cardDistribution": {
     "new": {
-      "count": 14500,
+      "count": 14454,
       "percentage": 87.9
     },
     "learning": {
-      "count": 80,
+      "count": 76,
       "percentage": 0.5
     },
     "relearning": {
-      "count": 62,
+      "count": 58,
       "percentage": 0.4
     },
     "young": {
@@ -43,23 +43,23 @@
     },
     "mature": {
       "count": 584,
-      "percentage": 3.5
+      "percentage": 3.6
     },
-    "total": 16490
+    "total": 16436
   },
   "retention": {
-    "recent30Days": 74.8,
+    "recent30Days": 75.0,
     "matureCards": 87.9,
     "youngCards": 78.8,
     "totalReviews": {
-      "recent30Days": 793,
+      "recent30Days": 801,
       "mature": 340,
       "young": 13558
     }
   },
   "efficiency": {
-    "avgSecondsPerCard": 15.9,
-    "totalRecentReviews": 1004
+    "avgSecondsPerCard": 15.8,
+    "totalRecentReviews": 1012
   },
   "decks": [
     {
@@ -136,81 +136,6 @@
       },
       "retention30Days": 66.7,
       "totalReviews30Days": 15
-    },
-    {
-      "deckName": "German Vocabulary - Beginner",
-      "reviewsToday": 4,
-      "reviewsPastWeek": 4,
-      "currentStreak": 1,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 4,
-          "studiedToday": true
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 46,
-          "percentage": 85.2
-        },
-        "learning": {
-          "count": 4,
-          "percentage": 7.4
-        },
-        "relearning": {
-          "count": 4,
-          "percentage": 7.4
-        },
-        "young": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 54
-      },
-      "retention30Days": 100.0,
-      "totalReviews30Days": 4
     },
     {
       "deckName": "Goethe Institute A1 Wordlist",
@@ -1189,16 +1114,16 @@
     }
   ],
   "overall": {
-    "reviewsToday": 4,
-    "timeMinutesToday": 0,
+    "reviewsToday": 0,
+    "timeMinutesToday": 1,
     "matureCardRetentionPercent": 87.9,
     "currentStreakDays": 1,
     "cardCounts": {
-      "new": 14500,
-      "learning": 80,
+      "new": 14454,
+      "learning": 76,
       "young": 1264,
       "mature": 584,
-      "total": 16490
+      "total": 16436
     }
   }
 }

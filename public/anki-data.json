@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-07-15T15:14:18.705845",
+  "lastUpdated": "2025-07-15T15:43:06.966043",
   "today": {
-    "reviewsCompleted": 5,
-    "studyTimeMinutes": 1,
-    "cardsDue": 1567,
-    "estimatedTimeRemaining": 409.3
+    "reviewsCompleted": 3,
+    "studyTimeMinutes": 2,
+    "cardsDue": 1544,
+    "estimatedTimeRemaining": 402.2
   },
   "streaks": {
     "current": 1,
@@ -12,54 +12,54 @@
   },
   "averages": {
     "last30Days": {
-      "cardsPerDay": 127.8,
+      "cardsPerDay": 128.4,
       "minutesPerDay": 33.4,
       "sessionsPerDay": 3.4,
       "activeDays": 8
     },
     "last90Days": {
-      "cardsPerDay": 195.5,
-      "minutesPerDay": 24.3,
+      "cardsPerDay": 195.9,
+      "minutesPerDay": 24.4,
       "sessionsPerDay": 2.9,
       "activeDays": 11
     }
   },
   "cardDistribution": {
     "new": {
-      "count": 14499,
-      "percentage": 87.9
+      "count": 17793,
+      "percentage": 90.2
     },
     "learning": {
-      "count": 76,
-      "percentage": 0.5
-    },
-    "relearning": {
-      "count": 58,
+      "count": 74,
       "percentage": 0.4
     },
+    "relearning": {
+      "count": 56,
+      "percentage": 0.3
+    },
     "young": {
-      "count": 1269,
-      "percentage": 7.7
+      "count": 1227,
+      "percentage": 6.2
     },
     "mature": {
-      "count": 584,
-      "percentage": 3.5
+      "count": 583,
+      "percentage": 3.0
     },
-    "total": 16486
+    "total": 19733
   },
   "retention": {
-    "recent30Days": 75.3,
+    "recent30Days": 75.2,
     "matureCards": 87.9,
     "youngCards": 78.8,
     "totalReviews": {
-      "recent30Days": 811,
+      "recent30Days": 816,
       "mature": 340,
-      "young": 13558
+      "young": 13559
     }
   },
   "efficiency": {
-    "avgSecondsPerCard": 15.7,
-    "totalRecentReviews": 1022
+    "avgSecondsPerCard": 15.6,
+    "totalRecentReviews": 1027
   },
   "decks": [
     {
@@ -138,91 +138,16 @@
       "totalReviews30Days": 15
     },
     {
-      "deckName": "German Vocabulary - Beginner",
-      "reviewsToday": 5,
-      "reviewsPastWeek": 10,
+      "deckName": "Goethe Institute A1 Wordlist",
+      "reviewsToday": 3,
+      "reviewsPastWeek": 109,
       "currentStreak": 1,
       "weeklyActivity": [
         {
           "date": "2025-07-15",
           "dayName": "Tuesday",
-          "reviewCount": 10,
+          "reviewCount": 3,
           "studiedToday": true
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 45,
-          "percentage": 90.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 5,
-          "percentage": 10.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 50
-      },
-      "retention30Days": 100.0,
-      "totalReviews30Days": 10
-    },
-    {
-      "deckName": "Goethe Institute A1 Wordlist",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 106,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
         },
         {
           "date": "2025-07-14",
@@ -264,31 +189,31 @@
       "cardTypes": {
         "new": {
           "count": 1814,
-          "percentage": 97.8
+          "percentage": 97.9
         },
         "learning": {
-          "count": 2,
-          "percentage": 0.1
+          "count": 0,
+          "percentage": 0.0
         },
         "relearning": {
-          "count": 2,
-          "percentage": 0.1
+          "count": 0,
+          "percentage": 0.0
         },
         "young": {
-          "count": 36,
-          "percentage": 1.9
+          "count": 38,
+          "percentage": 2.1
         },
         "mature": {
           "count": 0,
           "percentage": 0.0
         },
-        "total": 1854
+        "total": 1852
       },
-      "retention30Days": 71.7,
-      "totalReviews30Days": 106
+      "retention30Days": 72.5,
+      "totalReviews30Days": 109
     },
     {
-      "deckName": "Languages on Fire – German",
+      "deckName": "Goethe Institute A2 Wordlist",
       "reviewsToday": 0,
       "reviewsPastWeek": 0,
       "currentStreak": 0,
@@ -338,157 +263,7 @@
       ],
       "cardTypes": {
         "new": {
-          "count": 421,
-          "percentage": 91.3
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 39,
-          "percentage": 8.5
-        },
-        "mature": {
-          "count": 1,
-          "percentage": 0.2
-        },
-        "total": 461
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
-    },
-    {
-      "deckName": "Languages on Fire – German::01. Hallo",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 16,
-          "percentage": 28.6
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 39,
-          "percentage": 69.6
-        },
-        "mature": {
-          "count": 1,
-          "percentage": 1.8
-        },
-        "total": 56
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
-    },
-    {
-      "deckName": "Languages on Fire – German::02. Woher kommst du?",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 89,
+          "count": 3760,
           "percentage": 100.0
         },
         "learning": {
@@ -507,307 +282,7 @@
           "count": 0,
           "percentage": 0.0
         },
-        "total": 89
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
-    },
-    {
-      "deckName": "Languages on Fire – German::03. Wie gefällt dir München?",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 77,
-          "percentage": 100.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 77
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
-    },
-    {
-      "deckName": "Languages on Fire – German::04. Das Wetter ist heute schön",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 85,
-          "percentage": 100.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 85
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
-    },
-    {
-      "deckName": "Languages on Fire – German::05. Der, die, das",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 61,
-          "percentage": 100.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 61
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
-    },
-    {
-      "deckName": "Languages on Fire – German::06. Die Ausländer sprechen gut Deutsch",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 90,
-          "percentage": 100.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 90
+        "total": 3760
       },
       "retention30Days": 0,
       "totalReviews30Days": 0
@@ -1189,16 +664,16 @@
     }
   ],
   "overall": {
-    "reviewsToday": 5,
-    "timeMinutesToday": 1,
+    "reviewsToday": 3,
+    "timeMinutesToday": 2,
     "matureCardRetentionPercent": 87.9,
     "currentStreakDays": 1,
     "cardCounts": {
-      "new": 14499,
-      "learning": 76,
-      "young": 1269,
-      "mature": 584,
-      "total": 16486
+      "new": 17793,
+      "learning": 74,
+      "young": 1227,
+      "mature": 583,
+      "total": 19733
     }
   }
 }

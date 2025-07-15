@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-07-15T15:12:14.925324",
+  "lastUpdated": "2025-07-15T15:14:18.705845",
   "today": {
-    "reviewsCompleted": 0,
+    "reviewsCompleted": 5,
     "studyTimeMinutes": 1,
     "cardsDue": 1567,
-    "estimatedTimeRemaining": 412.8
+    "estimatedTimeRemaining": 409.3
   },
   "streaks": {
     "current": 1,
@@ -12,21 +12,21 @@
   },
   "averages": {
     "last30Days": {
-      "cardsPerDay": 126.5,
-      "minutesPerDay": 33.3,
-      "sessionsPerDay": 3.2,
+      "cardsPerDay": 127.8,
+      "minutesPerDay": 33.4,
+      "sessionsPerDay": 3.4,
       "activeDays": 8
     },
     "last90Days": {
-      "cardsPerDay": 194.5,
+      "cardsPerDay": 195.5,
       "minutesPerDay": 24.3,
-      "sessionsPerDay": 2.8,
+      "sessionsPerDay": 2.9,
       "activeDays": 11
     }
   },
   "cardDistribution": {
     "new": {
-      "count": 14454,
+      "count": 14499,
       "percentage": 87.9
     },
     "learning": {
@@ -38,28 +38,28 @@
       "percentage": 0.4
     },
     "young": {
-      "count": 1264,
+      "count": 1269,
       "percentage": 7.7
     },
     "mature": {
       "count": 584,
-      "percentage": 3.6
+      "percentage": 3.5
     },
-    "total": 16436
+    "total": 16486
   },
   "retention": {
-    "recent30Days": 75.0,
+    "recent30Days": 75.3,
     "matureCards": 87.9,
     "youngCards": 78.8,
     "totalReviews": {
-      "recent30Days": 801,
+      "recent30Days": 811,
       "mature": 340,
       "young": 13558
     }
   },
   "efficiency": {
-    "avgSecondsPerCard": 15.8,
-    "totalRecentReviews": 1012
+    "avgSecondsPerCard": 15.7,
+    "totalRecentReviews": 1022
   },
   "decks": [
     {
@@ -136,6 +136,81 @@
       },
       "retention30Days": 66.7,
       "totalReviews30Days": 15
+    },
+    {
+      "deckName": "German Vocabulary - Beginner",
+      "reviewsToday": 5,
+      "reviewsPastWeek": 10,
+      "currentStreak": 1,
+      "weeklyActivity": [
+        {
+          "date": "2025-07-15",
+          "dayName": "Tuesday",
+          "reviewCount": 10,
+          "studiedToday": true
+        },
+        {
+          "date": "2025-07-14",
+          "dayName": "Monday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-07-13",
+          "dayName": "Sunday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-07-12",
+          "dayName": "Saturday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-07-11",
+          "dayName": "Friday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-07-10",
+          "dayName": "Thursday",
+          "reviewCount": 0,
+          "studiedToday": false
+        },
+        {
+          "date": "2025-07-09",
+          "dayName": "Wednesday",
+          "reviewCount": 0,
+          "studiedToday": false
+        }
+      ],
+      "cardTypes": {
+        "new": {
+          "count": 45,
+          "percentage": 90.0
+        },
+        "learning": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "relearning": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "young": {
+          "count": 5,
+          "percentage": 10.0
+        },
+        "mature": {
+          "count": 0,
+          "percentage": 0.0
+        },
+        "total": 50
+      },
+      "retention30Days": 100.0,
+      "totalReviews30Days": 10
     },
     {
       "deckName": "Goethe Institute A1 Wordlist",
@@ -1114,16 +1189,16 @@
     }
   ],
   "overall": {
-    "reviewsToday": 0,
+    "reviewsToday": 5,
     "timeMinutesToday": 1,
     "matureCardRetentionPercent": 87.9,
     "currentStreakDays": 1,
     "cardCounts": {
-      "new": 14454,
+      "new": 14499,
       "learning": 76,
-      "young": 1264,
+      "young": 1269,
       "mature": 584,
-      "total": 16436
+      "total": 16486
     }
   }
 }

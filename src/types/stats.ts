@@ -61,6 +61,35 @@ export interface LeetCodeStats {
 
 export interface AnkiStats {
   lastUpdated: string;
+  today: {
+    // I noticed this is used in your component but missing from the type, so I've added it.
+    reviewsCompleted: number;
+    studyTimeMinutes: number;
+    cardsDue: number;
+    estimatedTimeRemaining: number;
+  };
+  streaks: {
+    // <-- ADD THIS
+    current: number;
+    longest: number;
+  };
+  retention: {
+    // <-- ADD THIS
+    recent30Days: number;
+    totalReviews: {
+      recent30Days: number;
+    };
+  };
+  efficiency: {
+    // <-- ADD THIS
+    avgSecondsPerCard: number;
+  };
+  averages: {
+    // <-- ADD THIS
+    last30Days: {
+      cardsPerDay: number;
+    };
+  };
   overall: {
     reviewsToday: number;
     timeMinutesToday: number;
@@ -96,13 +125,18 @@ export interface AnkiStats {
       percentage: number;
     };
     total: {
-      count: number;
+      count: number; // This was also missing but used in your component
       percentage: number;
     };
   };
   decks: Array<{
     deckName: string;
     reviewsToday: number;
+    cardTypes: {
+      // This was also missing
+      total: number;
+    };
+    retention30Days: number; // This was also missing
     matureCards: number;
     newCards: number;
     totalCards: number;
@@ -117,3 +151,4 @@ export interface AllStats {
   anki?: AnkiStats;
   lastUpdated: string;
 }
+

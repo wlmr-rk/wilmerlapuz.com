@@ -44,8 +44,45 @@ import {
   Route,
   Footprints,
 } from "lucide-react";
+import Image from "next/image";
 import { useStats } from "../hooks/useStats";
 import StatCard from "./ui/StatCard";
+
+interface WeeklyActivity {
+  dayName: string;
+  reviewCount: number;
+}
+
+interface ExtendedDeck {
+  deckName: string;
+  reviewsToday: number;
+  weeklyActivity: WeeklyActivity[];
+}
+
+interface DeckWithName {
+  deckName: string;
+}
+
+interface PieChartData {
+  name: string;
+  value: number;
+  percentage: number;
+}
+
+interface TooltipPayload {
+  value: number;
+  name: string;
+  color: string;
+  payload: Record<string, unknown>;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayload[];
+  label?: string;
+  unit?: string;
+  formatter?: (value: number) => string;
+}
 
 const StatsSection: React.FC = () => {
   const { stats, loading, error } = useStats();
@@ -59,12 +96,18 @@ const StatsSection: React.FC = () => {
   ];
 
   // Custom tooltip component with proper contrast
-  const CustomTooltip = ({ active, payload, label, unit = "", formatter }: any) => {
+  const CustomTooltip: React.FC<CustomTooltipProps> = ({
+    active,
+    payload,
+    label,
+    unit = "",
+    formatter,
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-gray-900/95 border border-white/20 rounded-lg p-3 shadow-xl backdrop-blur-sm">
           <p className="text-white font-medium text-sm mb-1">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index) => (
             <p key={index} className="text-white text-sm">
               <span style={{ color: entry.color }}>●</span>
               {` ${entry.name}: `}
@@ -88,9 +131,10 @@ const StatsSection: React.FC = () => {
       value: Math.max(
         0,
         Math.round(
-          baseValue * (1 + (Math.random() - 0.5) * variance) * 
-          (index < 5 ? 1.2 : 0.8)
-        )
+          baseValue *
+            (1 + (Math.random() - 0.5) * variance) *
+            (index < 5 ? 1.2 : 0.8),
+        ),
       ),
     }));
   };
@@ -135,12 +179,15 @@ const StatsSection: React.FC = () => {
         }))
       : [];
 
-    const ankiWeeklyData = stats?.anki?.decks?.[2]?.weeklyActivity
-      ? stats.anki.decks[2].weeklyActivity.map((day) => ({
-          day: day.dayName.slice(0, 3),
-          reviews: day.reviewCount,
-        }))
-      : [];
+    const ankiWeeklyData =
+      stats?.anki?.decks?.[2] && "weeklyActivity" in stats.anki.decks[2]
+        ? (stats.anki.decks[2] as ExtendedDeck).weeklyActivity.map(
+            (day: WeeklyActivity) => ({
+              day: day.dayName.slice(0, 3),
+              reviews: day.reviewCount,
+            }),
+          )
+        : [];
 
     return (
       <div className="space-y-6">
@@ -158,7 +205,7 @@ const StatsSection: React.FC = () => {
 
           <StatCard
             title="Study Streak"
-            value={stats?.anki?.overall.currentStreakDays?.toString() || "0"}
+            value={stats?.anki?.streaks.current?.toString() || "0"}
             unit="days"
             icon={Flame}
             gradient="from-orange-500/20 to-red-500/20"
@@ -207,9 +254,19 @@ const StatsSection: React.FC = () => {
               <ResponsiveContainer width="100%" height={160}>
                 <AreaChart data={codingData}>
                   <defs>
-                    <linearGradient id="codingGradient" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="codingGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#00ff88" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#00ff88" stopOpacity={0.05} />
+                      <stop
+                        offset="95%"
+                        stopColor="#00ff88"
+                        stopOpacity={0.05}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff15" />
@@ -271,8 +328,12 @@ const StatsSection: React.FC = () => {
                         className="w-2 h-2 rounded-full mr-2"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="text-white/80 truncate">{item.name}</span>
-                      <span className="text-white/60 ml-auto">{item.value.toFixed(1)}%</span>
+                      <span className="text-white/80 truncate">
+                        {item.name}
+                      </span>
+                      <span className="text-white/60 ml-auto">
+                        {item.value.toFixed(1)}%
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -311,7 +372,7 @@ const StatsSection: React.FC = () => {
         {/* Currently Playing */}
         {stats?.spotify && (
           <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-betw                                                   een">
               <div className="flex items-center">
                 <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
                   <Music size={16} className="text-green-400" />
@@ -331,10 +392,12 @@ const StatsSection: React.FC = () => {
                 ) : (
                   <Pause size={14} className="text-white/60 mr-2" />
                 )}
-                <img
+                <Image
                   src={stats.spotify.albumImageUrl}
                   alt={stats.spotify.album}
-                  className="w-10 h-10 rounded-lg"
+                  width={40}
+                  height={40}
+                  className="rounded-lg"
                 />
               </div>
             </div>
@@ -351,7 +414,10 @@ const StatsSection: React.FC = () => {
       { month: "Mar", hours: 45 },
       { month: "Apr", hours: 52 },
       { month: "May", hours: 48 },
-      { month: "Jun", hours: parseFloat(stats?.wakatime?.weekly.totalHours || "0") },
+      {
+        month: "Jun",
+        hours: parseFloat(stats?.wakatime?.weekly.totalHours || "0"),
+      },
     ];
 
     const techStack = [
@@ -377,7 +443,9 @@ const StatsSection: React.FC = () => {
 
           <StatCard
             title="Daily Avg"
-            value={Math.round((stats?.wakatime?.weekly.dailyAverageMinutes || 0) / 60).toString()}
+            value={Math.round(
+              (stats?.wakatime?.weekly.dailyAverageMinutes || 0) / 60,
+            ).toString()}
             unit="h"
             icon={Target}
             gradient="from-purple-500/20 to-pink-500/20"
@@ -440,7 +508,7 @@ const StatsSection: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {techStack.map((tech, index) => (
+              {techStack.map((tech) => (
                 <div key={tech.name} className="flex items-center">
                   <div className="w-16 text-xs text-white/80 font-medium">
                     {tech.name}
@@ -483,22 +551,36 @@ const StatsSection: React.FC = () => {
     const monthlyRunData = [
       { month: "Jan", distance: 15.2, runs: 4 },
       { month: "Feb", distance: 22.8, runs: 6 },
-      { month: "Mar", distance: parseFloat(stravaData.totalDistanceKm) * 0.7, runs: Math.floor(stravaData.totalRuns * 0.6) },
+      {
+        month: "Mar",
+        distance: parseFloat(stravaData.totalDistanceKm) * 0.7,
+        runs: Math.floor(stravaData.totalRuns * 0.6),
+      },
       { month: "Apr", distance: 18.5, runs: 5 },
       { month: "May", distance: 25.3, runs: 7 },
-      { month: "Jun", distance: parseFloat(stravaData.totalDistanceKm), runs: stravaData.totalRuns },
+      {
+        month: "Jun",
+        distance: parseFloat(stravaData.totalDistanceKm),
+        runs: stravaData.totalRuns,
+      },
     ];
 
     // Process recent runs for chart
-    const recentRunsData = stravaData.recentRuns.map((run, index) => ({
-      run: `Run ${index + 1}`,
-      distance: parseFloat(run.distanceKm),
-      date: new Date(run.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      name: run.name,
-    })).reverse(); // Show most recent first
+    const recentRunsData = stravaData.recentRuns
+      .map((run, index) => ({
+        run: `Run ${index + 1}`,
+        distance: parseFloat(run.distanceKm),
+        date: new Date(run.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        }),
+        name: run.name,
+      }))
+      .reverse(); // Show most recent first
 
     // Calculate average pace (synthetic data)
-    const avgDistance = parseFloat(stravaData.totalDistanceKm) / stravaData.totalRuns;
+    const avgDistance =
+      parseFloat(stravaData.totalDistanceKm) / stravaData.totalRuns;
     const avgPace = (5.5 + Math.random() * 1.5).toFixed(1); // 5.5-7.0 min/km range
 
     return (
@@ -555,7 +637,9 @@ const StatsSection: React.FC = () => {
                 <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
                   <TrendingUp size={16} className="text-orange-400" />
                 </div>
-                <h3 className="text-sm font-bold text-white">Monthly Progress</h3>
+                <h3 className="text-sm font-bold text-white">
+                  Monthly Progress
+                </h3>
               </div>
               <div className="text-xs text-white/60">
                 {stravaData.totalDistanceKm}km total
@@ -565,7 +649,13 @@ const StatsSection: React.FC = () => {
             <ResponsiveContainer width="100%" height={180}>
               <AreaChart data={monthlyRunData}>
                 <defs>
-                  <linearGradient id="runningGradient" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="runningGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="5%" stopColor="#f97316" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="#f97316" stopOpacity={0.05} />
                   </linearGradient>
@@ -573,17 +663,25 @@ const StatsSection: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff15" />
                 <XAxis dataKey="month" stroke="#ffffff60" fontSize={11} />
                 <YAxis stroke="#ffffff60" fontSize={11} />
-                <Tooltip 
-                  content={({ active, payload, label }) => {
+                <Tooltip
+                  content={(props) => {
+                    const { active, payload, label } = props;
                     if (active && payload && payload.length) {
-                      const data = payload[0].payload;
+                      const data = payload[0].payload as {
+                        distance: number;
+                        runs: number;
+                      };
                       return (
                         <div className="bg-gray-900/95 border border-white/20 rounded-lg p-3 shadow-xl backdrop-blur-sm">
-                          <p className="text-white font-medium text-sm mb-1">{label}</p>
+                          <p className="text-white font-medium text-sm mb-1">
+                            {label}
+                          </p>
                           <p className="text-white text-sm">
                             <span style={{ color: "#f97316" }}>●</span>
                             {` Distance: `}
-                            <span className="font-semibold">{data.distance.toFixed(1)}km</span>
+                            <span className="font-semibold">
+                              {data.distance.toFixed(1)}km
+                            </span>
                           </p>
                           <p className="text-white text-sm">
                             <span style={{ color: "#f97316" }}>●</span>
@@ -612,7 +710,10 @@ const StatsSection: React.FC = () => {
           <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center mb-3">
               <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
-                <Activity size={16} className="text-blue-400" />
+                <Activity
+                  size={16}
+                  className="text-blu                                                   e-400"
+                />
               </div>
               <h3 className="text-sm font-bold text-white">Recent Runs</h3>
             </div>
@@ -623,26 +724,41 @@ const StatsSection: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff15" />
                   <XAxis dataKey="date" stroke="#ffffff60" fontSize={10} />
                   <YAxis stroke="#ffffff60" fontSize={11} />
-                  <Tooltip 
-                    content={({ active, payload }) => {
+                  <Tooltip
+                    content={(props) => {
+                      const { active, payload } = props;
                       if (active && payload && payload.length) {
-                        const data = payload[0].payload;
+                        const data = payload[0].payload as {
+                          name: string;
+                          distance: number;
+                          date: string;
+                        };
                         return (
                           <div className="bg-gray-900/95 border border-white/20 rounded-lg p-3 shadow-xl backdrop-blur-sm">
-                            <p className="text-white font-medium text-sm mb-1">{data.name}</p>
+                            <p className="text-white font-medium text-sm mb-1">
+                              {data.name}
+                            </p>
                             <p className="text-white text-sm">
                               <span style={{ color: "#3b82f6" }}>●</span>
                               {` Distance: `}
-                              <span className="font-semibold">{data.distance.toFixed(1)}km</span>
+                              <span className="font-semibold">
+                                {data.distance.toFixed(1)}km
+                              </span>
                             </p>
-                            <p className="text-white/70 text-xs mt-1">{data.date}</p>
+                            <p className="text-white/70 text-xs mt-1">
+                              {data.date}
+                            </p>
                           </div>
                         );
                       }
                       return null;
                     }}
                   />
-                  <Bar dataKey="distance" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+                  <Bar
+                    dataKey="distance"
+                    fill="#3b82f6"
+                    radius={[3, 3, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -665,7 +781,10 @@ const StatsSection: React.FC = () => {
 
           <div className="space-y-3">
             {stravaData.recentRuns.map((run, index) => (
-              <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-white/8 bg-white/5 hover:bg-white/8 transition-colors">
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 rounded-lg border border-white/8 bg-white/5 hover:bg-white/8 transition-colors"
+              >
                 <div className="flex items-center">
                   <div className="p-2 rounded-lg bg-orange-500/20 mr-3">
                     <Footprints size={14} className="text-orange-400" />
@@ -675,10 +794,10 @@ const StatsSection: React.FC = () => {
                       {run.name}
                     </h4>
                     <p className="text-xs text-white/60">
-                      {new Date(run.date).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
+                      {new Date(run.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
                       })}
                     </p>
                   </div>
@@ -688,7 +807,12 @@ const StatsSection: React.FC = () => {
                     {run.distanceKm}km
                   </div>
                   <div className="text-xs text-white/60">
-                    ~{(parseFloat(run.distanceKm) * (5.5 + Math.random() * 1.5)).toFixed(0)}min
+                    ~
+                    {(
+                      parseFloat(run.distanceKm) *
+                      (5.5 + Math.random() * 1.5)
+                    ).toFixed(0)}
+                    min
                   </div>
                 </div>
               </div>
@@ -702,10 +826,15 @@ const StatsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Trophy size={14} className="text-green-400 mr-2" />
-                <span className="text-xs font-medium text-white">Longest Run</span>
+                <span className="text-xs font-medium text-white">
+                  Longest Run
+                </span>
               </div>
               <span className="text-lg font-bold text-green-400">
-                {Math.max(...stravaData.recentRuns.map(r => parseFloat(r.distanceKm))).toFixed(1)}km
+                {Math.max(
+                  ...stravaData.recentRuns.map((r) => parseFloat(r.distanceKm)),
+                ).toFixed(1)}
+                km
               </span>
             </div>
             <div className="text-xs text-white/60 mt-1">
@@ -717,17 +846,21 @@ const StatsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Calendar size={14} className="text-blue-400 mr-2" />
-                <span className="text-xs font-medium text-white">Most Recent</span>
+                <span className="text-xs font-medium text-white">
+                  Most Recent
+                </span>
               </div>
               <span className="text-lg font-bold text-blue-400">
                 {stravaData.recentRuns[0]?.distanceKm || "0"}km
               </span>
             </div>
             <div className="text-xs text-white/60 mt-1">
-              {stravaData.recentRuns[0] ? 
-                new Date(stravaData.recentRuns[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) :
-                'No recent runs'
-              }
+              {stravaData.recentRuns[0]
+                ? new Date(stravaData.recentRuns[0].date).toLocaleDateString(
+                    "en-US",
+                    { month: "short", day: "numeric" },
+                  )
+                : "No recent runs"}
             </div>
           </div>
 
@@ -735,10 +868,16 @@ const StatsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Target size={14} className="text-purple-400 mr-2" />
-                <span className="text-xs font-medium text-white">Consistency</span>
+                <span className="text-xs font-medium text-white">
+                  Consistency
+                </span>
               </div>
               <span className="text-lg font-bold text-purple-400">
-                {stravaData.totalRuns > 10 ? "High" : stravaData.totalRuns > 5 ? "Medium" : "Building"}
+                {stravaData.totalRuns > 10
+                  ? "High"
+                  : stravaData.totalRuns > 5
+                    ? "Medium"
+                    : "Building"}
               </span>
             </div>
             <div className="text-xs text-white/60 mt-1">
@@ -767,43 +906,49 @@ const StatsSection: React.FC = () => {
     // Card distribution with modern colors
     const cardDistributionData = [
       {
-        name: 'New',
+        name: "New",
         value: ankiData.cardDistribution.new.count,
         percentage: ankiData.cardDistribution.new.percentage,
-        color: '#3b82f6',
+        color: "#3b82f6",
       },
       {
-        name: 'Learning',
+        name: "Learning",
         value: ankiData.cardDistribution.learning.count,
         percentage: ankiData.cardDistribution.learning.percentage,
-        color: '#f59e0b',
+        color: "#f59e0b",
       },
       {
-        name: 'Young',
+        name: "Young",
         value: ankiData.cardDistribution.young.count,
         percentage: ankiData.cardDistribution.young.percentage,
-        color: '#10b981',
+        color: "#10b981",
       },
       {
-        name: 'Mature',
+        name: "Mature",
         value: ankiData.cardDistribution.mature.count,
         percentage: ankiData.cardDistribution.mature.percentage,
-        color: '#8b5cf6',
+        color: "#8b5cf6",
       },
       {
-        name: 'Relearning',
+        name: "Relearning",
         value: ankiData.cardDistribution.relearning.count,
         percentage: ankiData.cardDistribution.relearning.percentage,
-        color: '#ef4444',
+        color: "#ef4444",
       },
-    ].filter(item => item.value > 0);
+    ].filter((item) => item.value > 0);
 
     // Weekly activity from most active deck
-    const mostActiveDeck = ankiData.decks.find(deck => deck.reviewsToday > 0) || ankiData.decks[2];
-    const weeklyActivityData = mostActiveDeck?.weeklyActivity.map((day) => ({
-      day: day.dayName.slice(0, 3),
-      reviews: day.reviewCount,
-    })) || [];
+    const mostActiveDeck =
+      ankiData.decks.find((deck) => deck.reviewsToday > 0) || ankiData.decks[2];
+    const weeklyActivityData =
+      mostActiveDeck && "weeklyActivity" in mostActiveDeck
+        ? (mostActiveDeck as ExtendedDeck).weeklyActivity.map(
+            (day: WeeklyActivity) => ({
+              day: day.dayName.slice(0, 3),
+              reviews: day.reviewCount,
+            }),
+          )
+        : [];
 
     return (
       <div className="space-y-6">
@@ -862,7 +1007,12 @@ const StatsSection: React.FC = () => {
                 <h3 className="text-sm font-bold text-white">Weekly Pattern</h3>
               </div>
               <div className="text-xs text-white/60">
-                {mostActiveDeck?.deckName.replace(/[🔰⭐💬🗾🧩]/g, '').trim().slice(0, 15)}
+                {mostActiveDeck && "deckName" in mostActiveDeck
+                  ? (mostActiveDeck as DeckWithName).deckName
+                      .replace(/[🔰⭐💬🗾🧩]/g, "")
+                      .trim()
+                      .slice(0, 15)
+                  : "No deck data"}
               </div>
             </div>
 
@@ -885,7 +1035,7 @@ const StatsSection: React.FC = () => {
           </div>
 
           {/* Card Distribution */}
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturat                                                   e-150">
             <div className="flex items-center mb-3">
               <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
                 <PieChartIcon size={16} className="text-accent-mid" />
@@ -910,14 +1060,16 @@ const StatsSection: React.FC = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    content={({ active, payload }) => {
+                  <Tooltip
+                    content={(props) => {
+                      const { active, payload } = props;
                       if (active && payload && payload.length) {
-                        const data = payload[0].payload;
+                        const data = payload[0].payload as PieChartData;
                         return (
                           <div className="bg-gray-900/95 border border-white/20 rounded-lg p-2 shadow-xl backdrop-blur-sm">
                             <p className="text-white text-xs font-medium">
-                              {data.name}: {data.value.toLocaleString()} cards ({data.percentage.toFixed(1)}%)
+                              {data.name}: {data.value.toLocaleString()} cards (
+                              {data.percentage.toFixed(1)}%)
                             </p>
                           </div>
                         );
@@ -934,8 +1086,12 @@ const StatsSection: React.FC = () => {
                       className="w-2 h-2 rounded-full mr-2"
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className="text-white/80 truncate flex-1">{item.name}</span>
-                    <span className="text-white/60">{item.percentage.toFixed(1)}%</span>
+                    <span className="text-white/80 truncate flex-1">
+                      {item.name}
+                    </span>
+                    <span className="text-white/60">
+                      {item.percentage.toFixed(1)}%
+                    </span>
                   </div>
                 ))}
               </div>
@@ -949,7 +1105,9 @@ const StatsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <CheckCircle size={14} className="text-green-400 mr-2" />
-                <span className="text-xs font-medium text-white">Retention</span>
+                <span className="text-xs font-medium text-white">
+                  Retention
+                </span>
               </div>
               <span className="text-lg font-bold text-green-400">
                 {ankiData.retention.recent30Days.toFixed(1)}%
@@ -970,16 +1128,16 @@ const StatsSection: React.FC = () => {
                 {ankiData.efficiency.avgSecondsPerCard.toFixed(1)}s
               </span>
             </div>
-            <div className="text-xs text-white/60 mt-1">
-              Per card average
-            </div>
+            <div className="text-xs text-white/60 mt-1">Per card average</div>
           </div>
 
           <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-purple-500/10 via-white/1 to-purple-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <TrendingUp size={14} className="text-purple-400 mr-2" />
-                <span className="text-xs font-medium text-white">Daily Avg</span>
+                <span className="text-xs font-medium text-white">
+                  Daily Avg
+                </span>
               </div>
               <span className="text-lg font-bold text-purple-400">
                 {ankiData.averages.last30Days.cardsPerDay.toFixed(0)}
@@ -1004,28 +1162,47 @@ const StatsSection: React.FC = () => {
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left py-2 text-white/80 font-medium">Deck</th>
-                  <th className="text-right py-2 text-white/80 font-medium">Today</th>
-                  <th className="text-right py-2 text-white/80 font-medium">Total</th>
-                  <th className="text-right py-2 text-white/80 font-medium">Retention</th>
+                  <th className="text-left py-2 text-white/80 font-medium">
+                    Deck
+                  </th>
+                  <th className="text-right py-2 text-white/80 font-medium">
+                    Today
+                  </th>
+                  <th className="text-right py-2 text-white/80 font-medium">
+                    Total
+                  </th>
+                  <th className="text-right py-2 text-white/80 font-medium">
+                    Retention
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {ankiData.decks.slice(0, 4).map((deck, index) => (
-                  <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <tr
+                    key={index}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                  >
                     <td className="py-2">
                       <div className="flex items-center">
                         <div className="w-1.5 h-1.5 rounded-full bg-accent-main mr-2" />
                         <span className="text-white font-medium truncate max-w-[120px]">
-                          {deck.deckName.replace(/[🔰⭐💬🗾🧩]/g, '').trim()}
+                          {deck.deckName.replace(/[🔰⭐💬🗾🧩]/g, "").trim()}
                         </span>
                       </div>
                     </td>
-                    <td className="text-right py-2 text-white/80">{deck.reviewsToday}</td>
-                    <td className="text-right py-2 text-white/80">{deck.cardTypes.total.toLocaleString()}</td>
+                    <td className="text-right py-2 text-white/80">
+                      {deck.reviewsToday}
+                    </td>
+                    <td className="text-right py-2 text-white/80">
+                      {deck.cardTypes.total.toLocaleString()}
+                    </td>
                     <td className="text-right py-2">
-                      <span className={`font-medium ${deck.retention30Days > 80 ? 'text-green-400' : deck.retention30Days > 60 ? 'text-yellow-400' : 'text-red-400'}`}>
-                        {deck.retention30Days > 0 ? `${deck.retention30Days.toFixed(1)}%` : 'N/A'}
+                      <span
+                        className={`font-medium ${deck.retention30Days > 80 ? "text-green-400" : deck.retention30Days > 60 ? "text-yellow-400" : "text-red-400"}`}
+                      >
+                        {deck.retention30Days > 0
+                          ? `${deck.retention30Days.toFixed(1)}%`
+                          : "N/A"}
                       </span>
                     </td>
                   </tr>
@@ -1052,7 +1229,7 @@ const StatsSection: React.FC = () => {
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase text-shadow-[0_4px_8px_rgba(0,0,0,0.8)] mb-4">
             Live Stats
           </h2>
-          <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-6">
+          <p className="text-lg sm:text-xl t                                                   ext-white/60 max-w-2xl mx-auto mb-6">
             Real-time insights into my coding, learning, and productivity
           </p>
 
@@ -1060,7 +1237,10 @@ const StatsSection: React.FC = () => {
           <div className="inline-flex items-center px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-[40px]">
             <Clock size={12} className="mr-2 text-accent-main" />
             <span className="text-xs text-white/70">
-              Updated: {stats?.wakatime?.lastUpdated ? new Date(stats.wakatime.lastUpdated).toLocaleString() : 'Unknown'}
+              Updated:{" "}
+              {stats?.wakatime?.lastUpdated
+                ? new Date(stats.wakatime.lastUpdated).toLocaleString()
+                : "Unknown"}
             </span>
           </div>
         </div>
@@ -1099,10 +1279,7 @@ const StatsSection: React.FC = () => {
         {/* Error State */}
         {error && (
           <div className="text-center py-8">
-            <ErrorCard
-              title="Failed to Load Stats"
-              message={error}
-            />
+            <ErrorCard title="Failed to Load Stats" message={error} />
           </div>
         )}
       </div>
@@ -1111,3 +1288,4 @@ const StatsSection: React.FC = () => {
 };
 
 export default StatsSection;
+

@@ -2,7 +2,6 @@
 export interface WakaTimeStats {
   lastUpdated: string;
   status: string;
-  timeTodayMinutes: number;
   today: {
     timeTodayMinutes: number;
     topLanguage: string;
@@ -11,14 +10,9 @@ export interface WakaTimeStats {
   };
   weekly: {
     totalHours: string;
-    activeDays: number;
     dailyAverageMinutes: number;
     consistency: string;
-  };
-  monthly: {
-    totalHours: string;
     activeDays: number;
-    dailyAverageMinutes: number;
   };
   languages: Array<{
     name: string;
@@ -38,15 +32,6 @@ export interface StravaStats {
   }>;
 }
 
-export interface SpotifyStats {
-  isPlaying: boolean;
-  title: string;
-  artist: string;
-  album: string;
-  albumImageUrl: string;
-  songUrl: string;
-}
-
 export interface LeetCodeStats {
   username: string;
   totalSolved: number;
@@ -62,34 +47,73 @@ export interface LeetCodeStats {
 export interface AnkiStats {
   lastUpdated: string;
   today: {
-    // I noticed this is used in your component but missing from the type, so I've added it.
     reviewsCompleted: number;
     studyTimeMinutes: number;
     cardsDue: number;
     estimatedTimeRemaining: number;
   };
   streaks: {
-    // <-- ADD THIS
     current: number;
     longest: number;
   };
+  averages: {
+    last30Days: {
+      cardsPerDay: number;
+      minutesPerDay: number;
+      sessionsPerDay: number;
+      activeDays: number;
+    };
+    last90Days: {
+      cardsPerDay: number;
+      minutesPerDay: number;
+      sessionsPerDay: number;
+      activeDays: number;
+    };
+  };
+  cardDistribution: {
+    new: { count: number; percentage: number };
+    learning: { count: number; percentage: number };
+    relearning: { count: number; percentage: number };
+    young: { count: number; percentage: number };
+    mature: { count: number; percentage: number };
+    total: number;
+  };
   retention: {
-    // <-- ADD THIS
     recent30Days: number;
+    matureCards: number;
+    youngCards: number;
     totalReviews: {
       recent30Days: number;
+      mature: number;
+      young: number;
     };
   };
   efficiency: {
-    // <-- ADD THIS
     avgSecondsPerCard: number;
+    totalRecentReviews: number;
   };
-  averages: {
-    // <-- ADD THIS
-    last30Days: {
-      cardsPerDay: number;
+  decks: Array<{
+    deckName: string;
+    reviewsToday: number;
+    reviewsPastWeek: number;
+    currentStreak: number;
+    weeklyActivity: Array<{
+      date: string;
+      dayName: string;
+      reviewCount: number;
+      studiedToday: boolean;
+    }>;
+    cardTypes: {
+      new: { count: number; percentage: number };
+      learning: { count: number; percentage: number };
+      relearning: { count: number; percentage: number };
+      young: { count: number; percentage: number };
+      mature: { count: number; percentage: number };
+      total: number;
     };
-  };
+    retention30Days: number;
+    totalReviews30Days: number;
+  }>;
   overall: {
     reviewsToday: number;
     timeMinutesToday: number;
@@ -103,50 +127,11 @@ export interface AnkiStats {
       total: number;
     };
   };
-  cardDistribution: {
-    new: {
-      count: number;
-      percentage: number;
-    };
-    learning: {
-      count: number;
-      percentage: number;
-    };
-    relearning: {
-      count: number;
-      percentage: number;
-    };
-    young: {
-      count: number;
-      percentage: number;
-    };
-    mature: {
-      count: number;
-      percentage: number;
-    };
-    total: {
-      count: number; // This was also missing but used in your component
-      percentage: number;
-    };
-  };
-  decks: Array<{
-    deckName: string;
-    reviewsToday: number;
-    cardTypes: {
-      // This was also missing
-      total: number;
-    };
-    retention30Days: number; // This was also missing
-    matureCards: number;
-    newCards: number;
-    totalCards: number;
-  }>;
 }
 
 export interface AllStats {
   wakatime?: WakaTimeStats;
   strava?: StravaStats;
-  spotify?: SpotifyStats;
   leetcode?: LeetCodeStats;
   anki?: AnkiStats;
   lastUpdated: string;

@@ -64,7 +64,7 @@ const MobileNavigation: React.FC = () => {
         {/* This container re-enables pointer events for the nav elements. */}
         <div className="relative flex items-end gap-4 pointer-events-auto">
           {/* Main Horizontal Navigation Pill */}
-          <nav className="ease-fluid relative transform-3d overflow-hidden rounded-full border border-white/15 bg-linear-to-br/oklch from-white/8 via-white/4 to-white/6 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_2px_4px_rgba(255,255,255,0.2),0_-2px_4px_rgba(0,0,0,0.9)] shadow-[0_4px_16px_rgba(0,255,136,0.05),0_8px_32px_rgba(0,0,0,0.4),0_16px_64px_rgba(0,0,0,0.3)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200">
+          <nav className="ease-fluid relative transform-3d overflow-hidden rounded-full border border-white/15 bg-linear-to-br/oklch from-white/8 via-white/4 to-white/6 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_2px_4px_rgba(255,255,255,0.2),0_-2px_4px_rgba(0,0,0,0.9)] shadow-[0_4px_16px_rgba(255,0,0,0.05),0_8px_32px_rgba(0,0,0,0.4),0_16px_64px_rgba(0,0,0,0.3)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200">
             <div className="flex items-center justify-center gap-2 p-2">
               {navItems.map((item) => {
                 const Icon = item.icon;

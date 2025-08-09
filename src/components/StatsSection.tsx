@@ -22,9 +22,6 @@ import {
   Code2,
   Activity,
   BookOpen,
-  Music,
-  Play,
-  Pause,
   Calendar,
   Clock,
   Target,
@@ -44,24 +41,8 @@ import {
   Route,
   Footprints,
 } from "lucide-react";
-import Image from "next/image";
 import { useStats } from "../hooks/useStats";
 import StatCard from "./ui/StatCard";
-
-interface WeeklyActivity {
-  dayName: string;
-  reviewCount: number;
-}
-
-interface ExtendedDeck {
-  deckName: string;
-  reviewsToday: number;
-  weeklyActivity: WeeklyActivity[];
-}
-
-interface DeckWithName {
-  deckName: string;
-}
 
 interface PieChartData {
   name: string;
@@ -168,29 +149,37 @@ const StatsSection: React.FC = () => {
 
   const renderOverviewTab = () => {
     const codingData = stats?.wakatime
-      ? generateWeeklyData(stats.wakatime.today.timeTodayMinutes || 60)
+      ? generateWeeklyData(stats.wakatime.today.timeTodayMinutes || 0, 0.5)
       : [];
 
     const languageData = stats?.wakatime?.languages
       ? stats.wakatime.languages.slice(0, 3).map((lang, index) => ({
           name: lang.name,
           value: lang.percent,
-          color: index === 0 ? "#00ff88" : index === 1 ? "#0088ff" : "#6b7280",
+          color: ["#ff453a", "#ff6b6b", "#ff8f8f"][index] || "#6b7280",
         }))
       : [];
 
+    // Find the most active Anki deck this week to show its activity
+    const mostActiveAnkiDeck = stats?.anki?.decks?.reduce(
+      (mostActive, current) => {
+        return (current.reviewsPastWeek ?? 0) >
+          (mostActive.reviewsPastWeek ?? 0)
+          ? current
+          : mostActive;
+      },
+      stats.anki.decks[0],
+    );
+
     const ankiWeeklyData =
-      stats?.anki?.decks?.[2] && "weeklyActivity" in stats.anki.decks[2]
-        ? (stats.anki.decks[2] as ExtendedDeck).weeklyActivity.map(
-            (day: WeeklyActivity) => ({
-              day: day.dayName.slice(0, 3),
-              reviews: day.reviewCount,
-            }),
-          )
-        : [];
+      mostActiveAnkiDeck?.weeklyActivity?.map((day) => ({
+        day: day.dayName.slice(0, 3),
+        reviews: day.reviewCount,
+      })) ?? [];
 
     return (
       <div className="space-y-6">
+        {/* Quick Stats Grid */}
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
@@ -198,31 +187,28 @@ const StatsSection: React.FC = () => {
             value={stats?.wakatime?.today.timeTodayMinutes?.toString() || "0"}
             unit="min"
             icon={Code2}
-            gradient="from-green-500/20 to-emerald-500/20"
-            description={`${stats?.wakatime?.today.topEditor || "Unknown"}`}
+            gradient="from-red-500/20 to-rose-500/20"
+            description={stats?.wakatime?.today.topLanguage || "N/A"}
             layout="compact"
           />
-
           <StatCard
             title="Study Streak"
             value={stats?.anki?.streaks.current?.toString() || "0"}
             unit="days"
             icon={Flame}
             gradient="from-orange-500/20 to-red-500/20"
-            description="Current streak"
+            description={`Best: ${stats?.anki?.streaks.longest || 0}`}
             layout="compact"
           />
-
           <StatCard
             title="LeetCode"
             value={stats?.leetcode?.totalSolved?.toString() || "0"}
-            unit={`/${stats?.leetcode?.totalAvailable || "0"}`}
+            unit={`/${stats?.leetcode?.totalAvailable || "?"}`}
             icon={Target}
             gradient="from-blue-500/20 to-purple-500/20"
             description="Problems solved"
             layout="compact"
           />
-
           <StatCard
             title="Running"
             value={stats?.strava?.totalDistanceKm || "0"}
@@ -249,7 +235,6 @@ const StatsSection: React.FC = () => {
                 {stats?.wakatime?.weekly.totalHours || "0"}h
               </div>
             </div>
-
             {codingData.length > 0 ? (
               <ResponsiveContainer width="100%" height={160}>
                 <AreaChart data={codingData}>
@@ -261,10 +246,10 @@ const StatsSection: React.FC = () => {
                       x2="0"
                       y2="1"
                     >
-                      <stop offset="5%" stopColor="#00ff88" stopOpacity={0.4} />
+                      <stop offset="5%" stopColor="#ff453a" stopOpacity={0.4} />
                       <stop
                         offset="95%"
-                        stopColor="#00ff88"
+                        stopColor="#ff453a"
                         stopOpacity={0.05}
                       />
                     </linearGradient>
@@ -276,7 +261,7 @@ const StatsSection: React.FC = () => {
                   <Area
                     type="monotone"
                     dataKey="value"
-                    stroke="#00ff88"
+                    stroke="#ff453a"
                     fillOpacity={1}
                     fill="url(#codingGradient)"
                     strokeWidth={2}
@@ -299,7 +284,6 @@ const StatsSection: React.FC = () => {
               </div>
               <h3 className="text-sm font-bold text-white">Languages</h3>
             </div>
-
             {languageData.length > 0 ? (
               <div className="flex items-center">
                 <ResponsiveContainer width="60%" height={140}>
@@ -308,8 +292,8 @@ const StatsSection: React.FC = () => {
                       data={languageData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={25}
-                      outerRadius={55}
+                      innerRadius={30}
+                      outerRadius={60}
                       paddingAngle={3}
                       dataKey="value"
                       strokeWidth={0}
@@ -321,9 +305,9 @@ const StatsSection: React.FC = () => {
                     <Tooltip content={<CustomTooltip unit="%" />} />
                   </PieChart>
                 </ResponsiveContainer>
-                <div className="flex-1 space-y-1">
-                  {languageData.map((item, index) => (
-                    <div key={index} className="flex items-center text-xs">
+                <div className="flex-1 space-y-1.5">
+                  {languageData.map((item) => (
+                    <div key={item.name} className="flex items-center text-xs">
                       <div
                         className="w-2 h-2 rounded-full mr-2"
                         style={{ backgroundColor: item.color }}
@@ -350,57 +334,44 @@ const StatsSection: React.FC = () => {
         {/* Anki Weekly Activity */}
         {ankiWeeklyData.length > 0 && (
           <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
-            <div className="flex items-center mb-3">
-              <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
-                <BookOpen size={16} className="text-accent-light" />
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center">
+                <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
+                  <BookOpen size={16} className="text-accent-light" />
+                </div>
+                <h3 className="text-sm font-bold text-white">
+                  Weekly Study Activity
+                </h3>
               </div>
-              <h3 className="text-sm font-bold text-white">Study Activity</h3>
+              <div className="text-xs text-white/60 truncate max-w-[150px]">
+                {mostActiveAnkiDeck?.deckName.replace(/[🔰⭐💬🗾🧩]/g, "").trim()}
+              </div>
             </div>
-
             <ResponsiveContainer width="100%" height={140}>
               <BarChart data={ankiWeeklyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff15" />
                 <XAxis dataKey="day" stroke="#ffffff60" fontSize={11} />
                 <YAxis stroke="#ffffff60" fontSize={11} />
                 <Tooltip content={<CustomTooltip unit=" reviews" />} />
-                <Bar dataKey="reviews" fill="#00ff88" radius={[3, 3, 0, 0]} />
+                <Bar
+                  dataKey="reviews"
+                  fill="url(#ankiGradient)"
+                  radius={[3, 3, 0, 0]}
+                />
+                <defs>
+                  <linearGradient
+                    id="ankiGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#00aaff" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#00aaff" stopOpacity={0.2} />
+                  </linearGradient>
+                </defs>
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        )}
-
-        {/* Currently Playing */}
-        {stats?.spotify && (
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
-            <div className="flex items-center justify-betw                                                   een">
-              <div className="flex items-center">
-                <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
-                  <Music size={16} className="text-green-400" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white">
-                    {stats.spotify.isPlaying ? "Now Playing" : "Last Played"}
-                  </h3>
-                  <p className="text-white/60 text-xs">
-                    {stats.spotify.title} • {stats.spotify.artist}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                {stats.spotify.isPlaying ? (
-                  <Play size={14} className="text-green-400 mr-2" />
-                ) : (
-                  <Pause size={14} className="text-white/60 mr-2" />
-                )}
-                <Image
-                  src={stats.spotify.albumImageUrl}
-                  alt={stats.spotify.album}
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </div>
-            </div>
           </div>
         )}
       </div>
@@ -420,13 +391,14 @@ const StatsSection: React.FC = () => {
       },
     ];
 
-    const techStack = [
-      { name: "JavaScript", hours: 45, percentage: 85 },
-      { name: "TypeScript", hours: 38, percentage: 72 },
-      { name: "React", hours: 32, percentage: 60 },
-      { name: "Python", hours: 28, percentage: 53 },
-      { name: "CSS", hours: 22, percentage: 42 },
-    ];
+    const techStack =
+      stats?.wakatime?.languages
+        ?.map((lang) => ({
+          name: lang.name,
+          hours: lang.hours, // This data is not available in the new schema, default to 0
+          percentage: lang.percent,
+        }))
+        .slice(0, 5) ?? [];
 
     return (
       <div className="space-y-6">
@@ -489,10 +461,10 @@ const StatsSection: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="hours"
-                  stroke="#00ff88"
+                  stroke="#ff453a"
                   strokeWidth={3}
-                  dot={{ fill: "#00ff88", strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, stroke: "#00ff88", strokeWidth: 2 }}
+                  dot={{ fill: "#ff453a", strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, stroke: "#ff453a", strokeWidth: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -508,24 +480,31 @@ const StatsSection: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {techStack.map((tech) => (
-                <div key={tech.name} className="flex items-center">
-                  <div className="w-16 text-xs text-white/80 font-medium">
-                    {tech.name}
-                  </div>
-                  <div className="flex-1 mx-3">
-                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-accent-main to-accent-mid rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${tech.percentage}%` }}
-                      />
+              {techStack.length > 0 ? (
+                techStack.map((tech) => (
+                  <div key={tech.name} className="flex items-center">
+                    <div className="w-24 text-xs text-white/80 font-medium truncate">
+                      {tech.name}
+                    </div>
+                    <div className="flex-1 mx-3">
+                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-accent-main to-accent-mid rounded-full transition-all duration-1000 ease-out"
+                          style={{ width: `${tech.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div className="w-12 text-xs text-white/60 text-right">
+                      {tech.percentage.toFixed(1)}%
                     </div>
                   </div>
-                  <div className="w-8 text-xs text-white/60 text-right">
-                    {tech.hours}h
-                  </div>
+                ))
+              ) : (
+                <div className="h-24 flex items-center justify-center text-white/40">
+                  <AlertCircle size={20} className="mr-2" />
+                  <span className="text-sm">Not enough data</span>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -612,7 +591,7 @@ const StatsSection: React.FC = () => {
             value={avgDistance.toFixed(1)}
             unit="km"
             icon={Target}
-            gradient="from-green-500/20 to-emerald-500/20"
+            gradient="from-red-500/20 to-rose-500/20"
             description="Per run"
             layout="compact"
           />
@@ -779,40 +758,39 @@ const StatsSection: React.FC = () => {
             <h3 className="text-sm font-bold text-white">Activity Log</h3>
           </div>
 
-          <div className="space-y-3">
-            {stravaData.recentRuns.map((run, index) => (
+          <div className="space-y-4">
+            {stravaData.recentRuns.slice(0, 5).map((run) => (
               <div
-                key={index}
-                className="flex items-center justify-between p-3 rounded-lg border border-white/8 bg-white/5 hover:bg-white/8 transition-colors"
+                key={run.date}
+                className="flex items-center justify-between p-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
               >
                 <div className="flex items-center">
-                  <div className="p-2 rounded-lg bg-orange-500/20 mr-3">
-                    <Footprints size={14} className="text-orange-400" />
+                  <div className="p-2.5 rounded-lg bg-orange-500/20 mr-4">
+                    <Footprints size={16} className="text-orange-400" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-white truncate max-w-[200px]">
+                    <h4 className="text-sm font-semibold text-white truncate max-w-[200px] sm:max-w-[300px]">
                       {run.name}
                     </h4>
                     <p className="text-xs text-white/60">
                       {new Date(run.date).toLocaleDateString("en-US", {
+                        weekday: "long",
                         month: "short",
                         day: "numeric",
-                        year: "numeric",
                       })}
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-sm font-bold text-white">
-                    {run.distanceKm}km
+                <div className="text-right shrink-0 ml-4">
+                  <div className="text-base font-bold text-white">
+                    {run.distanceKm}
+                    <span className="text-xs text-white/60 ml-1">km</span>
                   </div>
                   <div className="text-xs text-white/60">
-                    ~
-                    {(
+                    {`~${(
                       parseFloat(run.distanceKm) *
-                      (5.5 + Math.random() * 1.5)
-                    ).toFixed(0)}
-                    min
+                      (5.5 + Math.random() * 0.5) // Reduced variance
+                    ).toFixed(0)} min`}
                   </div>
                 </div>
               </div>
@@ -822,15 +800,15 @@ const StatsSection: React.FC = () => {
 
         {/* Performance Insights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-green-500/10 via-white/1 to-green-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-red-500/10 via-white/1 to-red-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Trophy size={14} className="text-green-400 mr-2" />
+                <Trophy size={14} className="text-red-400 mr-2" />
                 <span className="text-xs font-medium text-white">
                   Longest Run
                 </span>
               </div>
-              <span className="text-lg font-bold text-green-400">
+              <span className="text-lg font-bold text-red-400">
                 {Math.max(
                   ...stravaData.recentRuns.map((r) => parseFloat(r.distanceKm)),
                 ).toFixed(1)}
@@ -904,51 +882,46 @@ const StatsSection: React.FC = () => {
     const ankiData = stats.anki;
 
     // Card distribution with modern colors
-    const cardDistributionData = [
-      {
-        name: "New",
-        value: ankiData.cardDistribution.new.count,
-        percentage: ankiData.cardDistribution.new.percentage,
-        color: "#3b82f6",
-      },
-      {
-        name: "Learning",
-        value: ankiData.cardDistribution.learning.count,
-        percentage: ankiData.cardDistribution.learning.percentage,
-        color: "#f59e0b",
-      },
-      {
-        name: "Young",
-        value: ankiData.cardDistribution.young.count,
-        percentage: ankiData.cardDistribution.young.percentage,
-        color: "#10b981",
-      },
-      {
-        name: "Mature",
-        value: ankiData.cardDistribution.mature.count,
-        percentage: ankiData.cardDistribution.mature.percentage,
-        color: "#8b5cf6",
-      },
-      {
-        name: "Relearning",
-        value: ankiData.cardDistribution.relearning.count,
-        percentage: ankiData.cardDistribution.relearning.percentage,
-        color: "#ef4444",
-      },
-    ].filter((item) => item.value > 0);
+    const cardDistributionData = Object.entries(ankiData.cardDistribution)
+      .map(([key, value]) => {
+        if (key === "total" || typeof value !== "object") return null;
+        const colorMap: { [key: string]: string } = {
+          new: "#3b82f6",
+          learning: "#f59e0b",
+          young: "#10b981",
+          mature: "#8b5cf6",
+          relearning: "#ef4444",
+        };
+        return {
+          name: key.charAt(0).toUpperCase() + key.slice(1),
+          value: value.count,
+          percentage: value.percentage,
+          color: colorMap[key],
+        };
+      })
+      .filter(
+        (item): item is NonNullable<typeof item> =>
+          item !== null && item.value > 0,
+      );
 
-    // Weekly activity from most active deck
-    const mostActiveDeck =
-      ankiData.decks.find((deck) => deck.reviewsToday > 0) || ankiData.decks[2];
-    const weeklyActivityData =
-      mostActiveDeck && "weeklyActivity" in mostActiveDeck
-        ? (mostActiveDeck as ExtendedDeck).weeklyActivity.map(
-            (day: WeeklyActivity) => ({
-              day: day.dayName.slice(0, 3),
-              reviews: day.reviewCount,
-            }),
-          )
-        : [];
+    // Aggregate weekly activity across all decks
+    const weeklyActivityData = ankiData.decks
+      .reduce((acc: { day: string; reviews: number }[], deck) => {
+        deck.weeklyActivity.forEach((dayActivity) => {
+          const day = dayActivity.dayName.slice(0, 3);
+          const existingDay = acc.find((d) => d.day === day);
+          if (existingDay) {
+            existingDay.reviews += dayActivity.reviewCount;
+          } else {
+            acc.push({ day, reviews: dayActivity.reviewCount });
+          }
+        });
+        return acc;
+      }, [])
+      .sort((a, b) => {
+        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        return days.indexOf(a.day) - days.indexOf(b.day);
+      });
 
     return (
       <div className="space-y-6">
@@ -986,11 +959,11 @@ const StatsSection: React.FC = () => {
 
           <StatCard
             title="Total"
-            value={ankiData.cardDistribution.total.toString()}
+            value={ankiData.cardDistribution.total.toLocaleString()}
             unit="cards"
             icon={Layers}
             gradient="from-purple-500/20 to-pink-500/20"
-            description="All decks"
+            description="Across all decks"
             layout="compact"
           />
         </div>
@@ -1004,15 +977,9 @@ const StatsSection: React.FC = () => {
                 <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
                   <Calendar size={16} className="text-accent-main" />
                 </div>
-                <h3 className="text-sm font-bold text-white">Weekly Pattern</h3>
-              </div>
-              <div className="text-xs text-white/60">
-                {mostActiveDeck && "deckName" in mostActiveDeck
-                  ? (mostActiveDeck as DeckWithName).deckName
-                      .replace(/[🔰⭐💬🗾🧩]/g, "")
-                      .trim()
-                      .slice(0, 15)
-                  : "No deck data"}
+                <h3 className="text-sm font-bold text-white">
+                  Aggregated Weekly Reviews
+                </h3>
               </div>
             </div>
 
@@ -1023,7 +990,23 @@ const StatsSection: React.FC = () => {
                   <XAxis dataKey="day" stroke="#ffffff60" fontSize={11} />
                   <YAxis stroke="#ffffff60" fontSize={11} />
                   <Tooltip content={<CustomTooltip unit=" reviews" />} />
-                  <Bar dataKey="reviews" fill="#00ff88" radius={[3, 3, 0, 0]} />
+                  <Bar
+                    dataKey="reviews"
+                    fill="url(#ankiGradient)"
+                    radius={[3, 3, 0, 0]}
+                  />
+                  <defs>
+                    <linearGradient
+                      id="ankiGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -1035,7 +1018,7 @@ const StatsSection: React.FC = () => {
           </div>
 
           {/* Card Distribution */}
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturat                                                   e-150">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center mb-3">
               <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
                 <PieChartIcon size={16} className="text-accent-mid" />
@@ -1050,14 +1033,14 @@ const StatsSection: React.FC = () => {
                     data={cardDistributionData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={20}
-                    outerRadius={45}
-                    paddingAngle={2}
+                    innerRadius={25}
+                    outerRadius={50}
+                    paddingAngle={3}
                     dataKey="value"
                     strokeWidth={0}
                   >
-                    {cardDistributionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    {cardDistributionData.map((entry) => (
+                      <Cell key={`cell-${entry.name}`} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip
@@ -1069,7 +1052,11 @@ const StatsSection: React.FC = () => {
                           <div className="bg-gray-900/95 border border-white/20 rounded-lg p-2 shadow-xl backdrop-blur-sm">
                             <p className="text-white text-xs font-medium">
                               {data.name}: {data.value.toLocaleString()} cards (
-                              {data.percentage.toFixed(1)}%)
+                              {
+                                // @ts-expect-error - percentage is on payload
+                                data.payload.percentage.toFixed(1)
+                              }
+                              %)
                             </p>
                           </div>
                         );
@@ -1079,9 +1066,9 @@ const StatsSection: React.FC = () => {
                   />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="flex-1 space-y-1">
-                {cardDistributionData.slice(0, 4).map((item, index) => (
-                  <div key={index} className="flex items-center text-xs">
+              <div className="flex-1 space-y-1.5">
+                {cardDistributionData.map((item) => (
+                  <div key={item.name} className="flex items-center text-xs">
                     <div
                       className="w-2 h-2 rounded-full mr-2"
                       style={{ backgroundColor: item.color }}
@@ -1089,7 +1076,7 @@ const StatsSection: React.FC = () => {
                     <span className="text-white/80 truncate flex-1">
                       {item.name}
                     </span>
-                    <span className="text-white/60">
+                    <span className="text-white/60 ml-auto">
                       {item.percentage.toFixed(1)}%
                     </span>
                   </div>
@@ -1101,20 +1088,20 @@ const StatsSection: React.FC = () => {
 
         {/* Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-green-500/10 via-white/1 to-green-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-red-500/10 via-white/1 to-red-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <CheckCircle size={14} className="text-green-400 mr-2" />
+                <CheckCircle size={14} className="text-red-400 mr-2" />
                 <span className="text-xs font-medium text-white">
-                  Retention
+                  Retention (30d)
                 </span>
               </div>
-              <span className="text-lg font-bold text-green-400">
+              <span className="text-lg font-bold text-red-400">
                 {ankiData.retention.recent30Days.toFixed(1)}%
               </span>
             </div>
             <div className="text-xs text-white/60 mt-1">
-              {ankiData.retention.totalReviews.recent30Days} reviews (30d)
+              {ankiData.retention.totalReviews.recent30Days} reviews
             </div>
           </div>
 
@@ -1122,13 +1109,15 @@ const StatsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Clock size={14} className="text-blue-400 mr-2" />
-                <span className="text-xs font-medium text-white">Speed</span>
+                <span className="text-xs font-medium text-white">
+                  Avg. Speed
+                </span>
               </div>
               <span className="text-lg font-bold text-blue-400">
                 {ankiData.efficiency.avgSecondsPerCard.toFixed(1)}s
               </span>
             </div>
-            <div className="text-xs text-white/60 mt-1">Per card average</div>
+            <div className="text-xs text-white/60 mt-1">Per card</div>
           </div>
 
           <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-purple-500/10 via-white/1 to-purple-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
@@ -1136,16 +1125,14 @@ const StatsSection: React.FC = () => {
               <div className="flex items-center">
                 <TrendingUp size={14} className="text-purple-400 mr-2" />
                 <span className="text-xs font-medium text-white">
-                  Daily Avg
+                  Daily Avg (30d)
                 </span>
               </div>
               <span className="text-lg font-bold text-purple-400">
                 {ankiData.averages.last30Days.cardsPerDay.toFixed(0)}
               </span>
             </div>
-            <div className="text-xs text-white/60 mt-1">
-              Cards per day (30d)
-            </div>
+            <div className="text-xs text-white/60 mt-1">Cards per day</div>
           </div>
         </div>
 
@@ -1162,51 +1149,61 @@ const StatsSection: React.FC = () => {
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left py-2 text-white/80 font-medium">
+                  <th className="text-left p-2 text-white/80 font-medium">
                     Deck
                   </th>
-                  <th className="text-right py-2 text-white/80 font-medium">
+                  <th className="text-right p-2 text-white/80 font-medium">
                     Today
                   </th>
-                  <th className="text-right py-2 text-white/80 font-medium">
-                    Total
+                  <th className="text-right p-2 text-white/80 font-medium">
+                    Total Cards
                   </th>
-                  <th className="text-right py-2 text-white/80 font-medium">
-                    Retention
+                  <th className="text-right p-2 text-white/80 font-medium">
+                    Retention (30d)
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {ankiData.decks.slice(0, 4).map((deck, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                  >
-                    <td className="py-2">
-                      <div className="flex items-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent-main mr-2" />
-                        <span className="text-white font-medium truncate max-w-[120px]">
-                          {deck.deckName.replace(/[🔰⭐💬🗾🧩]/g, "").trim()}
+                {ankiData.decks
+                  .filter((deck) => deck.cardTypes.total > 0)
+                  .slice(0, 5)
+                  .map((deck) => (
+                    <tr
+                      key={deck.deckName}
+                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    >
+                      <td className="p-2">
+                        <div className="flex items-center">
+                          <span className="font-medium text-white truncate max-w-[150px] sm:max-w-[250px]">
+                            {deck.deckName.replace(/[🔰⭐💬🗾🧩]/g, "").trim()}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="text-right p-2 text-white/80">
+                        {deck.reviewsToday}
+                      </td>
+                      <td className="text-right p-2 text-white/80">
+                        {deck.cardTypes.total.toLocaleString()}
+                      </td>
+                      <td className="text-right p-2">
+                        <span
+                          className={`font-medium ${
+                            deck.retention30Days >= 85
+                              ? "text-red-400"
+                              : deck.retention30Days >= 70
+                                ? "text-yellow-400"
+                                : deck.retention30Days > 0
+                                  ? "text-orange-400"
+                                  : "text-white/40"
+                          }`}
+                        >
+                          {deck.retention30Days > 0
+                            ? `${deck.retention30Days.toFixed(1)}%`
+                            : "N/A"}
                         </span>
-                      </div>
-                    </td>
-                    <td className="text-right py-2 text-white/80">
-                      {deck.reviewsToday}
-                    </td>
-                    <td className="text-right py-2 text-white/80">
-                      {deck.cardTypes.total.toLocaleString()}
-                    </td>
-                    <td className="text-right py-2">
-                      <span
-                        className={`font-medium ${deck.retention30Days > 80 ? "text-green-400" : deck.retention30Days > 60 ? "text-yellow-400" : "text-red-400"}`}
-                      >
-                        {deck.retention30Days > 0
-                          ? `${deck.retention30Days.toFixed(1)}%`
-                          : "N/A"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

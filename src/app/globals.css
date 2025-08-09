@@ -9,9 +9,9 @@ body {
 
 @theme {
   /* REVERTED: Original color values with the new variable names */
-  --color-accent-main: oklch(0.75 0.15 145); /* Original Green */
-  --color-accent-mid: oklch(0.75 0.12 210); /* Original Blue */
-  --color-accent-light: oklch(0.75 0.13 195); /* Original Cyan */
+  --color-accent-main: oklch(0.7 0.1 20); /* Red */
+  --color-accent-mid: oklch(0.7 0.1 30); /* Reddish */
+  --color-accent-light: oklch(0.7 0.1 10); /* Reddish */
 
   /* REVERTED: Original glass color hue */
   --color-glass-dark: oklch(0.12 0.02 240 / 0.96);

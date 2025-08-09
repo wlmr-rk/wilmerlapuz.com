@@ -356,6 +356,23 @@ export const useStats = () => {
                 activeDays: toNumber(raw.averages.last90Days.activeDays),
               },
             },
+            overall: {
+              ...raw.overall,
+              reviewsToday: toNumber(raw.overall.reviewsToday),
+              timeMinutesToday: toNumber(raw.overall.timeMinutesToday),
+              matureCardRetentionPercent: toNumber(
+                raw.overall.matureCardRetentionPercent,
+              ),
+              currentStreakDays: toNumber(raw.overall.currentStreakDays),
+              cardCounts: {
+                ...raw.overall.cardCounts,
+                new: toNumber(raw.overall.cardCounts.new),
+                learning: toNumber(raw.overall.cardCounts.learning),
+                young: toNumber(raw.overall.cardCounts.young),
+                mature: toNumber(raw.overall.cardCounts.mature),
+                total: toNumber(raw.overall.cardCounts.total),
+              },
+            },
           };
         }
 

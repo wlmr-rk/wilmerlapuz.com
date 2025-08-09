@@ -32,15 +32,6 @@ export interface StravaStats {
   }>;
 }
 
-export interface SpotifyStats {
-  isPlaying: boolean;
-  title: string;
-  artist: string;
-  album: string;
-  albumImageUrl: string;
-  songUrl: string;
-}
-
 export interface LeetCodeStats {
   username: string;
   totalSolved: number;
@@ -141,7 +132,6 @@ export interface AnkiStats {
 export interface AllStats {
   wakatime?: WakaTimeStats;
   strava?: StravaStats;
-  spotify?: SpotifyStats;
   leetcode?: LeetCodeStats;
   anki?: AnkiStats;
   lastUpdated: string;

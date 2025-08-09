@@ -160,7 +160,7 @@ const StatsSection: React.FC = () => {
       ? stats.wakatime.languages.slice(0, 3).map((lang, index) => ({
           name: lang.name,
           value: lang.percent,
-          color: ["#00ff88", "#0088ff", "#ff8800"][index] || "#6b7280",
+          color: ["#ff453a", "#ff6b6b", "#ff8f8f"][index] || "#6b7280",
         }))
       : [];
 
@@ -191,7 +191,7 @@ const StatsSection: React.FC = () => {
             value={stats?.wakatime?.today.timeTodayMinutes?.toString() || "0"}
             unit="min"
             icon={Code2}
-            gradient="from-green-500/20 to-emerald-500/20"
+            gradient="from-red-500/20 to-rose-500/20"
             description={stats?.wakatime?.today.topLanguage || "N/A"}
             layout="compact"
           />
@@ -250,10 +250,10 @@ const StatsSection: React.FC = () => {
                       x2="0"
                       y2="1"
                     >
-                      <stop offset="5%" stopColor="#00ff88" stopOpacity={0.4} />
+                      <stop offset="5%" stopColor="#ff453a" stopOpacity={0.4} />
                       <stop
                         offset="95%"
-                        stopColor="#00ff88"
+                        stopColor="#ff453a"
                         stopOpacity={0.05}
                       />
                     </linearGradient>
@@ -265,7 +265,7 @@ const StatsSection: React.FC = () => {
                   <Area
                     type="monotone"
                     dataKey="value"
-                    stroke="#00ff88"
+                    stroke="#ff453a"
                     fillOpacity={1}
                     fill="url(#codingGradient)"
                     strokeWidth={2}
@@ -378,41 +378,6 @@ const StatsSection: React.FC = () => {
             </ResponsiveContainer>
           </div>
         )}
-
-        {/* Currently Playing */}
-        {stats?.spotify && (
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-white/4 via-white/1 to-white/3 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
-            <div className="flex items-center justify-betw                                                   een">
-              <div className="flex items-center">
-                <div className="p-1.5 rounded-lg bg-white/10 backdrop-blur-[20px] mr-2">
-                  <Music size={16} className="text-green-400" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white">
-                    {stats.spotify.isPlaying ? "Now Playing" : "Last Played"}
-                  </h3>
-                  <p className="text-white/60 text-xs">
-                    {stats.spotify.title} • {stats.spotify.artist}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                {stats.spotify.isPlaying ? (
-                  <Play size={14} className="text-green-400 mr-2" />
-                ) : (
-                  <Pause size={14} className="text-white/60 mr-2" />
-                )}
-                <Image
-                  src={stats.spotify.albumImageUrl}
-                  alt={stats.spotify.album}
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   };
@@ -500,10 +465,10 @@ const StatsSection: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="hours"
-                  stroke="#00ff88"
+                  stroke="#ff453a"
                   strokeWidth={3}
-                  dot={{ fill: "#00ff88", strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, stroke: "#00ff88", strokeWidth: 2 }}
+                  dot={{ fill: "#ff453a", strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, stroke: "#ff453a", strokeWidth: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -630,7 +595,7 @@ const StatsSection: React.FC = () => {
             value={avgDistance.toFixed(1)}
             unit="km"
             icon={Target}
-            gradient="from-green-500/20 to-emerald-500/20"
+            gradient="from-red-500/20 to-rose-500/20"
             description="Per run"
             layout="compact"
           />
@@ -839,15 +804,15 @@ const StatsSection: React.FC = () => {
 
         {/* Performance Insights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-green-500/10 via-white/1 to-green-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-red-500/10 via-white/1 to-red-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Trophy size={14} className="text-green-400 mr-2" />
+                <Trophy size={14} className="text-red-400 mr-2" />
                 <span className="text-xs font-medium text-white">
                   Longest Run
                 </span>
               </div>
-              <span className="text-lg font-bold text-green-400">
+              <span className="text-lg font-bold text-red-400">
                 {Math.max(
                   ...stravaData.recentRuns.map((r) => parseFloat(r.distanceKm)),
                 ).toFixed(1)}
@@ -1127,15 +1092,15 @@ const StatsSection: React.FC = () => {
 
         {/* Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-green-500/10 via-white/1 to-green-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
+          <div className="bento-item ease-snappy relative z-2 border border-white/8 bg-linear-to-br/oklch from-red-500/10 via-white/1 to-red-500/5 rounded-2xl p-4 backdrop-blur-[40px] backdrop-saturate-150">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <CheckCircle size={14} className="text-green-400 mr-2" />
+                <CheckCircle size={14} className="text-red-400 mr-2" />
                 <span className="text-xs font-medium text-white">
                   Retention (30d)
                 </span>
               </div>
-              <span className="text-lg font-bold text-green-400">
+              <span className="text-lg font-bold text-red-400">
                 {ankiData.retention.recent30Days.toFixed(1)}%
               </span>
             </div>
@@ -1228,11 +1193,11 @@ const StatsSection: React.FC = () => {
                         <span
                           className={`font-medium ${
                             deck.retention30Days >= 85
-                              ? "text-green-400"
+                              ? "text-red-400"
                               : deck.retention30Days >= 70
                                 ? "text-yellow-400"
                                 : deck.retention30Days > 0
-                                  ? "text-red-400"
+                                  ? "text-orange-400"
                                   : "text-white/40"
                           }`}
                         >

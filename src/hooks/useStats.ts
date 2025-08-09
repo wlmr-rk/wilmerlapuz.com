@@ -155,11 +155,10 @@ export const useStats = () => {
       try {
         setLoading(true);
 
-        const [wakatimeRes, stravaRes, spotifyRes, leetcodeRes, ankiRes] =
+        const [wakatimeRes, stravaRes, leetcodeRes, ankiRes] =
           await Promise.all([
             fetch("/wakatime-data.json").catch(() => null),
             fetch("/strava-data.json").catch(() => null),
-            fetch("/spotify-data.json").catch(() => null),
             fetch("/leetcode-data.json").catch(() => null),
             fetch("/anki-data.json").catch(() => null),
           ]);
@@ -216,11 +215,6 @@ export const useStats = () => {
             ...raw,
             totalRuns: toNumber(raw.totalRuns),
           };
-        }
-
-        // --- SPOTIFY (no numeric conversions needed) ---
-        if (spotifyRes?.ok) {
-          acc.spotify = await spotifyRes.json();
         }
 
         // --- LEETCODE ---

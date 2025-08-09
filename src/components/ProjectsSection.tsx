@@ -123,7 +123,7 @@ const projects: Project[] = [
       "Custom chart implementations",
       "Performance optimization",
     ],
-    gradient: "from-green-500/20 to-emerald-500/20",
+    gradient: "from-red-500/20 to-rose-500/20",
     icon: Smartphone,
   },
   {

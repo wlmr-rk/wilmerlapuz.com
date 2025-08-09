@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@vercel/postgres"; // Use the Vercel Postgres SDK
 
-// Instantiate Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Instantiate Resend only if the API key is available
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 const TO_EMAIL = "wilmer.lapuz@gmail.com";
 const FROM_EMAIL = "onboarding@wilmerlapuz.com";
 
@@ -34,6 +36,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Failed to save submission to the database." },
         { status: 500 },
+      );
+    }
+
+    // --- 2. SEND EMAIL NOTIFICATION ---
+    if (!resend) {
+      console.warn(
+        "Resend API key is missing or invalid. Skipping email notification.",
+      );
+      // The submission is saved, but email is disabled.
+      // Return a multi-status response to indicate partial success.
+      return NextResponse.json(
+        { message: "Submission saved, but email notification is disabled." },
+        { status: 207 },
       );
     }
 

@@ -22,9 +22,6 @@ import {
   Code2,
   Activity,
   BookOpen,
-  Music,
-  Play,
-  Pause,
   Calendar,
   Clock,
   Target,
@@ -44,7 +41,6 @@ import {
   Route,
   Footprints,
 } from "lucide-react";
-import Image from "next/image";
 import { useStats } from "../hooks/useStats";
 import StatCard from "./ui/StatCard";
 

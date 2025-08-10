@@ -181,7 +181,7 @@ const ContactSection: React.FC = () => {
 
           {/* Availability Status */}
           <div className="inline-flex items-center px-4 py-2 rounded-full border border-accent-main/20 bg-accent-main/5 backdrop-blur-[40px]">
-            <span className="status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-2 mr-3 shadow-[0_0_12px_rgba(0,255,136,0.8)]" />
+            <span className="status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-2 mr-3 shadow-[0_0_12px_rgba(255,90,90,0.8)]" />
             <span className="text-sm font-semibold text-accent-main">
               Available for immediate opportunities
             </span>
@@ -194,7 +194,7 @@ const ContactSection: React.FC = () => {
             <div className="card-container relative perspective-distant">
               <div className="card card-glass ease-fluid relative transform-3d overflow-hidden rounded-3xl border border-white/15 p-8 lg:p-12 backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-800 hover:border-white/22">
                 {/* Floating accent */}
-                <div className="floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.9)]" />
+                <div className="floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(255,90,90,0.9)]" />
 
                 <div className="flex items-center mb-8">
                   <div className="p-3 rounded-xl bg-white/10 backdrop-blur-[20px] mr-4">
@@ -349,7 +349,7 @@ const ContactSection: React.FC = () => {
                   <button
                     type="submit"
                     disabled={status.type === "loading"}
-                    className="ease-snappy w-full flex items-center justify-center px-8 py-4 rounded-xl border border-accent-main/20 bg-linear-to-br/oklch from-accent-main/15 via-accent-light/10 to-accent-mid/15 text-white font-semibold inset-shadow-[0_2px_4px_rgba(255,255,255,0.1)] shadow-[0_8px_24px_rgba(0,255,136,0.2)] transition-all duration-400 hover:border-accent-main/30 hover:bg-linear-to-br hover:from-accent-main/25 hover:via-accent-light/15 hover:to-accent-mid/25 hover:inset-shadow-[0_4px_8px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_32px_rgba(0,255,136,0.3)] hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    className="ease-snappy w-full flex items-center justify-center px-8 py-4 rounded-xl border border-accent-main/20 bg-linear-to-br/oklch from-accent-main/15 via-accent-light/10 to-accent-mid/15 text-white font-semibold inset-shadow-[0_2px_4px_rgba(255,255,255,0.1)] shadow-[0_8px_24px_rgba(255,90,90,0.2)] transition-all duration-400 hover:border-accent-main/30 hover:bg-linear-to-br hover:from-accent-main/25 hover:via-accent-light/15 hover:to-accent-mid/25 hover:inset-shadow-[0_4px_8px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_32px_rgba(255,90,90,0.3)] hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     <Send size={18} className="mr-2" />
                     {status.type === "loading" ? "Sending..." : "Send Message"}

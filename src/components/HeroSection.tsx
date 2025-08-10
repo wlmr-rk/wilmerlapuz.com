@@ -67,11 +67,11 @@ const HeroSection: React.FC = () => {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <div className="card-container relative perspective-distant">
-          <div className="card card-glass ease-fluid relative transform-3d overflow-hidden rounded-3xl sm:rounded-4xl border border-white/15 p-8 sm:p-12 lg:p-16 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08)] shadow-[0_2px_8px_rgba(0,255,136,0.05),0_8px_32px_rgba(0,0,0,0.7),0_32px_64px_rgba(0,0,0,0.8),0_64px_128px_rgba(0,0,0,0.9)] inset-shadow-[0_2px_4px_rgba(255,255,255,0.2),0_-2px_4px_rgba(0,0,0,0.9),0_0_80px_rgba(255,255,255,0.03)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-800 hover:border-white/22">
-            <div className="floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.9),0_0_32px_rgba(0,255,136,0.5)]" />
+          <div className="card card-glass ease-fluid relative transform-3d overflow-hidden rounded-3xl sm:rounded-4xl border border-white/15 p-8 sm:p-12 lg:p-16 inset-shadow-[0_0_0_1px_rgba(255,255,255,0.08)] shadow-[0_2px_8px_rgba(255,90,90,0.05),0_8px_32px_rgba(0,0,0,0.7),0_32px_64px_rgba(0,0,0,0.8),0_64px_128px_rgba(0,0,0,0.9)] inset-shadow-[0_2px_4px_rgba(255,255,255,0.2),0_-2px_4px_rgba(0,0,0,0.9),0_0_80px_rgba(255,255,255,0.03)] backdrop-blur-[80px] backdrop-brightness-110 backdrop-saturate-200 transition-all duration-800 hover:border-white/22">
+            <div className="floating-accent absolute top-6 right-6 z-10 size-1.5 animate-[float-accent_5s_ease-in_out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid shadow-[0_0_16px_rgba(255,90,90,0.9),0_0_32px_rgba(255,90,90,0.5)]" />
 
             <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full border border-white/15 bg-linear-to-r/oklch from-accent-main/10 via-accent-light/5 to-accent-mid/10 backdrop-blur-[40px]">
-              <span className="status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-2 mr-3 shadow-[0_0_12px_rgba(0,255,136,0.8)]" />
+              <span className="status-dot relative inline-block animate-[pulse_2.5s_ease-in-out_infinite] rounded-full bg-linear-to-br/oklch from-accent-main to-accent-mid size-2 mr-3 shadow-[0_0_12px_rgba(255,90,90,0.8)]" />
               <span className="text-sm font-semibold text-accent-main tracking-wide">
                 Open to Work
               </span>
@@ -126,7 +126,7 @@ const HeroSection: React.FC = () => {
                     projectsSection.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="ease-snappy px-8 py-4 rounded-xl border border-white/20 bg-linear-to-br/oklch from-accent-main/15 via-accent-light/10 to-accent-mid/15 text-white font-semibold inset-shadow-[0_2px_4px_rgba(255,255,255,0.1)] shadow-[0_8px_24px_rgba(0,255,136,0.2)] transition-all duration-400 hover:border-white/30 hover:bg-linear-to-br hover:from-accent-main/25 hover:via-accent-light/15 hover:to-accent-mid/25 hover:inset-shadow-[0_4px_8px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_32px_rgba(0,255,136,0.3)] hover:-translate-y-1"
+                className="ease-snappy px-8 py-4 rounded-xl border border-white/20 bg-linear-to-br/oklch from-accent-main/15 via-accent-light/10 to-accent-mid/15 text-white font-semibold inset-shadow-[0_2px_4px_rgba(255,255,255,0.1)] shadow-[0_8px_24px_rgba(255,90,90,0.2)] transition-all duration-400 hover:border-white/30 hover:bg-linear-to-br hover:from-accent-main/25 hover:via-accent-light/15 hover:to-accent-mid/25 hover:inset-shadow-[0_4px_8px_rgba(255,255,255,0.15)] hover:shadow-[0_12px_32px_rgba(255,90,90,0.3)] hover:-translate-y-1"
               >
                 View My Work
               </a>
@@ -164,7 +164,7 @@ const HeroSection: React.FC = () => {
               })}
             </div>
 
-            <div className="accent-line relative mx-auto mt-10 h-1 w-16 rounded bg-linear-to-r/oklch from-accent-main via-accent-light to-accent-mid shadow-[0_0_16px_rgba(0,255,136,0.5),0_4px_8px_rgba(0,0,0,0.3)]" />
+            <div className="accent-line relative mx-auto mt-10 h-1 w-16 rounded bg-linear-to-r/oklch from-accent-main via-accent-light to-accent-mid shadow-[0_0_16px_rgba(255,90,90,0.5),0_4px_8px_rgba(0,0,0,0.3)]" />
           </div>
         </div>
 

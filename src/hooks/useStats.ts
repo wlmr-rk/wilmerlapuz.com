@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { AllStats } from "../types/stats";
+import type { AllStats, SpotifyStats } from "../types/stats";
 
 interface WakatimeRaw {
   lastUpdated: string;
@@ -53,91 +53,19 @@ interface LeetCodeRaw {
   hardAvailable: unknown;
 }
 
-interface AnkiDeckRaw {
-  deckName: string;
-  reviewsToday: unknown;
-  reviewsPastWeek: unknown;
-  currentStreak: unknown;
-  weeklyActivity: Array<{
-    date: string;
-    dayName: string;
-    reviewCount: unknown;
-    studiedToday: boolean;
-  }>;
-  cardTypes: {
-    new: { count: unknown; percentage: unknown };
-    learning: { count: unknown; percentage: unknown };
-    relearning: { count: unknown; percentage: unknown };
-    young: { count: unknown; percentage: unknown };
-    mature: { count: unknown; percentage: unknown };
-    total: unknown;
-  };
-  retention30Days: unknown;
-  totalReviews30Days: unknown;
-}
-
 interface AnkiRaw {
   lastUpdated: string;
-  today: {
-    reviewsCompleted: unknown;
-    studyTimeMinutes: unknown;
-    cardsDue: unknown;
-    estimatedTimeRemaining: unknown;
-  };
-  streaks: {
-    current: unknown;
-    longest: unknown;
-  };
-  averages: {
-    last30Days: {
-      cardsPerDay: unknown;
-      minutesPerDay: unknown;
-      sessionsPerDay: unknown;
-      activeDays: unknown;
-    };
-    last90Days: {
-      cardsPerDay: unknown;
-      minutesPerDay: unknown;
-      sessionsPerDay: unknown;
-      activeDays: unknown;
-    };
-  };
-  cardDistribution: {
-    new: { count: unknown; percentage: unknown };
-    learning: { count: unknown; percentage: unknown };
-    relearning: { count: unknown; percentage: unknown };
-    young: { count: unknown; percentage: unknown };
-    mature: { count: unknown; percentage: unknown };
-    total: unknown;
-  };
-  retention: {
-    recent30Days: unknown;
-    matureCards: unknown;
-    youngCards: unknown;
-    totalReviews: {
-      recent30Days: unknown;
-      mature: unknown;
-      young: unknown;
-    };
-  };
-  efficiency: {
-    avgSecondsPerCard: unknown;
-    totalRecentReviews: unknown;
-  };
-  decks: AnkiDeckRaw[];
-  overall: {
-    reviewsToday: unknown;
-    timeMinutesToday: unknown;
-    matureCardRetentionPercent: unknown;
-    currentStreakDays: unknown;
-    cardCounts: {
-      new: unknown;
-      learning: unknown;
-      young: unknown;
-      mature: unknown;
-      total: unknown;
-    };
-  };
+  total_cards: unknown;
+  mature_cards: unknown;
+  due_today: unknown;
+  new_today: unknown;
+  learning_today: unknown;
+  decks: Array<{
+    deckName: string;
+    due: unknown;
+    new: unknown;
+    learning: unknown;
+  }>;
 }
 
 function toNumber(v: unknown): number {
@@ -155,12 +83,13 @@ export const useStats = () => {
       try {
         setLoading(true);
 
-        const [wakatimeRes, stravaRes, leetcodeRes, ankiRes] =
+        const [wakatimeRes, stravaRes, leetcodeRes, ankiRes, spotifyRes] =
           await Promise.all([
             fetch("/wakatime-data.json").catch(() => null),
             fetch("/strava-data.json").catch(() => null),
             fetch("/leetcode-data.json").catch(() => null),
             fetch("/anki-data.json").catch(() => null),
+            fetch("/spotify-data.json").catch(() => null),
           ]);
 
         const acc: Partial<AllStats> = {};
@@ -233,138 +162,84 @@ export const useStats = () => {
           };
         }
 
+        // --- SPOTIFY ---
+        if (spotifyRes?.ok) {
+          const raw: SpotifyStats = await spotifyRes.json();
+          acc.spotify = raw;
+        }
+
         // --- ANKI ---
         if (ankiRes?.ok) {
           const raw: AnkiRaw = await ankiRes.json();
+          const totalCards = toNumber(raw.total_cards);
+          const matureCards = toNumber(raw.mature_cards);
+          const newCards = toNumber(raw.new_today);
+          const learningCards = toNumber(raw.learning_today);
+
           acc.anki = {
-            ...raw,
+            lastUpdated: raw.lastUpdated,
             today: {
-              reviewsCompleted: toNumber(raw.today.reviewsCompleted),
-              studyTimeMinutes: toNumber(raw.today.studyTimeMinutes),
-              cardsDue: toNumber(raw.today.cardsDue),
-              estimatedTimeRemaining: toNumber(
-                raw.today.estimatedTimeRemaining,
-              ),
+              reviewsCompleted: 0, // Not available in new JSON
+              studyTimeMinutes: 0, // Not available in new JSON
+              cardsDue: toNumber(raw.due_today),
+              estimatedTimeRemaining: 0, // Not available in new JSON
             },
             streaks: {
-              current: toNumber(raw.streaks.current),
-              longest: toNumber(raw.streaks.longest),
+              current: 0, // Not available in new JSON
+              longest: 0, // Not available in new JSON
             },
             cardDistribution: {
-              ...raw.cardDistribution,
-              new: {
-                count: toNumber(raw.cardDistribution.new.count),
-                percentage: toNumber(raw.cardDistribution.new.percentage),
-              },
-              learning: {
-                count: toNumber(raw.cardDistribution.learning.count),
-                percentage: toNumber(raw.cardDistribution.learning.percentage),
-              },
-              young: {
-                count: toNumber(raw.cardDistribution.young.count),
-                percentage: toNumber(raw.cardDistribution.young.percentage),
-              },
-              mature: {
-                count: toNumber(raw.cardDistribution.mature.count),
-                percentage: toNumber(raw.cardDistribution.mature.percentage),
-              },
-              relearning: {
-                count: toNumber(raw.cardDistribution.relearning.count),
-                percentage: toNumber(
-                  raw.cardDistribution.relearning.percentage,
-                ),
-              },
-              total: toNumber(raw.cardDistribution.total),
+              total: totalCards,
+              mature: { count: matureCards, percentage: (matureCards / totalCards) * 100 },
+              new: { count: newCards, percentage: (newCards / totalCards) * 100 },
+              learning: { count: learningCards, percentage: (learningCards / totalCards) * 100 },
+              young: { count: 0, percentage: 0 }, // Not available
+              relearning: { count: 0, percentage: 0 }, // Not available
             },
             decks: raw.decks.map((d) => ({
-              ...d,
-              reviewsToday: toNumber(d.reviewsToday),
-              reviewsPastWeek: toNumber(d.reviewsPastWeek),
-              currentStreak: toNumber(d.currentStreak),
-              retention30Days: toNumber(d.retention30Days),
-              totalReviews30Days: toNumber(d.totalReviews30Days),
-              weeklyActivity: d.weeklyActivity.map((w) => ({
-                ...w,
-                reviewCount: toNumber(w.reviewCount),
-              })),
+              deckName: d.deckName,
+              reviewsToday: toNumber(d.due),
               cardTypes: {
-                ...d.cardTypes,
-                new: {
-                  count: toNumber(d.cardTypes.new.count),
-                  percentage: toNumber(d.cardTypes.new.percentage),
-                },
-                learning: {
-                  count: toNumber(d.cardTypes.learning.count),
-                  percentage: toNumber(d.cardTypes.learning.percentage),
-                },
-                relearning: {
-                  count: toNumber(d.cardTypes.relearning.count),
-                  percentage: toNumber(d.cardTypes.relearning.percentage),
-                },
-                young: {
-                  count: toNumber(d.cardTypes.young.count),
-                  percentage: toNumber(d.cardTypes.young.percentage),
-                },
-                mature: {
-                  count: toNumber(d.cardTypes.mature.count),
-                  percentage: toNumber(d.cardTypes.mature.percentage),
-                },
-                total: toNumber(d.cardTypes.total),
+                new: { count: toNumber(d.new), percentage: 0 },
+                learning: { count: toNumber(d.learning), percentage: 0 },
+                mature: { count: 0, percentage: 0 },
+                young: { count: 0, percentage: 0 },
+                relearning: { count: 0, percentage: 0 },
+                total: toNumber(d.new) + toNumber(d.learning),
               },
+              // Default values for fields not in the new JSON
+              reviewsPastWeek: 0,
+              currentStreak: 0,
+              weeklyActivity: [],
+              retention30Days: 0,
+              totalReviews30Days: 0,
             })),
+            // Default values for top-level fields not in the new JSON
             retention: {
-              ...raw.retention,
-              recent30Days: toNumber(raw.retention.recent30Days),
-              matureCards: toNumber(raw.retention.matureCards),
-              youngCards: toNumber(raw.retention.youngCards),
-              totalReviews: {
-                ...raw.retention.totalReviews,
-                recent30Days: toNumber(raw.retention.totalReviews.recent30Days),
-                mature: toNumber(raw.retention.totalReviews.mature),
-                young: toNumber(raw.retention.totalReviews.young),
-              },
+              recent30Days: 0,
+              matureCards: 0,
+              youngCards: 0,
+              totalReviews: { recent30Days: 0, mature: 0, young: 0 },
             },
             efficiency: {
-              ...raw.efficiency,
-              avgSecondsPerCard: toNumber(raw.efficiency.avgSecondsPerCard),
-              totalRecentReviews: toNumber(raw.efficiency.totalRecentReviews),
+              avgSecondsPerCard: 0,
+              totalRecentReviews: 0,
             },
             averages: {
-              ...raw.averages,
-              last30Days: {
-                ...raw.averages.last30Days,
-                cardsPerDay: toNumber(raw.averages.last30Days.cardsPerDay),
-                minutesPerDay: toNumber(raw.averages.last30Days.minutesPerDay),
-                sessionsPerDay: toNumber(
-                  raw.averages.last30Days.sessionsPerDay,
-                ),
-                activeDays: toNumber(raw.averages.last30Days.activeDays),
-              },
-              last90Days: {
-                ...raw.averages.last90Days,
-                cardsPerDay: toNumber(raw.averages.last90Days.cardsPerDay),
-                minutesPerDay: toNumber(raw.averages.last90Days.minutesPerDay),
-                sessionsPerDay: toNumber(
-                  raw.averages.last90Days.sessionsPerDay,
-                ),
-                activeDays: toNumber(raw.averages.last90Days.activeDays),
-              },
+              last30Days: { cardsPerDay: 0, minutesPerDay: 0, sessionsPerDay: 0, activeDays: 0 },
+              last90Days: { cardsPerDay: 0, minutesPerDay: 0, sessionsPerDay: 0, activeDays: 0 },
             },
             overall: {
-              ...raw.overall,
-              reviewsToday: toNumber(raw.overall.reviewsToday),
-              timeMinutesToday: toNumber(raw.overall.timeMinutesToday),
-              matureCardRetentionPercent: toNumber(
-                raw.overall.matureCardRetentionPercent,
-              ),
-              currentStreakDays: toNumber(raw.overall.currentStreakDays),
+              reviewsToday: 0,
+              timeMinutesToday: 0,
+              matureCardRetentionPercent: 0,
+              currentStreakDays: 0,
               cardCounts: {
-                ...raw.overall.cardCounts,
-                new: toNumber(raw.overall.cardCounts.new),
-                learning: toNumber(raw.overall.cardCounts.learning),
-                young: toNumber(raw.overall.cardCounts.young),
-                mature: toNumber(raw.overall.cardCounts.mature),
-                total: toNumber(raw.overall.cardCounts.total),
+                new: newCards,
+                learning: learningCards,
+                mature: matureCards,
+                young: 0,
+                total: totalCards,
               },
             },
           };

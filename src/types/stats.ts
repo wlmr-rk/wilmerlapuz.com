@@ -129,11 +129,21 @@ export interface AnkiStats {
   };
 }
 
+export interface SpotifyStats {
+  isPlaying: boolean;
+  title: string;
+  artist: string;
+  album: string;
+  albumImageUrl: string;
+  songUrl: string;
+}
+
 export interface AllStats {
   wakatime?: WakaTimeStats;
   strava?: StravaStats;
   leetcode?: LeetCodeStats;
   anki?: AnkiStats;
+  spotify?: SpotifyStats;
   lastUpdated: string;
 }
 

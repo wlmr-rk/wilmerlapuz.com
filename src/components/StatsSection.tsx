@@ -40,9 +40,11 @@ import {
   MapPin,
   Route,
   Footprints,
+  Music,
 } from "lucide-react";
 import { useStats } from "../hooks/useStats";
 import StatCard from "./ui/StatCard";
+import SpotifyStatCard from "./ui/SpotifyStatCard";
 
 interface PieChartData {
   name: string;
@@ -74,6 +76,7 @@ const StatsSection: React.FC = () => {
     { id: "coding", label: "Coding", icon: Code2 },
     { id: "fitness", label: "Fitness", icon: Activity },
     { id: "learning", label: "Learning", icon: BookOpen },
+    { id: "music", label: "Music", icon: Music },
   ];
 
   // Custom tooltip component with proper contrast
@@ -867,6 +870,25 @@ const StatsSection: React.FC = () => {
     );
   };
 
+  const renderMusicTab = () => {
+    if (!stats?.spotify) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <ErrorCard
+            title="Spotify Data Unavailable"
+            message="Unable to load Spotify listening data."
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-center">
+        <SpotifyStatCard {...stats.spotify} />
+      </div>
+    );
+  };
+
   const renderLearningTab = () => {
     if (!stats?.anki) {
       return (
@@ -1271,6 +1293,7 @@ const StatsSection: React.FC = () => {
           {activeTab === "coding" && renderCodingTab()}
           {activeTab === "fitness" && renderFitnessTab()}
           {activeTab === "learning" && renderLearningTab()}
+          {activeTab === "music" && renderMusicTab()}
         </div>
 
         {/* Error State */}

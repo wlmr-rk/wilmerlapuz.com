@@ -1,679 +1,112 @@
 {
-  "lastUpdated": "2025-07-15T15:43:06.966043",
-  "today": {
-    "reviewsCompleted": 3,
-    "studyTimeMinutes": 2,
-    "cardsDue": 1544,
-    "estimatedTimeRemaining": 402.2
-  },
-  "streaks": {
-    "current": 1,
-    "longest": 55
-  },
-  "averages": {
-    "last30Days": {
-      "cardsPerDay": 128.4,
-      "minutesPerDay": 33.4,
-      "sessionsPerDay": 3.4,
-      "activeDays": 8
-    },
-    "last90Days": {
-      "cardsPerDay": 195.9,
-      "minutesPerDay": 24.4,
-      "sessionsPerDay": 2.9,
-      "activeDays": 11
-    }
-  },
-  "cardDistribution": {
-    "new": {
-      "count": 17793,
-      "percentage": 90.2
-    },
-    "learning": {
-      "count": 74,
-      "percentage": 0.4
-    },
-    "relearning": {
-      "count": 56,
-      "percentage": 0.3
-    },
-    "young": {
-      "count": 1227,
-      "percentage": 6.2
-    },
-    "mature": {
-      "count": 583,
-      "percentage": 3.0
-    },
-    "total": 19733
-  },
-  "retention": {
-    "recent30Days": 75.2,
-    "matureCards": 87.9,
-    "youngCards": 78.8,
-    "totalReviews": {
-      "recent30Days": 816,
-      "mature": 340,
-      "young": 13559
-    }
-  },
-  "efficiency": {
-    "avgSecondsPerCard": 15.6,
-    "totalRecentReviews": 1027
-  },
+  "lastUpdated": "2025-08-10T20:22:13.637026",
+  "total_cards": 20191,
+  "mature_cards": 588,
+  "due_today": 1776,
+  "new_today": 18322,
+  "learning_today": 93,
   "decks": [
     {
-      "deckName": "German IPA Deck",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 15,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 15,
-          "studiedToday": true
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 51,
-          "percentage": 91.1
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 5,
-          "percentage": 8.9
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 56
-      },
-      "retention30Days": 66.7,
-      "totalReviews30Days": 15
+      "deckName": "Programming\u001fArch Linux",
+      "due": 28,
+      "new": 247,
+      "learning": 15
     },
     {
-      "deckName": "Goethe Institute A1 Wordlist",
-      "reviewsToday": 3,
-      "reviewsPastWeek": 109,
-      "currentStreak": 1,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 3,
-          "studiedToday": true
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 106,
-          "studiedToday": true
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 1814,
-          "percentage": 97.9
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 38,
-          "percentage": 2.1
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 1852
-      },
-      "retention30Days": 72.5,
-      "totalReviews30Days": 109
+      "deckName": "Japanese\u001f\ud83d\udd30 Kaishi 1.5k",
+      "due": 1166,
+      "new": 329,
+      "learning": 5
     },
     {
-      "deckName": "Goethe Institute A2 Wordlist",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 3760,
-          "percentage": 100.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 3760
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
+      "deckName": "Japanese\u001f\ud83d\udcac \u6c7a\u307e\u308a\u6587\u53e5",
+      "due": 101,
+      "new": 0,
+      "learning": 0
     },
     {
-      "deckName": "⭐ Core 2k/6k Optimized",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 11606,
-          "percentage": 96.6
-        },
-        "learning": {
-          "count": 11,
-          "percentage": 0.1
-        },
-        "relearning": {
-          "count": 8,
-          "percentage": 0.1
-        },
-        "young": {
-          "count": 127,
-          "percentage": 1.1
-        },
-        "mature": {
-          "count": 260,
-          "percentage": 2.2
-        },
-        "total": 12012
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
+      "deckName": "Japanese\u001f\ud83e\udde9 Radicals",
+      "due": 15,
+      "new": 231,
+      "learning": 23
     },
     {
-      "deckName": "💬 決まり文句",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "learning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "relearning": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "young": {
-          "count": 28,
-          "percentage": 27.7
-        },
-        "mature": {
-          "count": 73,
-          "percentage": 72.3
-        },
-        "total": 101
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
+      "deckName": "Japanese\u001f\u2b50 Core 2k/6k Optimized",
+      "due": 380,
+      "new": 11606,
+      "learning": 11
     },
     {
-      "deckName": "🔰 開始 1.5k",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 331,
-          "percentage": 21.9
-        },
-        "learning": {
-          "count": 5,
-          "percentage": 0.3
-        },
-        "relearning": {
-          "count": 5,
-          "percentage": 0.3
-        },
-        "young": {
-          "count": 921,
-          "percentage": 60.9
-        },
-        "mature": {
-          "count": 250,
-          "percentage": 16.5
-        },
-        "total": 1512
-      },
-      "retention30Days": 82.6,
-      "totalReviews30Days": 454
+      "deckName": "Japanese\u001f\ud83d\uddfe \u90fd\u9053\u5e9c\u770c",
+      "due": 66,
+      "new": 0,
+      "learning": 35
     },
     {
-      "deckName": "🗾 都道府県",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "learning": {
-          "count": 35,
-          "percentage": 23.8
-        },
-        "relearning": {
-          "count": 20,
-          "percentage": 13.6
-        },
-        "young": {
-          "count": 92,
-          "percentage": 62.6
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 147
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
+      "deckName": "German\u001f\ud83d\udd30 German 1.5k",
+      "due": 0,
+      "new": 1501,
+      "learning": 1
     },
     {
-      "deckName": "🧩 Radicals",
-      "reviewsToday": 0,
-      "reviewsPastWeek": 0,
-      "currentStreak": 0,
-      "weeklyActivity": [
-        {
-          "date": "2025-07-15",
-          "dayName": "Tuesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-14",
-          "dayName": "Monday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-13",
-          "dayName": "Sunday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-12",
-          "dayName": "Saturday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-11",
-          "dayName": "Friday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-10",
-          "dayName": "Thursday",
-          "reviewCount": 0,
-          "studiedToday": false
-        },
-        {
-          "date": "2025-07-09",
-          "dayName": "Wednesday",
-          "reviewCount": 0,
-          "studiedToday": false
-        }
-      ],
-      "cardTypes": {
-        "new": {
-          "count": 231,
-          "percentage": 78.8
-        },
-        "learning": {
-          "count": 23,
-          "percentage": 7.8
-        },
-        "relearning": {
-          "count": 23,
-          "percentage": 7.8
-        },
-        "young": {
-          "count": 16,
-          "percentage": 5.5
-        },
-        "mature": {
-          "count": 0,
-          "percentage": 0.0
-        },
-        "total": 293
-      },
-      "retention30Days": 0,
-      "totalReviews30Days": 0
+      "deckName": "Japanese",
+      "due": 0,
+      "new": 0,
+      "learning": 0
+    },
+    {
+      "deckName": "German",
+      "due": 0,
+      "new": 0,
+      "learning": 0
+    },
+    {
+      "deckName": "German\u001f\ud83e\ude9c Goethe A1",
+      "due": 10,
+      "new": 1839,
+      "learning": 3
+    },
+    {
+      "deckName": "German\u001f\ud83e\ude9c Goethe A2",
+      "due": 0,
+      "new": 2428,
+      "learning": 0
+    },
+    {
+      "deckName": "German\u001f\ud83e\uddd1\u200d\ud83c\udf93 Academic Terms",
+      "due": 0,
+      "new": 135,
+      "learning": 0
+    },
+    {
+      "deckName": "Programming\u001fTailwind",
+      "due": 1,
+      "new": 6,
+      "learning": 0
+    },
+    {
+      "deckName": "Programming",
+      "due": 0,
+      "new": 0,
+      "learning": 0
+    },
+    {
+      "deckName": "Zettel \u6f22\u5b57",
+      "due": 9,
+      "new": 0,
+      "learning": 0
+    },
+    {
+      "deckName": "Rust",
+      "due": 0,
+      "new": 0,
+      "learning": 0
+    },
+    {
+      "deckName": "Database",
+      "due": 0,
+      "new": 0,
+      "learning": 0
     }
-  ],
-  "overall": {
-    "reviewsToday": 3,
-    "timeMinutesToday": 2,
-    "matureCardRetentionPercent": 87.9,
-    "currentStreakDays": 1,
-    "cardCounts": {
-      "new": 17793,
-      "learning": 74,
-      "young": 1227,
-      "mature": 583,
-      "total": 19733
-    }
-  }
+  ]
 }

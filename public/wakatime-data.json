@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2025-08-12T23:17:37.944Z",
+  "lastUpdated": "2025-08-13T01:27:17.962Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 157,
-    "primaryLanguage": "Markdown",
+    "codingMinutes": 0,
+    "primaryLanguage": "Various",
     "environment": {
-      "editor": "VS Code",
-      "os": "Linux"
+      "editor": "Unknown",
+      "os": "Unknown"
     }
   },
   "weeklyStats": {
-    "totalHoursLast7Days": "9.7",
-    "activeDaysCount": 4,
-    "dailyAverageMinutes": 83,
+    "totalHoursLast7Days": "6.0",
+    "activeDaysCount": 3,
+    "dailyAverageMinutes": 51,
     "languages": {
       "primary": "Markdown",
       "secondary": "TypeScript",
-      "primaryPercentage": "65.2",
-      "secondaryPercentage": "13.7"
+      "primaryPercentage": "45.8",
+      "secondaryPercentage": "22.2"
     },
     "consistency": "Good"
   }

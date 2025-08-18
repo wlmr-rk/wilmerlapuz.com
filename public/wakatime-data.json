@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-08-17T23:17:10.964Z",
+  "lastUpdated": "2025-08-18T01:41:51.578Z",
   "status": "Active Developer",
   "today": {
     "codingMinutes": 0,
@@ -10,14 +10,14 @@
     }
   },
   "weeklyStats": {
-    "totalHoursLast7Days": "8.7",
-    "activeDaysCount": 4,
-    "dailyAverageMinutes": 75,
+    "totalHoursLast7Days": "7.6",
+    "activeDaysCount": 3,
+    "dailyAverageMinutes": 65,
     "languages": {
       "primary": "Svelte",
       "secondary": "Markdown",
-      "primaryPercentage": "48.4",
-      "secondaryPercentage": "28.5"
+      "primaryPercentage": "51.1",
+      "secondaryPercentage": "26.3"
     },
     "consistency": "Good"
   }

@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2025-08-29T07:16:53.758Z",
+  "lastUpdated": "2025-08-29T08:22:56.893Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 105,
+    "codingMinutes": 118,
     "primaryLanguage": "TypeScript",
     "environment": {
       "editor": "Zed",
@@ -10,14 +10,14 @@
     }
   },
   "weeklyStats": {
-    "totalHoursLast7Days": "12.3",
+    "totalHoursLast7Days": "12.6",
     "activeDaysCount": 5,
-    "dailyAverageMinutes": 106,
+    "dailyAverageMinutes": 108,
     "languages": {
       "primary": "TypeScript",
       "secondary": "Markdown",
-      "primaryPercentage": "30.8",
-      "secondaryPercentage": "26.9"
+      "primaryPercentage": "31.8",
+      "secondaryPercentage": "26.4"
     },
     "consistency": "High"
   }

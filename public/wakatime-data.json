@@ -1,12 +1,12 @@
 {
-  "lastUpdated": "2025-08-31T23:15:31.574Z",
+  "lastUpdated": "2025-09-01T01:40:30.318Z",
   "status": "Active Developer",
   "today": {
-    "codingMinutes": 97,
-    "primaryLanguage": "TypeScript",
+    "codingMinutes": 0,
+    "primaryLanguage": "Various",
     "environment": {
-      "editor": "Zed",
-      "os": "Linux"
+      "editor": "Unknown",
+      "os": "Unknown"
     }
   },
   "weeklyStats": {
